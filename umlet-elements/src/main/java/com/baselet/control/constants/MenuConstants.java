@@ -34,6 +34,10 @@ public class MenuConstants {
 	public static final String COPY = "Copy";
 	public static final String PASTE = "Paste";
 
+	// ASSISTANT
+	public static final String ASSISTANT = "Assistant";
+	public static final String CHECK_CONSISTENCY = "Check Consistency";
+
 	// CUSTOM ELEMENTS
 	public static final String CUSTOM_ELEMENTS = "Custom Elements";
 	public static final String NEW_CE = "New...";

@@ -85,6 +85,11 @@ public class MenuBuilder {
 		editPaste.setEnabled(false);
 		editUngroup.setEnabled(false);
 
+		// Assistant Menu
+		JMenu assistantMenu = new JMenu(MenuConstants.ASSISTANT);
+		assistantMenu.add(menuFactory.createCheckConsistency());
+		menu.add(assistantMenu);
+
 		// Custom Element Menu
 		JMenu menu_custom = new JMenu(MenuConstants.CUSTOM_ELEMENTS);
 		menu_custom.setMnemonic(KeyEvent.VK_C);

@@ -66,7 +66,8 @@ import com.baselet.diagram.draw.helper.theme.ThemeFactory;
 import com.baselet.gui.helper.PlainColorIcon;
 
 public class MenuFactorySwing extends MenuFactory {
-
+	// temp
+	private static final String CHECK_CONSISTENCY = "Check Consistency";
 	private static MenuFactorySwing instance = null;
 
 	public static MenuFactorySwing getInstance() {
@@ -94,10 +95,12 @@ public class MenuFactorySwing extends MenuFactory {
 		recentFiles.setMnemonic(KeyEvent.VK_R);
 		recentFiles.addMenuListener(new MenuListener() {
 			@Override
-			public void menuDeselected(MenuEvent e) {}
+			public void menuDeselected(MenuEvent e) {
+			}
 
 			@Override
-			public void menuCanceled(MenuEvent e) {}
+			public void menuCanceled(MenuEvent e) {
+			}
 
 			@Override
 			public void menuSelected(MenuEvent e) {
@@ -230,6 +233,10 @@ public class MenuFactorySwing extends MenuFactory {
 
 	public JMenuItem createPaste(boolean usedRightClickContextMenu) {
 		return createJMenuItem(false, PASTE, PASTE, KeyEvent.VK_P, KeyEvent.VK_V, true, usedRightClickContextMenu);
+	}
+
+	public JMenuItem createCheckConsistency() {
+		return createJMenuItem(false, CHECK_CONSISTENCY, CHECK_CONSISTENCY, 1);
 	}
 
 	public JMenuItem createNewCustomElement() {

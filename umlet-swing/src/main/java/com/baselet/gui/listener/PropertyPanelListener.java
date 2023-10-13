@@ -20,7 +20,8 @@ import com.baselet.gui.command.HelpPanelChanged;
 
 public class PropertyPanelListener implements KeyListener, DocumentListener {
 
-	public PropertyPanelListener() {}
+	public PropertyPanelListener() {
+	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
@@ -56,6 +57,7 @@ public class PropertyPanelListener implements KeyListener, DocumentListener {
 				else {
 					HandlerElementMap.getHandlerForElement(gridElement).getController().executeCommand(new ChangePanelAttributes(gridElement, gridElement.getPanelAttributes(), s, oldCaretPos, newCaretPos));
 				}
+				System.out.println("New text: " + s);
 			}
 		}
 		else if (handler != null && !s.equals(handler.getHelpText())) { // help panel has been edited
@@ -69,14 +71,18 @@ public class PropertyPanelListener implements KeyListener, DocumentListener {
 	}
 
 	@Override
-	public void keyReleased(KeyEvent e) {}
+	public void keyReleased(KeyEvent e) {
+	}
 
 	@Override
-	public void keyPressed(KeyEvent e) {}
+	public void keyPressed(KeyEvent e) {
+	}
 
 	@Override
-	public void insertUpdate(DocumentEvent e) {}
+	public void insertUpdate(DocumentEvent e) {
+	}
 
 	@Override
-	public void removeUpdate(DocumentEvent e) {}
+	public void removeUpdate(DocumentEvent e) {
+	}
 }

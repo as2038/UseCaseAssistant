@@ -19,7 +19,8 @@ public class StickableMap {
 	 */
 	Map<Stickable, List<Integer>> stickingIndexMap = new HashMap<Stickable, List<Integer>>();
 
-	public StickableMap() {}
+	public StickableMap() {
+	}
 
 	public boolean equalsMap(StickableMap other) {
 		return checkMapsEqual(stickingIndexMap, other.stickingIndexMap);
@@ -76,6 +77,7 @@ public class StickableMap {
 				returnList.add(p);
 			}
 		}
+		System.out.println("Sticking moved");
 		return returnList;
 	}
 
