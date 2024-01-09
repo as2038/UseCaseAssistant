@@ -68,6 +68,7 @@ import com.baselet.gui.helper.PlainColorIcon;
 public class MenuFactorySwing extends MenuFactory {
 	// temp
 	private static final String CHECK_CONSISTENCY = "Check Consistency";
+	private static final String PROPERTIES = "Properties";
 	private static MenuFactorySwing instance = null;
 
 	public static MenuFactorySwing getInstance() {
@@ -235,6 +236,7 @@ public class MenuFactorySwing extends MenuFactory {
 		return createJMenuItem(false, PASTE, PASTE, KeyEvent.VK_P, KeyEvent.VK_V, true, usedRightClickContextMenu);
 	}
 
+	// MODIFIED: Check consistency
 	public JMenuItem createCheckConsistency() {
 		return createJMenuItem(false, CHECK_CONSISTENCY, CHECK_CONSISTENCY, 1);
 	}
@@ -282,6 +284,11 @@ public class MenuFactorySwing extends MenuFactory {
 
 	public JMenuItem createRateProgram() {
 		return createJMenuItemNoShortcut(false, RATE_PROGRAM, KeyEvent.VK_R);
+	}
+
+	// MODIFIED: Properties
+	public JMenuItem createProperties() {
+		return createJMenuItem(false, PROPERTIES, PROPERTIES, KeyEvent.VK_I, true, null);
 	}
 
 	public JMenu createSetColor(boolean fg) {

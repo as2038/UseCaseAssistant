@@ -81,6 +81,9 @@ public abstract class BaseGUI {
 			ungroup.setEnabled(false);
 		}
 
+		// MODIFIED: Properties
+		contextMenu.add(menuFactory.createProperties());
+
 		contextMenu.add(menuFactory.createSetColor(true));
 		contextMenu.add(menuFactory.createSetColor(false));
 
