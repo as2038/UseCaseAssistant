@@ -146,7 +146,6 @@ public class GridElementListener extends UniversalListener {
 
 		if (me.getButton() == MouseEvent.BUTTON3) {
 			showContextMenu(e, me.getX(), me.getY());
-			System.out.println("Menu shown!");
 		}
 		else if (me.getButton() == MouseEvent.BUTTON2) {
 			IS_DRAGGING_DIAGRAM = true;

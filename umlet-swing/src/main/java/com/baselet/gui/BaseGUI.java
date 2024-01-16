@@ -109,6 +109,11 @@ public abstract class BaseGUI {
 		selected_elements = selectedElements;
 	}
 
+	// MODIFIED: New getter method
+	public Collection<GridElement> getSelectedElements() {
+		return selected_elements;
+	}
+
 	protected void initGUIParameters() {
 		UIManager.put("TabbedPane.selected", Color.white);
 		UIManager.put("TabbedPane.tabInsets", new InsetsUIResource(0, 4, 1, 0));

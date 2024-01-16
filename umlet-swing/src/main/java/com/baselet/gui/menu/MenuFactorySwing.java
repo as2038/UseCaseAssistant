@@ -2,6 +2,7 @@ package com.baselet.gui.menu;
 
 import static com.baselet.control.constants.MenuConstants.ABOUT_PROGRAM;
 import static com.baselet.control.constants.MenuConstants.ALIGN;
+import static com.baselet.control.constants.MenuConstants.CHECK_CONSISTENCY;
 import static com.baselet.control.constants.MenuConstants.CLOSE;
 import static com.baselet.control.constants.MenuConstants.COPY;
 import static com.baselet.control.constants.MenuConstants.CUSTOM_ELEMENTS_TUTORIAL;
@@ -29,6 +30,7 @@ import static com.baselet.control.constants.MenuConstants.OPTIONS;
 import static com.baselet.control.constants.MenuConstants.PASTE;
 import static com.baselet.control.constants.MenuConstants.PRINT;
 import static com.baselet.control.constants.MenuConstants.PROGRAM_HOMEPAGE;
+import static com.baselet.control.constants.MenuConstants.PROPERTIES;
 import static com.baselet.control.constants.MenuConstants.RATE_PROGRAM;
 import static com.baselet.control.constants.MenuConstants.RECENT_FILES;
 import static com.baselet.control.constants.MenuConstants.REDO;
@@ -67,8 +69,6 @@ import com.baselet.gui.helper.PlainColorIcon;
 
 public class MenuFactorySwing extends MenuFactory {
 	// temp
-	private static final String CHECK_CONSISTENCY = "Check Consistency";
-	private static final String PROPERTIES = "Properties";
 	private static MenuFactorySwing instance = null;
 
 	public static MenuFactorySwing getInstance() {

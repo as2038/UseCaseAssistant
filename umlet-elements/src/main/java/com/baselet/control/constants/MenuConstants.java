@@ -56,6 +56,7 @@ public class MenuConstants {
 	public static final String ABOUT_PROGRAM = "About " + Program.getInstance().getProgramName();
 
 	// CONTEXT ON ELEMENT
+	public static final String PROPERTIES = "Properties";
 	public static final String SET_FOREGROUND_COLOR = "Set foreground color";
 	public static final String SET_BACKGROUND_COLOR = "Set background color";
 	public static final String ALIGN = "Align";

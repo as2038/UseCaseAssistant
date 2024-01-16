@@ -57,7 +57,6 @@ public class PropertyPanelListener implements KeyListener, DocumentListener {
 				else {
 					HandlerElementMap.getHandlerForElement(gridElement).getController().executeCommand(new ChangePanelAttributes(gridElement, gridElement.getPanelAttributes(), s, oldCaretPos, newCaretPos));
 				}
-				System.out.println("New text: " + s);
 			}
 		}
 		else if (handler != null && !s.equals(handler.getHelpText())) { // help panel has been edited

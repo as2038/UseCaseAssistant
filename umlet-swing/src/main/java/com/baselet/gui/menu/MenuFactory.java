@@ -29,6 +29,7 @@ import static com.baselet.control.constants.MenuConstants.OPTIONS;
 import static com.baselet.control.constants.MenuConstants.PASTE;
 import static com.baselet.control.constants.MenuConstants.PRINT;
 import static com.baselet.control.constants.MenuConstants.PROGRAM_HOMEPAGE;
+import static com.baselet.control.constants.MenuConstants.PROPERTIES;
 import static com.baselet.control.constants.MenuConstants.RATE_PROGRAM;
 import static com.baselet.control.constants.MenuConstants.RECENT_FILES;
 import static com.baselet.control.constants.MenuConstants.REDO;
@@ -221,6 +222,19 @@ public class MenuFactory {
 				}
 				else if (menuItem.equals(ABOUT_PROGRAM)) {
 					AboutDialog.show();
+				}
+				// MODIFIED: Properties
+				else if (menuItem.equals(PROPERTIES)) {
+					// MODIFIED
+					System.out.println("Element name: " + CurrentGui.getInstance().getGui().getPropertyPane().getText());
+					String selected_elements_string = CurrentGui.getInstance().getGui().getSelectedElements().toString();
+					String element_id = selected_elements_string.substring(selected_elements_string.lastIndexOf("@") + 1);
+					element_id = element_id.replace("]", "");
+					System.out.println("Element ID: " + element_id);
+					String element_type = selected_elements_string.substring(selected_elements_string.lastIndexOf(".") + 1);
+					element_type = element_type.substring(0, element_type.lastIndexOf("@"));
+					System.out.println("Element type: " + element_type);
+					System.out.println("Connections:\n"); // TODO
 				}
 				else if (menuItem.equals(SET_FOREGROUND_COLOR) && actualHandler != null && actualSelector != null) {
 					actualHandler.getController().executeCommand(new ChangeElementSetting(FacetConstants.FOREGROUND_COLOR_KEY, param, actualSelector.getSelectedElements()));
