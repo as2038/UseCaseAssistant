@@ -79,8 +79,9 @@ public class OwnSyntaxPane {
 		// ac.setShowDescWindow(true);
 		ac.install(textArea);
 
+		// MODIFIED: Panel renamed
 		// JLabel propertyLabel = new JLabel(" Properties");
-		JLabel propertyLabel = new JLabel(" Hello World!");
+		JLabel propertyLabel = new JLabel(" Element");
 		propertyLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 		propertyLabel.setFont(DerivedConfig.getPanelHeaderFont());
 		panel.add(propertyLabel);

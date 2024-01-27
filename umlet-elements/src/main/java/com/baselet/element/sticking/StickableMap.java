@@ -77,7 +77,8 @@ public class StickableMap {
 				returnList.add(p);
 			}
 		}
-		// System.out.println("Sticking moved");
+		// MODIFIED: Print stickable map
+		// System.out.println(stickingIndexMap.toString());
 		return returnList;
 	}
 

@@ -228,6 +228,7 @@ public class MenuFactory {
 					// MODIFIED
 					System.out.println("Element name: " + CurrentGui.getInstance().getGui().getPropertyPane().getText());
 					String selected_elements_string = CurrentGui.getInstance().getGui().getSelectedElements().toString();
+					System.out.println(selected_elements_string);
 					String element_id = selected_elements_string.substring(selected_elements_string.lastIndexOf("@") + 1);
 					element_id = element_id.replace("]", "");
 					System.out.println("Element ID: " + element_id);

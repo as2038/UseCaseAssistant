@@ -8,6 +8,7 @@ import static com.baselet.control.constants.MenuConstants.COPY;
 import static com.baselet.control.constants.MenuConstants.CUSTOM_ELEMENTS_TUTORIAL;
 import static com.baselet.control.constants.MenuConstants.CUT;
 import static com.baselet.control.constants.MenuConstants.DELETE;
+import static com.baselet.control.constants.MenuConstants.DUCK_HELP;
 import static com.baselet.control.constants.MenuConstants.EDIT_CURRENT_PALETTE;
 import static com.baselet.control.constants.MenuConstants.EDIT_SELECTED;
 import static com.baselet.control.constants.MenuConstants.EXIT;
@@ -16,6 +17,7 @@ import static com.baselet.control.constants.MenuConstants.EXPORT_AS;
 import static com.baselet.control.constants.MenuConstants.GENERATE_CLASS;
 import static com.baselet.control.constants.MenuConstants.GENERATE_CLASS_OPTIONS;
 import static com.baselet.control.constants.MenuConstants.GROUP;
+import static com.baselet.control.constants.MenuConstants.KNOWLEDGE_BASE;
 import static com.baselet.control.constants.MenuConstants.LAYER;
 import static com.baselet.control.constants.MenuConstants.LAYER_DOWN;
 import static com.baselet.control.constants.MenuConstants.LAYER_UP;
@@ -34,8 +36,10 @@ import static com.baselet.control.constants.MenuConstants.PROPERTIES;
 import static com.baselet.control.constants.MenuConstants.RATE_PROGRAM;
 import static com.baselet.control.constants.MenuConstants.RECENT_FILES;
 import static com.baselet.control.constants.MenuConstants.REDO;
+import static com.baselet.control.constants.MenuConstants.REQUIREMENTS;
 import static com.baselet.control.constants.MenuConstants.SAVE;
 import static com.baselet.control.constants.MenuConstants.SAVE_AS;
+import static com.baselet.control.constants.MenuConstants.SCENARIOS;
 import static com.baselet.control.constants.MenuConstants.SELECT_ALL;
 import static com.baselet.control.constants.MenuConstants.SET_BACKGROUND_COLOR;
 import static com.baselet.control.constants.MenuConstants.SET_FOREGROUND_COLOR;
@@ -239,6 +243,22 @@ public class MenuFactorySwing extends MenuFactory {
 	// MODIFIED: Check consistency
 	public JMenuItem createCheckConsistency() {
 		return createJMenuItem(false, CHECK_CONSISTENCY, CHECK_CONSISTENCY, 1);
+	}
+
+	public JMenuItem createRequirements() {
+		return createJMenuItem(false, REQUIREMENTS, REQUIREMENTS, 1);
+	}
+
+	public JMenuItem createKnowledgeBase() {
+		return createJMenuItem(false, KNOWLEDGE_BASE, KNOWLEDGE_BASE, 1);
+	}
+
+	public JMenuItem createScenarios() {
+		return createJMenuItem(false, SCENARIOS, SCENARIOS, 1);
+	}
+
+	public JMenuItem createDuckHelp() {
+		return createJMenuItem(false, DUCK_HELP, DUCK_HELP, 1);
 	}
 
 	public JMenuItem createNewCustomElement() {
