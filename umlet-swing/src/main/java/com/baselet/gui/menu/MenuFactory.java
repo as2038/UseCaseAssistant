@@ -2,12 +2,14 @@ package com.baselet.gui.menu;
 
 import static com.baselet.control.constants.MenuConstants.ABOUT_PROGRAM;
 import static com.baselet.control.constants.MenuConstants.ALIGN;
+import static com.baselet.control.constants.MenuConstants.CHECK_CONSISTENCY;
 import static com.baselet.control.constants.MenuConstants.CLOSE;
 import static com.baselet.control.constants.MenuConstants.COPY;
 import static com.baselet.control.constants.MenuConstants.CUSTOM_ELEMENTS_TUTORIAL;
 import static com.baselet.control.constants.MenuConstants.CUSTOM_ELEMENTS_TUTORIAL_URL;
 import static com.baselet.control.constants.MenuConstants.CUT;
 import static com.baselet.control.constants.MenuConstants.DELETE;
+import static com.baselet.control.constants.MenuConstants.DUCK_HELP;
 import static com.baselet.control.constants.MenuConstants.EDIT_CURRENT_PALETTE;
 import static com.baselet.control.constants.MenuConstants.EDIT_SELECTED;
 import static com.baselet.control.constants.MenuConstants.EXIT;
@@ -16,6 +18,7 @@ import static com.baselet.control.constants.MenuConstants.EXPORT_AS;
 import static com.baselet.control.constants.MenuConstants.GENERATE_CLASS;
 import static com.baselet.control.constants.MenuConstants.GENERATE_CLASS_OPTIONS;
 import static com.baselet.control.constants.MenuConstants.GROUP;
+import static com.baselet.control.constants.MenuConstants.KNOWLEDGE_BASE;
 import static com.baselet.control.constants.MenuConstants.LAYER;
 import static com.baselet.control.constants.MenuConstants.LAYER_DOWN;
 import static com.baselet.control.constants.MenuConstants.MAIL_TO;
@@ -33,8 +36,10 @@ import static com.baselet.control.constants.MenuConstants.PROPERTIES;
 import static com.baselet.control.constants.MenuConstants.RATE_PROGRAM;
 import static com.baselet.control.constants.MenuConstants.RECENT_FILES;
 import static com.baselet.control.constants.MenuConstants.REDO;
+import static com.baselet.control.constants.MenuConstants.REQUIREMENTS;
 import static com.baselet.control.constants.MenuConstants.SAVE;
 import static com.baselet.control.constants.MenuConstants.SAVE_AS;
+import static com.baselet.control.constants.MenuConstants.SCENARIOS;
 import static com.baselet.control.constants.MenuConstants.SELECT_ALL;
 import static com.baselet.control.constants.MenuConstants.SET_BACKGROUND_COLOR;
 import static com.baselet.control.constants.MenuConstants.SET_FOREGROUND_COLOR;
@@ -177,6 +182,22 @@ public class MenuFactory {
 						SwingUtilities.convertPointFromScreen(ctxMenuLocation, actualHandler.getDrawPanel().getScrollPane().getViewport());
 					}
 					actualHandler.getController().executeCommand(new Paste(ctxMenuLocation));
+				}
+				// MODIFIED: Assistant Functions
+				else if (menuItem.equals(CHECK_CONSISTENCY)) {
+					System.out.println("Check consistency clicked");
+				}
+				else if (menuItem.equals(REQUIREMENTS)) {
+					System.out.println("Requirements clicked");
+				}
+				else if (menuItem.equals(KNOWLEDGE_BASE)) {
+					System.out.println("Knowledge base clicked");
+				}
+				else if (menuItem.equals(SCENARIOS)) {
+					System.out.println("Scenarios clicked");
+				}
+				else if (menuItem.equals(DUCK_HELP)) {
+					System.out.println("Duck help clicked");
 				}
 				else if (menuItem.equals(NEW_CE)) {
 					if (gui.getCurrentCustomHandler().closeEntity()) {
