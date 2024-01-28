@@ -34,8 +34,10 @@ public abstract class BaseGUIBuilder {
 	private CustomElementHandler customHandler;
 	private JSplitPane mainSplit;
 	private MailPanel mailPanel;
+	private RequirementsPanel requirementsPanel;
 	private JSplitPane customSplit;
 	private JSplitPane mailSplit;
+	private JSplitPane requirementsSplit;
 	private JPanel rightPanel;
 	private OwnSyntaxPane propertyTextPane;
 
@@ -62,7 +64,14 @@ public abstract class BaseGUIBuilder {
 		mailPanel = new MailPanel();
 		mailPanel.setVisible(false);
 		mailSplit = newGenericSplitPane(JSplitPane.VERTICAL_SPLIT, mailPanel, customSplit, 0, 0, true);
-		return mailSplit;
+
+		// MODIFIED: Assistant panels
+		requirementsPanel = new RequirementsPanel();
+		requirementsPanel.setVisible(false);
+		requirementsSplit = newGenericSplitPane(JSplitPane.VERTICAL_SPLIT, requirementsPanel, customSplit, 0, 0, true);
+
+		return requirementsSplit;
+		// return mailSplit;
 	}
 
 	public JSplitPane getMailSplit() {
@@ -75,6 +84,12 @@ public abstract class BaseGUIBuilder {
 
 	public MailPanel getMailPanel() {
 		return mailPanel;
+	}
+
+	// MODIFIED: Assistant panels
+
+	public RequirementsPanel getRequirementsPanel() {
+		return requirementsPanel;
 	}
 
 	public JSplitPane getMainSplit() {
@@ -179,6 +194,19 @@ public abstract class BaseGUIBuilder {
 		}
 		else {
 			mailSplit.setDividerSize(0);
+		}
+	}
+
+	// MODIFIED: Assistant panels
+	public void setRequirementsPanelEnabled(boolean enable) {
+		getRequirementsPanel().setVisible(enable);
+		if (enable) {
+			int mailDividerLoc = Math.max(Constants.MIN_MAIL_SPLITPANEL_SIZE, Config.getInstance().getMail_split_position());
+			requirementsSplit.setDividerLocation(mailDividerLoc);
+			requirementsSplit.setDividerSize(2);
+		}
+		else {
+			requirementsSplit.setDividerSize(0);
 		}
 	}
 

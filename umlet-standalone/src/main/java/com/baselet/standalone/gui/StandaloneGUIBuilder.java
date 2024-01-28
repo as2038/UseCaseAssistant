@@ -107,7 +107,8 @@ public class StandaloneGUIBuilder extends BaseGUIBuilder {
 				if (is != null) {
 					try {
 						is.close();
-					} catch (IOException e) {}
+					} catch (IOException e) {
+					}
 				}
 			}
 		}
@@ -189,5 +190,12 @@ public class StandaloneGUIBuilder extends BaseGUIBuilder {
 	public void setMailPanelEnabled(boolean enable) {
 		super.setMailPanelEnabled(enable);
 		mailButton.setSelected(enable);
+	}
+
+	// MODIFIED: Assistant panels
+
+	@Override
+	public void setRequirementsPanelEnabled(boolean enable) {
+		super.setRequirementsPanelEnabled(enable);
 	}
 }

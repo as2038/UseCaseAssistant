@@ -189,6 +189,7 @@ public class MenuFactory {
 				}
 				else if (menuItem.equals(REQUIREMENTS)) {
 					System.out.println("Requirements clicked");
+					gui.setRequirementsPanelEnabled(!gui.isRequirementsPanelVisible());
 				}
 				else if (menuItem.equals(KNOWLEDGE_BASE)) {
 					System.out.println("Knowledge base clicked");

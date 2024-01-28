@@ -136,6 +136,11 @@ public abstract class BaseGUI {
 
 	public abstract boolean isMailPanelVisible();
 
+	// MODIFIED: Assistant panels
+	public abstract void setRequirementsPanelEnabled(boolean enable);
+
+	public abstract boolean isRequirementsPanelVisible();
+
 	public abstract void updateDiagramName(DiagramHandler diagram, String name);
 
 	public abstract void setDiagramChanged(DiagramHandler diagram, boolean changed);

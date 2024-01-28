@@ -199,6 +199,18 @@ public class StandaloneGUI extends BaseGUI {
 		return guiBuilder.getMailPanel().isVisible();
 	}
 
+	// MODIFIED: Assistant panels
+
+	@Override
+	public void setRequirementsPanelEnabled(boolean enable) {
+		guiBuilder.setRequirementsPanelEnabled(enable);
+	}
+
+	@Override
+	public boolean isRequirementsPanelVisible() {
+		return guiBuilder.getRequirementsPanel().isVisible();
+	}
+
 	@Override
 	public void setCustomElementSelected(boolean selected) {
 		// Custom Element Edit is only enabled if a CE is selected and the panel is not visible
