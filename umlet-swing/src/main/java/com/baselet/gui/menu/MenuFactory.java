@@ -185,20 +185,20 @@ public class MenuFactory {
 				}
 				// MODIFIED: Assistant Functions
 				else if (menuItem.equals(CHECK_CONSISTENCY)) {
-					System.out.println("Check consistency clicked");
+					// System.out.println("Check consistency clicked");
 				}
 				else if (menuItem.equals(REQUIREMENTS)) {
 					System.out.println("Requirements clicked");
 					gui.setRequirementsPanelEnabled(!gui.isRequirementsPanelVisible());
 				}
 				else if (menuItem.equals(KNOWLEDGE_BASE)) {
-					System.out.println("Knowledge base clicked");
+					// System.out.println("Knowledge base clicked");
 				}
 				else if (menuItem.equals(SCENARIOS)) {
-					System.out.println("Scenarios clicked");
+					// System.out.println("Scenarios clicked");
 				}
 				else if (menuItem.equals(DUCK_HELP)) {
-					System.out.println("Duck help clicked");
+					// System.out.println("Duck help clicked");
 				}
 				else if (menuItem.equals(NEW_CE)) {
 					if (gui.getCurrentCustomHandler().closeEntity()) {
