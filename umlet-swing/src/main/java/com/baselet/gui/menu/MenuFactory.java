@@ -75,6 +75,7 @@ import com.baselet.gui.BrowserLauncher;
 import com.baselet.gui.CurrentGui;
 import com.baselet.gui.ExportHandler;
 import com.baselet.gui.OptionPanel;
+import com.baselet.gui.ScenarioPanel;
 import com.baselet.gui.command.Align;
 import com.baselet.gui.command.ChangeElementSetting;
 import com.baselet.gui.command.Copy;
@@ -196,6 +197,7 @@ public class MenuFactory {
 				}
 				else if (menuItem.equals(SCENARIOS)) {
 					// System.out.println("Scenarios clicked");
+					ScenarioPanel.getInstance().showScenarioPanel();
 				}
 				else if (menuItem.equals(DUCK_HELP)) {
 					// System.out.println("Duck help clicked");
