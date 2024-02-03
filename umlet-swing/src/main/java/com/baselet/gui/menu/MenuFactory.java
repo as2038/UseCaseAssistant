@@ -70,6 +70,7 @@ import com.baselet.element.facet.common.LayerFacet;
 import com.baselet.element.interfaces.GridElement;
 import com.baselet.element.old.custom.CustomElement;
 import com.baselet.generator.ClassDiagramConverter;
+import com.baselet.gui.ActorPanel;
 import com.baselet.gui.BaseGUI;
 import com.baselet.gui.BrowserLauncher;
 import com.baselet.gui.CurrentGui;
@@ -196,7 +197,6 @@ public class MenuFactory {
 					// System.out.println("Knowledge base clicked");
 				}
 				else if (menuItem.equals(SCENARIOS)) {
-					// System.out.println("Scenarios clicked");
 					ScenarioPanel.getInstance().showScenarioPanel();
 				}
 				else if (menuItem.equals(DUCK_HELP)) {
@@ -260,6 +260,12 @@ public class MenuFactory {
 					element_type = element_type.substring(0, element_type.lastIndexOf("@"));
 					System.out.println("Element type: " + element_type);
 					System.out.println("Connections:\n"); // TODO
+					if (element_type.equals("Actor")) {
+						ActorPanel.getInstance().showActorPanel();
+					}
+					else if (element_type.equals("UseCase")) {
+						ScenarioPanel.getInstance().showScenarioPanel();
+					}
 				}
 				else if (menuItem.equals(SET_FOREGROUND_COLOR) && actualHandler != null && actualSelector != null) {
 					actualHandler.getController().executeCommand(new ChangeElementSetting(FacetConstants.FOREGROUND_COLOR_KEY, param, actualSelector.getSelectedElements()));
