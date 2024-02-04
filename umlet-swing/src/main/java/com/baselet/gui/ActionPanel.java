@@ -14,7 +14,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import com.baselet.assistant.Actor;
+import com.baselet.assistant.Action;
+import com.baselet.assistant.KnowledgeBase;
 import com.baselet.control.Main;
 
 public class ActionPanel extends JPanel implements ActionListener {
@@ -73,7 +74,9 @@ public class ActionPanel extends JPanel implements ActionListener {
 		parent.add(tf_postc);
 		parent.add(button_panel);
 
-		actionframe = new JFrame("New Action");
+		Main main = Main.getInstance();
+
+		actionframe = new JFrame(main.getKnowledgeBase().getLastTempName() + " - New Action");
 		actionframe.setContentPane(parent);
 		actionframe.pack();
 	}
@@ -96,10 +99,13 @@ public class ActionPanel extends JPanel implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent ae) {
+		Main main = Main.getInstance();
+		KnowledgeBase kb = main.getKnowledgeBase();
 		if (ae.getActionCommand().equals("Save")) {
-			Main main = Main.getInstance();
-			Actor new_action = new Actor(tf_name.getText());
-			main.getKnowledgeBase().addActor(new_action);
+			Action new_action = new Action(tf_name.getText());
+			kb.getActor(kb.getLastTempName()).addAction(new_action);
+			kb.addAction(new_action);
+			hideActorPanel();
 		}
 		if (ae.getActionCommand().equals("Close")) {
 			hideActorPanel();

@@ -2,9 +2,11 @@ package com.baselet.gui;
 
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -53,7 +55,7 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 	JScrollPane sp_altflow = new JScrollPane(ta_altflow);
 
 	private String temp_name;
-	private String[] temp_mainflow;
+	private final ArrayList<String> temp_mainflow = new ArrayList<String>();
 
 	private ScenarioPanel() {
 		setLayout(new GridLayout(0, 2, 4, 4));
@@ -90,6 +92,10 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 		parent.add(sp_altflow);
 		parent.add(button_panel);
 
+		Font font = new Font(Font.SANS_SERIF, Font.PLAIN, 12);
+		ta_mainflow.setFont(font);
+		ta_altflow.setFont(font);
+
 		scenarioframe = new JFrame("Scenario");
 		scenarioframe.setContentPane(parent);
 		scenarioframe.pack();
@@ -113,8 +119,7 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 					tf_secac.setText("");
 					tf_prec.setText(existing_scenario.getPrecond());
 					tf_postc.setText(existing_scenario.getPostcond());
-					// ta_mainflow.setText(existing_scenario.getMainflow()[0]);
-					ta_altflow.setText("");
+					ta_mainflow.setText(existing_scenario.getMainflow().get(0));
 				}
 				else {
 					tf_prac.setText("");
@@ -136,8 +141,10 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent ae) {
 		if (ae.getActionCommand().equals("Save")) {
+			temp_mainflow.add(ta_mainflow.getText());
 			Main main = Main.getInstance();
 			main.getKnowledgeBase().addScenario(new Scenario(temp_name, tf_prac.getText(), tf_prec.getText(), tf_postc.getText(), temp_mainflow));
+			hideScenarioPanel();
 		}
 		if (ae.getActionCommand().equals("Close")) {
 			hideScenarioPanel();

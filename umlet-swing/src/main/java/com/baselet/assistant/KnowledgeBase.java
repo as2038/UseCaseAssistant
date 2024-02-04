@@ -5,6 +5,7 @@ import java.util.Map;
 
 public class KnowledgeBase {
 
+	private String last_temp_name;
 	private final Map<String, Scenario> scenario_map;
 	private final Map<String, Actor> actor_map;
 	private final Map<String, Action> action_map;
@@ -37,6 +38,14 @@ public class KnowledgeBase {
 
 	public Action getAction(String action_name) {
 		return action_map.get(action_name);
+	}
+
+	public void setLastTempName(String last_temp_name) {
+		this.last_temp_name = last_temp_name;
+	}
+
+	public String getLastTempName() {
+		return last_temp_name;
 	}
 
 }

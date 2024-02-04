@@ -2,9 +2,11 @@ package com.baselet.gui;
 
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -16,6 +18,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import com.baselet.assistant.Action;
 import com.baselet.assistant.Actor;
 import com.baselet.control.Main;
 
@@ -46,6 +49,7 @@ public class ActorPanel extends JPanel implements ActionListener {
 	private final JTextField tf_states = new JTextField();
 
 	private String temp_name;
+	private final ArrayList<Action> temp_action_list = new ArrayList<Action>();
 
 	private ActorPanel() {
 		setLayout(new GridLayout(0, 2, 4, 4));
@@ -94,6 +98,8 @@ public class ActorPanel extends JPanel implements ActionListener {
 		parent.add(tf_states);
 		parent.add(button_panel);
 
+		Font font = new Font(Font.SANS_SERIF, Font.PLAIN, 12);
+		ta_actions.setFont(font);
 		ta_actions.setEnabled(false);
 
 		actorframe = new JFrame("Scenario");
@@ -111,6 +117,27 @@ public class ActorPanel extends JPanel implements ActionListener {
 
 				temp_name = CurrentGui.getInstance().getGui().getPropertyPane().getText();
 				actorframe.setTitle("Actor - " + temp_name);
+
+				Main main = Main.getInstance();
+				Actor existing_actor = main.getKnowledgeBase().getActor(temp_name);
+				if (existing_actor != null) {
+					// tf_alias.setText(existing_actor.getPrac());
+					// tf_goals.setText("");
+					// tf_states.setText(existing_actor.getPrecond());
+					ArrayList<Action> existing_action_list = existing_actor.getActionList();
+					if (existing_action_list.size() > 0) {
+						ta_actions.setText(existing_action_list.get(0).getName());
+					}
+					else {
+						ta_actions.setText("");
+					}
+				}
+				else {
+					tf_alias.setText("");
+					tf_goals.setText("");
+					tf_states.setText("");
+					ta_actions.setText("");
+				}
 			}
 		});
 	}
@@ -121,6 +148,9 @@ public class ActorPanel extends JPanel implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent ae) {
+		Main main = Main.getInstance();
+		main.getKnowledgeBase().setLastTempName(temp_name);
+
 		if (ae.getActionCommand().equals("Add")) {
 			ActionPanel.getInstance().showActionPanel();
 		}
@@ -128,9 +158,9 @@ public class ActorPanel extends JPanel implements ActionListener {
 
 		}
 		if (ae.getActionCommand().equals("Save")) {
-			Main main = Main.getInstance();
-			Actor new_actor = new Actor(temp_name);
+			Actor new_actor = new Actor(temp_name, temp_action_list);
 			main.getKnowledgeBase().addActor(new_actor);
+			hideActorPanel();
 		}
 		if (ae.getActionCommand().equals("Close")) {
 			hideActorPanel();
