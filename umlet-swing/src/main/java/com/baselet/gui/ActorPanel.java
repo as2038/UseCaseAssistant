@@ -16,6 +16,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import com.baselet.assistant.Actor;
+import com.baselet.control.Main;
+
 public class ActorPanel extends JPanel implements ActionListener {
 
 	private static ActorPanel actorpanel;
@@ -41,6 +44,8 @@ public class ActorPanel extends JPanel implements ActionListener {
 
 	private final JLabel lb_states = new JLabel("States:");
 	private final JTextField tf_states = new JTextField();
+
+	private String temp_name;
 
 	private ActorPanel() {
 		setLayout(new GridLayout(0, 2, 4, 4));
@@ -103,6 +108,9 @@ public class ActorPanel extends JPanel implements ActionListener {
 				actorframe.setLocationRelativeTo(CurrentGui.getInstance().getGui().getMainFrame());
 				actorframe.setVisible(true);
 				actorframe.toFront();
+
+				temp_name = CurrentGui.getInstance().getGui().getPropertyPane().getText();
+				actorframe.setTitle("Actor - " + temp_name);
 			}
 		});
 	}
@@ -117,10 +125,12 @@ public class ActorPanel extends JPanel implements ActionListener {
 			ActionPanel.getInstance().showActionPanel();
 		}
 		if (ae.getActionCommand().equals("Delete")) {
-			System.out.println("Deleted action...");
+
 		}
 		if (ae.getActionCommand().equals("Save")) {
-			System.out.println("Saved actor...");
+			Main main = Main.getInstance();
+			Actor new_actor = new Actor(temp_name);
+			main.getKnowledgeBase().addActor(new_actor);
 		}
 		if (ae.getActionCommand().equals("Close")) {
 			hideActorPanel();

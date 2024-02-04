@@ -18,4 +18,20 @@ public class Scenario {
 	public String getName() {
 		return name;
 	}
+
+	public String getPrac() {
+		return prac;
+	}
+
+	public String getPrecond() {
+		return precond;
+	}
+
+	public String getPostcond() {
+		return postcond;
+	}
+
+	public String[] getMainflow() {
+		return mainflow;
+	}
 }

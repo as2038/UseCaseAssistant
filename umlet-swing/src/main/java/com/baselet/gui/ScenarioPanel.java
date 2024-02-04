@@ -16,6 +16,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import com.baselet.assistant.Scenario;
+import com.baselet.control.Main;
+
 public class ScenarioPanel extends JPanel implements ActionListener {
 
 	private static ScenarioPanel scenariopanel;
@@ -49,6 +52,7 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 	private final JTextArea ta_altflow = new JTextArea(5, 5);
 	JScrollPane sp_altflow = new JScrollPane(ta_altflow);
 
+	private String temp_name;
 	private String[] temp_mainflow;
 
 	private ScenarioPanel() {
@@ -98,6 +102,28 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 				scenarioframe.setLocationRelativeTo(CurrentGui.getInstance().getGui().getMainFrame());
 				scenarioframe.setVisible(true);
 				scenarioframe.toFront();
+
+				temp_name = CurrentGui.getInstance().getGui().getPropertyPane().getText();
+				scenarioframe.setTitle("Scenario - " + temp_name);
+
+				Main main = Main.getInstance();
+				Scenario existing_scenario = main.getKnowledgeBase().getScenario(temp_name);
+				if (existing_scenario != null) {
+					tf_prac.setText(existing_scenario.getPrac());
+					tf_secac.setText("");
+					tf_prec.setText(existing_scenario.getPrecond());
+					tf_postc.setText(existing_scenario.getPostcond());
+					// ta_mainflow.setText(existing_scenario.getMainflow()[0]);
+					ta_altflow.setText("");
+				}
+				else {
+					tf_prac.setText("");
+					tf_secac.setText("");
+					tf_prec.setText("");
+					tf_postc.setText("");
+					ta_mainflow.setText("");
+					ta_altflow.setText("");
+				}
 			}
 		});
 
@@ -110,8 +136,8 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent ae) {
 		if (ae.getActionCommand().equals("Save")) {
-
-			System.out.println("Primary actor: " + tf_prac.getText());
+			Main main = Main.getInstance();
+			main.getKnowledgeBase().addScenario(new Scenario(temp_name, tf_prac.getText(), tf_prec.getText(), tf_postc.getText(), temp_mainflow));
 		}
 		if (ae.getActionCommand().equals("Close")) {
 			hideScenarioPanel();

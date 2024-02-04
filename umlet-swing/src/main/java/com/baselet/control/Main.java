@@ -14,6 +14,7 @@ import javax.swing.filechooser.FileSystemView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.baselet.assistant.KnowledgeBase;
 import com.baselet.control.config.Config;
 import com.baselet.control.config.handler.ConfigHandler;
 import com.baselet.control.constants.Constants;
@@ -40,9 +41,15 @@ public class Main implements CanCloseProgram, CanOpenDiagram {
 	private GridElement editedGridElement;
 	private TreeMap<String, PaletteHandler> palettes;
 	private final ArrayList<DiagramHandler> diagrams = new ArrayList<DiagramHandler>();
+	// MODIFIED: Knowledge base
+	private KnowledgeBase knowledge_base;
 
 	public static Main getInstance() {
 		return main;
+	}
+
+	public KnowledgeBase getKnowledgeBase() {
+		return knowledge_base;
 	}
 
 	public void init(BaseGUI gui) {
@@ -51,6 +58,8 @@ public class Main implements CanCloseProgram, CanOpenDiagram {
 		ToolTipManager.sharedInstance().setDismissDelay(Integer.MAX_VALUE); // Tooltips should not hide after some time
 		gui.initGUI(); // show gui
 		log.info("GUI initialized");
+		initKnowledgeBase();
+		log.info("Knowlege base initialized");
 	}
 
 	public void setPropertyPanelToGridElement(final GridElement e) {
@@ -60,6 +69,10 @@ public class Main implements CanCloseProgram, CanOpenDiagram {
 				setPropertyPanelToGridElementHelper(e);
 			}
 		});
+	}
+
+	private void initKnowledgeBase() {
+		knowledge_base = new KnowledgeBase();
 	}
 
 	private void setPropertyPanelToGridElementHelper(GridElement e) {

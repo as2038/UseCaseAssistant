@@ -195,6 +195,7 @@ public class MenuFactory {
 				}
 				else if (menuItem.equals(KNOWLEDGE_BASE)) {
 					// System.out.println("Knowledge base clicked");
+					main.getKnowledgeBase();
 				}
 				else if (menuItem.equals(SCENARIOS)) {
 					ScenarioPanel.getInstance().showScenarioPanel();

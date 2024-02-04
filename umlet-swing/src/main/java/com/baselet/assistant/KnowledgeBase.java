@@ -1,15 +1,18 @@
 package com.baselet.assistant;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class KnowledgeBase {
 
-	private Map<String, Scenario> scenario_map;
-	private Map<String, Actor> actor_map;
-	private Map<String, Action> action_map;
+	private final Map<String, Scenario> scenario_map;
+	private final Map<String, Actor> actor_map;
+	private final Map<String, Action> action_map;
 
 	public KnowledgeBase() {
-		// TODO Auto-generated constructor stub
+		scenario_map = new HashMap<String, Scenario>();
+		actor_map = new HashMap<String, Actor>();
+		action_map = new HashMap<String, Action>();
 	}
 
 	public void addScenario(Scenario new_scenario) {
