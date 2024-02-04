@@ -1,4 +1,4 @@
-package com.baselet.standalone.assistant;
+package com.baselet.assistant;
 
 public class Scenario {
 	private final String name;

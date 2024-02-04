@@ -1,4 +1,4 @@
-package com.baselet.standalone.assistant;
+package com.baselet.assistant;
 
 import java.util.Map;
 
@@ -12,16 +12,16 @@ public class KnowledgeBase {
 		// TODO Auto-generated constructor stub
 	}
 
-	public void addScenario(String new_scenario_name, Scenario new_scenario) {
-		scenario_map.put(new_scenario_name, new_scenario);
+	public void addScenario(Scenario new_scenario) {
+		scenario_map.put(new_scenario.getName(), new_scenario);
 	}
 
-	public void addActor() {
-
+	public void addActor(Actor new_actor) {
+		actor_map.put(new_actor.getName(), new_actor);
 	}
 
-	public void addAction() {
-
+	public void addAction(Action new_action) {
+		action_map.put(new_action.getName(), new_action);
 	}
 
 	public Scenario getScenario(String scenario_name) {
