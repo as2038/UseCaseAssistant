@@ -12,28 +12,26 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-public class ScenarioPanel extends JPanel implements ActionListener {
+public class ActionPanel extends JPanel implements ActionListener {
 
-	private static ScenarioPanel scenariopanel;
+	private static ActionPanel actionpanel;
 
-	public static ScenarioPanel getInstance() {
-		if (scenariopanel == null) {
-			scenariopanel = new ScenarioPanel();
+	public static ActionPanel getInstance() {
+		if (actionpanel == null) {
+			actionpanel = new ActionPanel();
 		}
-		return scenariopanel;
+		return actionpanel;
 	}
 
-	private final JFrame scenarioframe;
+	private final JFrame actionframe;
 
-	private final JLabel lb_prac = new JLabel("Primary actor:");
-	private final JTextField tf_prac = new JTextField();
+	private final JLabel lb_name = new JLabel("Name:");
+	private final JTextField tf_name = new JTextField();
 
-	private final JLabel lb_secac = new JLabel("Secondary actor(s):");
-	private final JTextField tf_secac = new JTextField();
+	private final JLabel lb_object = new JLabel("Object:");
+	private final JTextField tf_object = new JTextField();
 
 	private final JLabel lb_prec = new JLabel("Preconditions:");
 	private final JTextField tf_prec = new JTextField();
@@ -41,17 +39,7 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 	private final JLabel lb_postc = new JLabel("Postconditions:");
 	private final JTextField tf_postc = new JTextField();
 
-	private final JLabel lb_mainflow = new JLabel("Main flow:");
-	private final JTextArea ta_mainflow = new JTextArea(5, 5);
-	JScrollPane sp_mainflow = new JScrollPane(ta_mainflow);
-
-	private final JLabel lb_altflow = new JLabel("Alternative flows:");
-	private final JTextArea ta_altflow = new JTextArea(5, 5);
-	JScrollPane sp_altflow = new JScrollPane(ta_altflow);
-
-	private String[] temp_mainflow;
-
-	private ScenarioPanel() {
+	public ActionPanel() {
 		setLayout(new GridLayout(0, 2, 4, 4));
 		setAlignmentX(Component.LEFT_ALIGNMENT);
 		JButton button_save = new JButton("Save");
@@ -72,50 +60,46 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 
 		JPanel parent = new JPanel();
 		parent.setLayout(new BoxLayout(parent, BoxLayout.Y_AXIS));
-		parent.add(lb_prac);
-		parent.add(tf_prac);
-		parent.add(lb_secac);
-		parent.add(tf_secac);
+		parent.add(lb_name);
+		parent.add(tf_name);
+		parent.add(lb_object);
+		parent.add(tf_object);
 		parent.add(lb_prec);
 		parent.add(tf_prec);
 		parent.add(lb_postc);
 		parent.add(tf_postc);
-		parent.add(lb_mainflow);
-		parent.add(sp_mainflow);
-		parent.add(lb_altflow);
-		parent.add(sp_altflow);
 		parent.add(button_panel);
 
-		scenarioframe = new JFrame("Scenario");
-		scenarioframe.setContentPane(parent);
-		scenarioframe.pack();
+		actionframe = new JFrame("Action");
+		actionframe.setContentPane(parent);
+		actionframe.pack();
 	}
 
-	public void showScenarioPanel() {
+	public void showActionPanel() {
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				scenarioframe.setLocationRelativeTo(CurrentGui.getInstance().getGui().getMainFrame());
-				scenarioframe.setVisible(true);
-				scenarioframe.toFront();
+				actionframe.setLocationRelativeTo(CurrentGui.getInstance().getGui().getMainFrame());
+				actionframe.setVisible(true);
+				actionframe.toFront();
 			}
 		});
 
 	}
 
-	public void hideScenarioPanel() {
-		scenarioframe.setVisible(false);
+	public void hideActorPanel() {
+		actionframe.setVisible(false);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent ae) {
 		if (ae.getActionCommand().equals("Save")) {
 
-			System.out.println("Primary actor: " + tf_prac.getText());
 		}
 		if (ae.getActionCommand().equals("Close")) {
-			hideScenarioPanel();
+			hideActorPanel();
 		}
+
 	}
 
 }

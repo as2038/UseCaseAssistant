@@ -250,16 +250,16 @@ public class MenuFactory {
 				// MODIFIED: Properties
 				else if (menuItem.equals(PROPERTIES)) {
 					// MODIFIED
-					System.out.println("Element name: " + CurrentGui.getInstance().getGui().getPropertyPane().getText());
+					// System.out.println("Element name: " + CurrentGui.getInstance().getGui().getPropertyPane().getText());
 					String selected_elements_string = CurrentGui.getInstance().getGui().getSelectedElements().toString();
-					System.out.println(selected_elements_string);
+					// System.out.println(selected_elements_string);
 					String element_id = selected_elements_string.substring(selected_elements_string.lastIndexOf("@") + 1);
 					element_id = element_id.replace("]", "");
-					System.out.println("Element ID: " + element_id);
+					// System.out.println("Element ID: " + element_id);
 					String element_type = selected_elements_string.substring(selected_elements_string.lastIndexOf(".") + 1);
 					element_type = element_type.substring(0, element_type.lastIndexOf("@"));
-					System.out.println("Element type: " + element_type);
-					System.out.println("Connections:\n"); // TODO
+					// System.out.println("Element type: " + element_type);
+					// System.out.println("Connections:\n"); // TODO
 					if (element_type.equals("Actor")) {
 						ActorPanel.getInstance().showActorPanel();
 					}

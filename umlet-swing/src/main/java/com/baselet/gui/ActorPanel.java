@@ -5,7 +5,6 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Vector;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -29,31 +28,29 @@ public class ActorPanel extends JPanel implements ActionListener {
 	}
 
 	private final JFrame actorframe;
-	private final Vector<String> uis_technicalNames = new Vector<String>();
 
-	private final JLabel lb_prac = new JLabel("Primary actor:");
-	private final JTextField tf_prac = new JTextField();
+	private final JLabel lb_alias = new JLabel("Alias (optional):");
+	private final JTextField tf_alias = new JTextField();
 
-	private final JLabel lb_secac = new JLabel("Secondary actor(s):");
-	private final JTextField tf_secac = new JTextField();
+	private final JLabel lb_goals = new JLabel("Goals:");
+	private final JTextField tf_goals = new JTextField();
 
-	private final JLabel lb_prec = new JLabel("Preconditions:");
-	private final JTextField tf_prec = new JTextField();
+	private final JLabel lb_actions = new JLabel("Actions:");
+	private final JTextArea ta_actions = new JTextArea(5, 5);
+	JScrollPane sp_actions = new JScrollPane(ta_actions);
 
-	private final JLabel lb_postc = new JLabel("Postconditions:");
-	private final JTextField tf_postc = new JTextField();
-
-	private final JLabel lb_mainflow = new JLabel("Main flow:");
-	private final JTextArea ta_mainflow = new JTextArea(5, 5);
-	JScrollPane sp_mainflow = new JScrollPane(ta_mainflow);
-
-	private final JLabel lb_altflow = new JLabel("Alternative flows:");
-	private final JTextArea ta_altflow = new JTextArea(5, 5);
-	JScrollPane sp_altflow = new JScrollPane(ta_altflow);
+	private final JLabel lb_states = new JLabel("States:");
+	private final JTextField tf_states = new JTextField();
 
 	private ActorPanel() {
 		setLayout(new GridLayout(0, 2, 4, 4));
 		setAlignmentX(Component.LEFT_ALIGNMENT);
+		JButton button_add = new JButton("Add");
+		button_add.setActionCommand("Add");
+		button_add.addActionListener(this);
+		JButton button_delete = new JButton("Delete");
+		button_delete.setActionCommand("Delete");
+		button_delete.addActionListener(this);
 		JButton button_save = new JButton("Save");
 		button_save.setActionCommand("Save");
 		button_save.addActionListener(this);
@@ -70,21 +67,29 @@ public class ActorPanel extends JPanel implements ActionListener {
 		button_panel.add(Box.createHorizontalGlue());
 		button_panel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
+		JPanel act_button_panel = new JPanel();
+		act_button_panel.setLayout(new BoxLayout(act_button_panel, BoxLayout.X_AXIS));
+		act_button_panel.add(Box.createHorizontalGlue());
+		act_button_panel.add(button_add);
+		act_button_panel.add(Box.createRigidArea(new Dimension(20, 0)));
+		act_button_panel.add(button_delete);
+		act_button_panel.add(Box.createHorizontalGlue());
+		act_button_panel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
 		JPanel parent = new JPanel();
 		parent.setLayout(new BoxLayout(parent, BoxLayout.Y_AXIS));
-		parent.add(lb_prac);
-		parent.add(tf_prac);
-		parent.add(lb_secac);
-		parent.add(tf_secac);
-		parent.add(lb_prec);
-		parent.add(tf_prec);
-		parent.add(lb_postc);
-		parent.add(tf_postc);
-		parent.add(lb_mainflow);
-		parent.add(sp_mainflow);
-		parent.add(lb_altflow);
-		parent.add(sp_altflow);
+		parent.add(lb_alias);
+		parent.add(tf_alias);
+		parent.add(lb_goals);
+		parent.add(tf_goals);
+		parent.add(lb_actions);
+		parent.add(sp_actions);
+		parent.add(act_button_panel);
+		parent.add(lb_states);
+		parent.add(tf_states);
 		parent.add(button_panel);
+
+		ta_actions.setEnabled(false);
 
 		actorframe = new JFrame("Scenario");
 		actorframe.setContentPane(parent);
@@ -100,7 +105,6 @@ public class ActorPanel extends JPanel implements ActionListener {
 				actorframe.toFront();
 			}
 		});
-
 	}
 
 	public void hideActorPanel() {
@@ -109,6 +113,12 @@ public class ActorPanel extends JPanel implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent ae) {
+		if (ae.getActionCommand().equals("Add")) {
+			ActionPanel.getInstance().showActionPanel();
+		}
+		if (ae.getActionCommand().equals("Delete")) {
+			System.out.println("Deleted action...");
+		}
 		if (ae.getActionCommand().equals("Save")) {
 			System.out.println("Saved actor...");
 		}
