@@ -48,4 +48,8 @@ public class KnowledgeBase {
 		return last_temp_name;
 	}
 
+	public Map<String, Scenario> getScenarioMap() {
+		return scenario_map;
+	}
+
 }

@@ -57,6 +57,8 @@ import java.util.Map;
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 
+import com.baselet.assistant.KnowledgeBase;
+import com.baselet.assistant.Scenario;
 import com.baselet.control.Main;
 import com.baselet.control.constants.FacetConstants;
 import com.baselet.control.enums.Program;
@@ -187,7 +189,28 @@ public class MenuFactory {
 				}
 				// MODIFIED: Assistant Functions
 				else if (menuItem.equals(CHECK_CONSISTENCY)) {
-					// System.out.println("Check consistency clicked");
+					boolean noProblems = true;
+					KnowledgeBase kb = main.getKnowledgeBase();
+					for (Map.Entry<String, Scenario> set : kb.getScenarioMap().entrySet()) {
+						Scenario s = set.getValue();
+						if (kb.getActor(s.getPrac()) == null) {
+							System.out.println("Error: Actor '" + s.getPrac() + "' does not exist in the Knowledge Base.");
+							noProblems = false;
+						}
+
+						ArrayList<String> mf = s.getMainflow();
+						for (String a : mf) {
+							if (kb.getAction(a) == null) {
+								System.out.println("Error: Action '" + a + "' does not exist in the Knowledge Base.");
+								noProblems = false;
+							}
+						}
+						s.getMainflow().get(0);
+					}
+					System.out.println("\n");
+					if (noProblems) {
+						System.out.println("No problems found!");
+					}
 				}
 				else if (menuItem.equals(REQUIREMENTS)) {
 					System.out.println("Requirements clicked");

@@ -93,7 +93,7 @@ public class ActionPanel extends JPanel implements ActionListener {
 
 	}
 
-	public void hideActorPanel() {
+	public void hideActionPanel() {
 		actionframe.setVisible(false);
 	}
 
@@ -105,10 +105,10 @@ public class ActionPanel extends JPanel implements ActionListener {
 			Action new_action = new Action(tf_name.getText());
 			kb.getActor(kb.getLastTempName()).addAction(new_action);
 			kb.addAction(new_action);
-			hideActorPanel();
+			hideActionPanel();
 		}
 		if (ae.getActionCommand().equals("Close")) {
-			hideActorPanel();
+			hideActionPanel();
 		}
 
 	}
