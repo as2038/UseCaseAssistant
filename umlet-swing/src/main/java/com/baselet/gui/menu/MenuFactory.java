@@ -57,6 +57,7 @@ import java.util.Map;
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 
+import com.baselet.assistant.Action;
 import com.baselet.assistant.KnowledgeBase;
 import com.baselet.assistant.Scenario;
 import com.baselet.control.Main;
@@ -193,23 +194,40 @@ public class MenuFactory {
 					KnowledgeBase kb = main.getKnowledgeBase();
 					for (Map.Entry<String, Scenario> set : kb.getScenarioMap().entrySet()) {
 						Scenario s = set.getValue();
+						String s_name = s.getName();
+						String pc = s.getPostcond();
 						if (kb.getActor(s.getPrac()) == null) {
-							System.out.println("Error: Actor '" + s.getPrac() + "' does not exist in the Knowledge Base.");
+							System.out.println("ERROR (" + s_name + "): Actor '" + s.getPrac() + "' does not exist in the Knowledge Base.");
 							noProblems = false;
 						}
 
 						ArrayList<String> mf = s.getMainflow();
 						for (String a : mf) {
-							if (kb.getAction(a) == null) {
-								System.out.println("Error: Action '" + a + "' does not exist in the Knowledge Base.");
-								noProblems = false;
+
+							if (!a.equals("")) {
+								Action act = kb.getAction(a);
+								if (act == null) {
+									System.out.println("ERROR (" + s_name + "): Action '" + a + "' does not exist in the Knowledge Base.");
+									noProblems = false;
+								}
+								else {
+									if (!kb.getActor(s.getPrac()).getActionList().contains(act)) {
+										System.out.println("ERROR (" + s_name + "): Actor '" + s.getPrac() + "' does not have action '" + a + ".");
+										noProblems = false;
+									}
+									else {
+										if (!act.getPostcond().equals(pc)) {
+											System.out.println("ERROR (" + s_name + "): postcondition not satisfied.");
+											noProblems = false;
+										}
+									}
+								}
 							}
 						}
-						s.getMainflow().get(0);
-					}
-					System.out.println("\n");
-					if (noProblems) {
-						System.out.println("No problems found!");
+						System.out.println("");
+						if (noProblems) {
+							System.out.println("No problems found!");
+						}
 					}
 				}
 				else if (menuItem.equals(REQUIREMENTS)) {

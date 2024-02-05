@@ -102,7 +102,7 @@ public class ActionPanel extends JPanel implements ActionListener {
 		Main main = Main.getInstance();
 		KnowledgeBase kb = main.getKnowledgeBase();
 		if (ae.getActionCommand().equals("Save")) {
-			Action new_action = new Action(tf_name.getText());
+			Action new_action = new Action(tf_name.getText(), tf_prec.getText(), tf_postc.getText());
 			kb.getActor(kb.getLastTempName()).addAction(new_action);
 			kb.addAction(new_action);
 			hideActionPanel();
