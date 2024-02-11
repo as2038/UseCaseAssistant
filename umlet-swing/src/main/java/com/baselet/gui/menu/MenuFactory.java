@@ -72,6 +72,7 @@ import com.baselet.element.facet.common.GroupFacet;
 import com.baselet.element.facet.common.LayerFacet;
 import com.baselet.element.interfaces.GridElement;
 import com.baselet.element.old.custom.CustomElement;
+import com.baselet.element.relation.Relation;
 import com.baselet.generator.ClassDiagramConverter;
 import com.baselet.gui.ActorPanel;
 import com.baselet.gui.BaseGUI;
@@ -191,6 +192,7 @@ public class MenuFactory {
 				// MODIFIED: Assistant Functions
 				else if (menuItem.equals(CHECK_CONSISTENCY)) {
 					boolean noProblems = true;
+
 					KnowledgeBase kb = main.getKnowledgeBase();
 					for (Map.Entry<String, Scenario> set : kb.getScenarioMap().entrySet()) {
 						Scenario s = set.getValue();
@@ -243,6 +245,7 @@ public class MenuFactory {
 				}
 				else if (menuItem.equals(DUCK_HELP)) {
 					// System.out.println("Duck help clicked");
+					System.out.println(CurrentGui.getInstance().getGui().getCurrentDiagram().getGridElements().size());
 				}
 				else if (menuItem.equals(NEW_CE)) {
 					if (gui.getCurrentCustomHandler().closeEntity()) {
@@ -301,12 +304,31 @@ public class MenuFactory {
 					String element_type = selected_elements_string.substring(selected_elements_string.lastIndexOf(".") + 1);
 					element_type = element_type.substring(0, element_type.lastIndexOf("@"));
 					// System.out.println("Element type: " + element_type);
-					// System.out.println("Connections:\n"); // TODO
 					if (element_type.equals("Actor")) {
 						ActorPanel.getInstance().showActorPanel();
 					}
 					else if (element_type.equals("UseCase")) {
 						ScenarioPanel.getInstance().showScenarioPanel();
+					}
+					else if (element_type.equals("Relation")) {
+						String relation_type = CurrentGui.getInstance().getGui().getPropertyPane().getText();
+						if (relation_type.contains("u")) {
+							relation_type = "includes";
+						}
+						else if (relation_type.contains("x")) {
+							relation_type = "extends";
+						}
+						else if (relation_type.contains("-")) {
+							relation_type = "abstraction";
+						}
+						else {
+							relation_type = "actor-usecase";
+						}
+						GridElement selected_relation = CurrentGui.getInstance().getGui().getCurrentDiagram().getGridElements().get(0);
+						if (selected_relation.toString().contains("Relation")) {
+							System.out.println(((Relation) selected_relation).getStickablePoints().toString());
+						}
+						System.out.println("Relation type: " + relation_type + "\nConnections:\n");
 					}
 				}
 				else if (menuItem.equals(SET_FOREGROUND_COLOR) && actualHandler != null && actualSelector != null) {
