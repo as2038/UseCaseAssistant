@@ -57,9 +57,8 @@ import java.util.Map;
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 
-import com.baselet.assistant.Action;
+import com.baselet.assistant.DuckHandler;
 import com.baselet.assistant.KnowledgeBase;
-import com.baselet.assistant.Scenario;
 import com.baselet.control.Main;
 import com.baselet.control.constants.FacetConstants;
 import com.baselet.control.enums.Program;
@@ -72,15 +71,12 @@ import com.baselet.element.facet.common.GroupFacet;
 import com.baselet.element.facet.common.LayerFacet;
 import com.baselet.element.interfaces.GridElement;
 import com.baselet.element.old.custom.CustomElement;
-import com.baselet.element.relation.Relation;
 import com.baselet.generator.ClassDiagramConverter;
-import com.baselet.gui.ActorPanel;
 import com.baselet.gui.BaseGUI;
 import com.baselet.gui.BrowserLauncher;
 import com.baselet.gui.CurrentGui;
 import com.baselet.gui.ExportHandler;
 import com.baselet.gui.OptionPanel;
-import com.baselet.gui.ScenarioPanel;
 import com.baselet.gui.command.Align;
 import com.baselet.gui.command.ChangeElementSetting;
 import com.baselet.gui.command.Copy;
@@ -98,8 +94,10 @@ public class MenuFactory {
 			public void run() {
 				Main main = Main.getInstance();
 				BaseGUI gui = CurrentGui.getInstance().getGui();
+				KnowledgeBase knowledgeBase = main.getKnowledgeBase();
 				DiagramHandler diagramHandler = gui.getCurrentDiagram().getHandler();
 				DiagramHandler actualHandler = CurrentDiagram.getInstance().getDiagramHandler();
+				DuckHandler duckHandler = knowledgeBase.getDuckHandler();
 				SelectorOld actualSelector = actualHandler == null ? null : actualHandler.getDrawPanel().getSelector();
 
 				if (menuItem.equals(NEW)) {
@@ -191,60 +189,18 @@ public class MenuFactory {
 				}
 				// MODIFIED: Assistant Functions
 				else if (menuItem.equals(CHECK_CONSISTENCY)) {
-					boolean noProblems = true;
-
-					KnowledgeBase kb = main.getKnowledgeBase();
-					for (Map.Entry<String, Scenario> set : kb.getScenarioMap().entrySet()) {
-						Scenario s = set.getValue();
-						String s_name = s.getName();
-						String pc = s.getPostcond();
-						if (kb.getActor(s.getPrac()) == null) {
-							System.out.println("ERROR (" + s_name + "): Actor '" + s.getPrac() + "' does not exist in the Knowledge Base.");
-							noProblems = false;
-						}
-
-						ArrayList<String> mf = s.getMainflow();
-						for (String a : mf) {
-
-							if (!a.equals("")) {
-								Action act = kb.getAction(a);
-								if (act == null) {
-									System.out.println("ERROR (" + s_name + "): Action '" + a + "' does not exist in the Knowledge Base.");
-									noProblems = false;
-								}
-								else {
-									if (!kb.getActor(s.getPrac()).getActionList().contains(act)) {
-										System.out.println("ERROR (" + s_name + "): Actor '" + s.getPrac() + "' does not have action '" + a + ".");
-										noProblems = false;
-									}
-									else {
-										if (!act.getPostcond().equals(pc)) {
-											System.out.println("ERROR (" + s_name + "): postcondition not satisfied.");
-											noProblems = false;
-										}
-									}
-								}
-							}
-						}
-						System.out.println("");
-						if (noProblems) {
-							System.out.println("No problems found!");
-						}
-					}
+					duckHandler.checkConsistency();
 				}
 				else if (menuItem.equals(REQUIREMENTS)) {
-					System.out.println("Requirements clicked");
 					gui.setRequirementsPanelEnabled(!gui.isRequirementsPanelVisible());
 				}
 				else if (menuItem.equals(KNOWLEDGE_BASE)) {
-					// System.out.println("Knowledge base clicked");
-					main.getKnowledgeBase();
+					// TODO
 				}
 				else if (menuItem.equals(SCENARIOS)) {
-					ScenarioPanel.getInstance().showScenarioPanel();
+					// TODO
 				}
 				else if (menuItem.equals(DUCK_HELP)) {
-					// System.out.println("Duck help clicked");
 					System.out.println(CurrentGui.getInstance().getGui().getCurrentDiagram().getGridElements().size());
 				}
 				else if (menuItem.equals(NEW_CE)) {
@@ -294,42 +250,7 @@ public class MenuFactory {
 				}
 				// MODIFIED: Properties
 				else if (menuItem.equals(PROPERTIES)) {
-					// MODIFIED
-					// System.out.println("Element name: " + CurrentGui.getInstance().getGui().getPropertyPane().getText());
-					String selected_elements_string = CurrentGui.getInstance().getGui().getSelectedElements().toString();
-					// System.out.println(selected_elements_string);
-					String element_id = selected_elements_string.substring(selected_elements_string.lastIndexOf("@") + 1);
-					element_id = element_id.replace("]", "");
-					// System.out.println("Element ID: " + element_id);
-					String element_type = selected_elements_string.substring(selected_elements_string.lastIndexOf(".") + 1);
-					element_type = element_type.substring(0, element_type.lastIndexOf("@"));
-					// System.out.println("Element type: " + element_type);
-					if (element_type.equals("Actor")) {
-						ActorPanel.getInstance().showActorPanel();
-					}
-					else if (element_type.equals("UseCase")) {
-						ScenarioPanel.getInstance().showScenarioPanel();
-					}
-					else if (element_type.equals("Relation")) {
-						String relation_type = CurrentGui.getInstance().getGui().getPropertyPane().getText();
-						if (relation_type.contains("u")) {
-							relation_type = "includes";
-						}
-						else if (relation_type.contains("x")) {
-							relation_type = "extends";
-						}
-						else if (relation_type.contains("-")) {
-							relation_type = "abstraction";
-						}
-						else {
-							relation_type = "actor-usecase";
-						}
-						GridElement selected_relation = CurrentGui.getInstance().getGui().getCurrentDiagram().getGridElements().get(0);
-						if (selected_relation.toString().contains("Relation")) {
-							System.out.println(((Relation) selected_relation).getStickablePoints().toString());
-						}
-						System.out.println("Relation type: " + relation_type + "\nConnections:\n");
-					}
+					duckHandler.showProperties();
 				}
 				else if (menuItem.equals(SET_FOREGROUND_COLOR) && actualHandler != null && actualSelector != null) {
 					actualHandler.getController().executeCommand(new ChangeElementSetting(FacetConstants.FOREGROUND_COLOR_KEY, param, actualSelector.getSelectedElements()));

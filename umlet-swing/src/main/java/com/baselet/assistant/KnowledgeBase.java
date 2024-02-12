@@ -9,11 +9,13 @@ public class KnowledgeBase {
 	private final Map<String, Scenario> scenario_map;
 	private final Map<String, Actor> actor_map;
 	private final Map<String, Action> action_map;
+	private final DuckHandler duck_handler;
 
 	public KnowledgeBase() {
 		scenario_map = new HashMap<String, Scenario>();
 		actor_map = new HashMap<String, Actor>();
 		action_map = new HashMap<String, Action>();
+		duck_handler = new DuckHandler();
 	}
 
 	public void addScenario(Scenario new_scenario) {
@@ -50,6 +52,10 @@ public class KnowledgeBase {
 
 	public Map<String, Scenario> getScenarioMap() {
 		return scenario_map;
+	}
+
+	public DuckHandler getDuckHandler() {
+		return duck_handler;
 	}
 
 }
