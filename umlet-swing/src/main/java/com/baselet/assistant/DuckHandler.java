@@ -56,18 +56,18 @@ public class DuckHandler {
 					}
 				}
 			}
-			System.out.println("");
+			System.out.println();
 			if (noProblems) {
 				System.out.println("No problems found!");
 			}
 		}
-
+		System.out.println();
 		ArrayList<GridElement> entities = new ArrayList<GridElement>();
 		ArrayList<GridElement> relations = new ArrayList<GridElement>();
-		ArrayList<Double> rectangleX1s = new ArrayList<Double>();
-		ArrayList<Double> rectangleY1s = new ArrayList<Double>();
-		ArrayList<Double> rectangleX2s = new ArrayList<Double>();
-		ArrayList<Double> rectangleY2s = new ArrayList<Double>();
+		ArrayList<Double> rectX1s = new ArrayList<Double>();
+		ArrayList<Double> rectY1s = new ArrayList<Double>();
+		ArrayList<Double> rectX2s = new ArrayList<Double>();
+		ArrayList<Double> rectY2s = new ArrayList<Double>();
 
 		for (GridElement ge : CurrentGui.getInstance().getGui().getCurrentDiagram().getGridElements()) {
 			if (ge.getClass().toString().contains("Relation")) {
@@ -75,66 +75,69 @@ public class DuckHandler {
 			}
 			else {
 				entities.add(ge);
+				Rectangle rect = ge.getRectangle();
+				rectX1s.add((double) rect.getX());
+				rectY1s.add((double) rect.getY());
+				rectX2s.add((double) rect.getX2());
+				rectY2s.add((double) rect.getY2());
 			}
 		}
 
-		for (GridElement e : entities) {
+		for (GridElement r : relations) {
+			Rectangle stickRectangle = ((Relation) r).getRealRectangle();
+			String relation_type = r.getPanelAttributes();
 
-		}
-
-		for (GridElement ge : CurrentGui.getInstance().getGui().getCurrentDiagram().getGridElements()) {
-			Rectangle stickRectangle = ((Relation) ge).getRealRectangle();
-			if (ge.getClass().toString().contains("Relation")) {
-				String relation_type = ge.getPanelAttributes();
-
-				if (relation_type.contains("includes")) {
-					relation_type = "includes";
-				}
-				else if (relation_type.contains("extends")) {
-					relation_type = "extends";
-				}
-				else if (relation_type.contains("-")) {
-					relation_type = "abstraction";
-				}
-				else {
-					relation_type = "actor-usecase";
-				}
-
-				Double p0x = 0.0;
-				Double p0y = 0.0;
-				Double p1x = 0.0;
-				Double p1y = 0.0;
-
-				Iterator<PointDoubleIndexed> stickCoords = ((Relation) ge).getStickablePoints().iterator();
-
-				int i = 0;
-				while (stickCoords.hasNext()) {
-					PointDoubleIndexed pdi = stickCoords.next();
-
-					if (i == 0) {
-						p0x = pdi.getX() + stickRectangle.getX();
-						p0y = pdi.getY() + stickRectangle.getY();
-						System.out.println("Point 0 absolute position: x= " + p0x + " y=" + p0y);
-
-					}
-					else if (i == 1) {
-						p1x = pdi.getX() + stickRectangle.getX();
-						p1y = pdi.getY() + stickRectangle.getY();
-						System.out.println("Point 1 absolute position: x= " + p1x + " y=" + p1y);
-					}
-					i++;
-				}
-
-				System.out.println("Type " + relation_type + "\nReal rectangle: " + stickRectangle.toString());
+			if (relation_type.contains("includes")) {
+				relation_type = "includes";
+			}
+			else if (relation_type.contains("extends")) {
+				relation_type = "extends";
+			}
+			else if (relation_type.contains("-")) {
+				relation_type = "abstraction";
 			}
 			else {
-				System.out.println(ge.getRectangle().toString());
-				actorsAndUseCases.add(ge);
+				relation_type = "actor-usecase";
 			}
 
-			for (GridElement aouc : actorsAndUseCases) {
+			Double p0x = 0.0;
+			Double p0y = 0.0;
+			Double p1x = 0.0;
+			Double p1y = 0.0;
 
+			Iterator<PointDoubleIndexed> stickCoords = ((Relation) r).getStickablePoints().iterator();
+			String entity1 = "nothing";
+			String entity2 = "nothing";
+
+			int i = 0;
+			while (stickCoords.hasNext()) {
+				PointDoubleIndexed pdi = stickCoords.next();
+
+				if (i == 0) {
+					p0x = pdi.getX() + stickRectangle.getX();
+					p0y = pdi.getY() + stickRectangle.getY();
+					// System.out.println("Point 0 absolute position: x= " + p0x + " y=" + p0y);
+				}
+				else if (i == 1) {
+					p1x = pdi.getX() + stickRectangle.getX();
+					p1y = pdi.getY() + stickRectangle.getY();
+					// System.out.println("Point 1 absolute position: x= " + p1x + " y=" + p1y);
+				}
+				for (int j = 0; j < entities.size(); j++) {
+					if (p0x >= rectX1s.get(j) && p0y >= rectY1s.get(j) && p0x <= rectX2s.get(j) && p0y <= rectY2s.get(j)) {
+						entity1 = entities.get(j).getPanelAttributes();
+					}
+					else if (p1x >= rectX1s.get(j) && p1y >= rectY1s.get(j) && p1x <= rectX2s.get(j) && p1y <= rectY2s.get(j)) {
+						entity2 = entities.get(j).getPanelAttributes();
+					}
+				}
+
+				i++;
 			}
+
+			// System.out.println("Type " + relation_type + "\nReal rectangle: " + stickRectangle.toString());
+
+			System.out.println("An '" + relation_type + "' relation connects " + entity1 + " and " + entity2);
 		}
 
 	}
