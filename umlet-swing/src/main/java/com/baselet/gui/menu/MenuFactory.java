@@ -195,7 +195,7 @@ public class MenuFactory {
 					gui.setRequirementsPanelEnabled(!gui.isRequirementsPanelVisible());
 				}
 				else if (menuItem.equals(KNOWLEDGE_BASE)) {
-					// TODO
+					gui.setKnowledgeBasePanelEnabled(!gui.isKnowledgeBasePanelVisible());
 				}
 				else if (menuItem.equals(SCENARIOS)) {
 					// TODO

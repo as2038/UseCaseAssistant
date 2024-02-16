@@ -141,6 +141,10 @@ public abstract class BaseGUI {
 
 	public abstract boolean isRequirementsPanelVisible();
 
+	public abstract void setKnowledgeBasePanelEnabled(boolean enable);
+
+	public abstract boolean isKnowledgeBasePanelVisible();
+
 	public abstract void updateDiagramName(DiagramHandler diagram, String name);
 
 	public abstract void setDiagramChanged(DiagramHandler diagram, boolean changed);

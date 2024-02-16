@@ -76,7 +76,7 @@ public class RequirementsPanel extends JPanel {
 	private final JTextField opt_t3 = new JTextField();
 
 	private final JButton bt_add = new JButton("Add");
-	private final JButton bt_reset = new JButton("reset");
+	private final JButton bt_reset = new JButton("Reset");
 	private final JButton bt_close = new JButton("Close");
 
 	// private final JTextArea ta_text = new JTextArea(5, 5);
@@ -105,11 +105,6 @@ public class RequirementsPanel extends JPanel {
 
 		int line = 0;
 
-		// addComponent(this, layout, sp_text, 0, line, 1, 1, fillBoth, leftWeight, 1, paddingMessagebox);
-		// line++;
-		// addComponent(this, layout, lb_req, 0, line, 1, 1, fillWidth, noWeight, 0, paddingLeftLabel);
-		// addComponent(this, layout, tf_req, 1, line, 1, 1, fillWidth, leftWeight, 0, paddingText);
-		// line++;
 		addComponent(this, layout, cb_ubic, 0, line, 1, 1, fillWidth, noWeight, 0, paddingCheckbox);
 		addComponent(this, layout, ubic_l1, 1, line, 1, 1, fillWidth, noWeight, 0, paddingLeftLabel);
 		addComponent(this, layout, ubic_t1, 2, line, 1, 1, fillWidth, leftWeight, 0, paddingText);
@@ -159,7 +154,6 @@ public class RequirementsPanel extends JPanel {
 	}
 
 	private void initAndFillComponents() {
-		// ta_text.setText("Requirement in plain text");
 		ubic_t1.setText("<system name>");
 		ubic_t2.setText("<system response>");
 		ubic_t1.setEnabled(false);

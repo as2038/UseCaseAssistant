@@ -35,9 +35,11 @@ public abstract class BaseGUIBuilder {
 	private JSplitPane mainSplit;
 	private MailPanel mailPanel;
 	private RequirementsPanel requirementsPanel;
+	private KnowledgeBasePanel knowledgeBasePanel;
 	private JSplitPane customSplit;
 	private JSplitPane mailSplit;
 	private JSplitPane requirementsSplit;
+	private JSplitPane knowledgeBaseSplit;
 	private JPanel rightPanel;
 	private OwnSyntaxPane propertyTextPane;
 
@@ -68,9 +70,13 @@ public abstract class BaseGUIBuilder {
 		// MODIFIED: Assistant panels
 		requirementsPanel = new RequirementsPanel();
 		requirementsPanel.setVisible(false);
-		requirementsSplit = newGenericSplitPane(JSplitPane.VERTICAL_SPLIT, requirementsPanel, customSplit, 0, 0, true);
+		requirementsSplit = newGenericSplitPane(JSplitPane.VERTICAL_SPLIT, requirementsPanel, mailSplit, 0, 0, true);
 
-		return requirementsSplit;
+		knowledgeBasePanel = new KnowledgeBasePanel();
+		knowledgeBasePanel.setVisible(false);
+		knowledgeBaseSplit = newGenericSplitPane(JSplitPane.VERTICAL_SPLIT, knowledgeBasePanel, requirementsSplit, 0, 0, true);
+
+		return knowledgeBaseSplit;
 		// return mailSplit;
 	}
 
@@ -90,6 +96,10 @@ public abstract class BaseGUIBuilder {
 
 	public RequirementsPanel getRequirementsPanel() {
 		return requirementsPanel;
+	}
+
+	public KnowledgeBasePanel getKnowledgeBasePanel() {
+		return knowledgeBasePanel;
 	}
 
 	public JSplitPane getMainSplit() {
@@ -188,6 +198,8 @@ public abstract class BaseGUIBuilder {
 	public void setMailPanelEnabled(boolean enable) {
 		getMailPanel().setVisible(enable);
 		if (enable) {
+			getRequirementsPanel().setVisible(false);
+			getKnowledgeBasePanel().setVisible(false);
 			int mailDividerLoc = Math.max(Constants.MIN_MAIL_SPLITPANEL_SIZE, Config.getInstance().getMail_split_position());
 			mailSplit.setDividerLocation(mailDividerLoc);
 			mailSplit.setDividerSize(2);
@@ -201,12 +213,28 @@ public abstract class BaseGUIBuilder {
 	public void setRequirementsPanelEnabled(boolean enable) {
 		getRequirementsPanel().setVisible(enable);
 		if (enable) {
+			getMailPanel().setVisible(false);
+			getKnowledgeBasePanel().setVisible(false);
 			int mailDividerLoc = Math.max(Constants.MIN_MAIL_SPLITPANEL_SIZE, Config.getInstance().getMail_split_position());
 			requirementsSplit.setDividerLocation(mailDividerLoc);
 			requirementsSplit.setDividerSize(2);
 		}
 		else {
 			requirementsSplit.setDividerSize(0);
+		}
+	}
+
+	public void setKnowledgeBasePanelEnabled(boolean enable) {
+		getKnowledgeBasePanel().setVisible(enable);
+		if (enable) {
+			getMailPanel().setVisible(false);
+			getRequirementsPanel().setVisible(false);
+			int mailDividerLoc = Math.max(Constants.MIN_MAIL_SPLITPANEL_SIZE, Config.getInstance().getMail_split_position());
+			knowledgeBaseSplit.setDividerLocation(mailDividerLoc);
+			knowledgeBaseSplit.setDividerSize(2);
+		}
+		else {
+			knowledgeBaseSplit.setDividerSize(0);
 		}
 	}
 

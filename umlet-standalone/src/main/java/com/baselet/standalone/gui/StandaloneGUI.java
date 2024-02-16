@@ -212,6 +212,16 @@ public class StandaloneGUI extends BaseGUI {
 	}
 
 	@Override
+	public void setKnowledgeBasePanelEnabled(boolean enable) {
+		guiBuilder.setKnowledgeBasePanelEnabled(enable);
+	}
+
+	@Override
+	public boolean isKnowledgeBasePanelVisible() {
+		return guiBuilder.getKnowledgeBasePanel().isVisible();
+	}
+
+	@Override
 	public void setCustomElementSelected(boolean selected) {
 		// Custom Element Edit is only enabled if a CE is selected and the panel is not visible
 		menuBuilder.setEditCustomElementMenuItemEnabled(selected && !guiBuilder.getCustomPanel().isVisible());
