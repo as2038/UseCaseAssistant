@@ -11,6 +11,7 @@ import com.baselet.element.relation.Relation;
 import com.baselet.element.sticking.PointDoubleIndexed;
 import com.baselet.gui.ActorPanel;
 import com.baselet.gui.CurrentGui;
+import com.baselet.gui.DUCKHelpPanel;
 import com.baselet.gui.ScenarioPanel;
 
 public class DuckHandler {
@@ -161,5 +162,9 @@ public class DuckHandler {
 		else if (element_type.equals("Relation")) {
 
 		}
+	}
+
+	public void showHelp() {
+		DUCKHelpPanel.getInstance().showDuckHelpPanel();
 	}
 }

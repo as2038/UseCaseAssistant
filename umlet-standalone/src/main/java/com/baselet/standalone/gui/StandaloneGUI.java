@@ -200,6 +200,15 @@ public class StandaloneGUI extends BaseGUI {
 	}
 
 	// MODIFIED: Assistant panels
+	@Override
+	public void setReportPanelEnabled(boolean enable) {
+		guiBuilder.setReportPanelEnabled(enable);
+	}
+
+	@Override
+	public boolean isReportPanelVisible() {
+		return guiBuilder.getReportPanel().isVisible();
+	}
 
 	@Override
 	public void setRequirementsPanelEnabled(boolean enable) {
@@ -219,6 +228,16 @@ public class StandaloneGUI extends BaseGUI {
 	@Override
 	public boolean isKnowledgeBasePanelVisible() {
 		return guiBuilder.getKnowledgeBasePanel().isVisible();
+	}
+
+	@Override
+	public void setScenarioListPanelEnabled(boolean enable) {
+		guiBuilder.setScenarioListPanelEnabled(enable);
+	}
+
+	@Override
+	public boolean isScenarioListPanelVisible() {
+		return guiBuilder.getScenarioListPanel().isVisible();
 	}
 
 	@Override

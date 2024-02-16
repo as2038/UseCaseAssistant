@@ -190,6 +190,7 @@ public class MenuFactory {
 				// MODIFIED: Assistant Functions
 				else if (menuItem.equals(CHECK_CONSISTENCY)) {
 					duckHandler.checkConsistency();
+					gui.setReportPanelEnabled(!gui.isReportPanelVisible());
 				}
 				else if (menuItem.equals(REQUIREMENTS)) {
 					gui.setRequirementsPanelEnabled(!gui.isRequirementsPanelVisible());
@@ -198,10 +199,11 @@ public class MenuFactory {
 					gui.setKnowledgeBasePanelEnabled(!gui.isKnowledgeBasePanelVisible());
 				}
 				else if (menuItem.equals(SCENARIOS)) {
-					// TODO
+					gui.setScenarioListPanelEnabled(!gui.isScenarioListPanelVisible());
 				}
 				else if (menuItem.equals(DUCK_HELP)) {
-					System.out.println(CurrentGui.getInstance().getGui().getCurrentDiagram().getGridElements().size());
+					// System.out.println(CurrentGui.getInstance().getGui().getCurrentDiagram().getGridElements().size());
+					duckHandler.showHelp();
 				}
 				else if (menuItem.equals(NEW_CE)) {
 					if (gui.getCurrentCustomHandler().closeEntity()) {

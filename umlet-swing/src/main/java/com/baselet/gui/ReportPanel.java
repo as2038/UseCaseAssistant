@@ -7,10 +7,10 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
-import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class ScenarioListPanel extends JPanel {
+public class ReportPanel extends JPanel {
 
 	private final int paddingTop = 1;
 	private final int paddingBottom = 1;
@@ -22,9 +22,7 @@ public class ScenarioListPanel extends JPanel {
 	private final GridBagLayout layout = new GridBagLayout();
 
 	// UI
-	private final JButton bt_newscenario = new JButton("New Scenario");
-	private final JButton bt_delete = new JButton("Delete");
-	private final JButton bt_close = new JButton("Close");
+	private final JLabel lb_warnings = new JLabel("Warnings:");
 
 	private final Insets paddingLeftLabel = new Insets(paddingTop, outerPaddingLeft, paddingBottom, halfHorizontalDividerSpace);
 	private final Insets paddingMessagebox = new Insets(paddingTop, outerPaddingLeft, paddingBottom, outerPaddingRight);
@@ -41,7 +39,7 @@ public class ScenarioListPanel extends JPanel {
 	private final int fillWidth = GridBagConstraints.HORIZONTAL;
 	private final int fillBoth = GridBagConstraints.BOTH;
 
-	public ScenarioListPanel() {
+	public ReportPanel() {
 		initAndFillComponents();
 
 		setLayout(layout);
@@ -50,9 +48,7 @@ public class ScenarioListPanel extends JPanel {
 		int line = 0;
 
 		line++;
-		addComponent(this, layout, bt_newscenario, 4, line, 1, 1, fillWidth, leftWeight, 0, paddingText);
-		addComponent(this, layout, bt_delete, 5, line, 1, 1, fillWidth, leftWeight, 0, paddingText);
-		addComponent(this, layout, bt_close, 6, line, 1, 1, fillWidth, leftWeight, 0, paddingText);
+		addComponent(this, layout, lb_warnings, 4, line, 1, 1, fillWidth, leftWeight, 0, paddingText);
 	}
 
 	private void initAndFillComponents() {

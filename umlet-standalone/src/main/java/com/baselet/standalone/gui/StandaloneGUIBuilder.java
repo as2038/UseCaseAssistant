@@ -193,9 +193,23 @@ public class StandaloneGUIBuilder extends BaseGUIBuilder {
 	}
 
 	// MODIFIED: Assistant panels
+	@Override
+	public void setReportPanelEnabled(boolean enable) {
+		super.setReportPanelEnabled(enable);
+	}
 
 	@Override
 	public void setRequirementsPanelEnabled(boolean enable) {
 		super.setRequirementsPanelEnabled(enable);
+	}
+
+	@Override
+	public void setKnowledgeBasePanelEnabled(boolean enable) {
+		super.setKnowledgeBasePanelEnabled(enable);
+	}
+
+	@Override
+	public void setScenarioListPanelEnabled(boolean enable) {
+		super.setScenarioListPanelEnabled(enable);
 	}
 }

@@ -34,12 +34,16 @@ public abstract class BaseGUIBuilder {
 	private CustomElementHandler customHandler;
 	private JSplitPane mainSplit;
 	private MailPanel mailPanel;
+	private ReportPanel reportPanel;
 	private RequirementsPanel requirementsPanel;
 	private KnowledgeBasePanel knowledgeBasePanel;
+	private ScenarioListPanel scenarioListPanel;
 	private JSplitPane customSplit;
 	private JSplitPane mailSplit;
+	private JSplitPane reportSplit;
 	private JSplitPane requirementsSplit;
 	private JSplitPane knowledgeBaseSplit;
+	private JSplitPane scenarioListSplit;
 	private JPanel rightPanel;
 	private OwnSyntaxPane propertyTextPane;
 
@@ -68,15 +72,23 @@ public abstract class BaseGUIBuilder {
 		mailSplit = newGenericSplitPane(JSplitPane.VERTICAL_SPLIT, mailPanel, customSplit, 0, 0, true);
 
 		// MODIFIED: Assistant panels
+		reportPanel = new ReportPanel();
+		reportPanel.setVisible(false);
+		reportSplit = newGenericSplitPane(JSplitPane.VERTICAL_SPLIT, reportPanel, mailSplit, 0, 0, true);
+
 		requirementsPanel = new RequirementsPanel();
 		requirementsPanel.setVisible(false);
-		requirementsSplit = newGenericSplitPane(JSplitPane.VERTICAL_SPLIT, requirementsPanel, mailSplit, 0, 0, true);
+		requirementsSplit = newGenericSplitPane(JSplitPane.VERTICAL_SPLIT, requirementsPanel, reportSplit, 0, 0, true);
 
 		knowledgeBasePanel = new KnowledgeBasePanel();
 		knowledgeBasePanel.setVisible(false);
 		knowledgeBaseSplit = newGenericSplitPane(JSplitPane.VERTICAL_SPLIT, knowledgeBasePanel, requirementsSplit, 0, 0, true);
 
-		return knowledgeBaseSplit;
+		scenarioListPanel = new ScenarioListPanel();
+		scenarioListPanel.setVisible(false);
+		scenarioListSplit = newGenericSplitPane(JSplitPane.VERTICAL_SPLIT, scenarioListPanel, knowledgeBaseSplit, 0, 0, true);
+
+		return scenarioListSplit;
 		// return mailSplit;
 	}
 
@@ -93,6 +105,9 @@ public abstract class BaseGUIBuilder {
 	}
 
 	// MODIFIED: Assistant panels
+	public ReportPanel getReportPanel() {
+		return reportPanel;
+	}
 
 	public RequirementsPanel getRequirementsPanel() {
 		return requirementsPanel;
@@ -100,6 +115,10 @@ public abstract class BaseGUIBuilder {
 
 	public KnowledgeBasePanel getKnowledgeBasePanel() {
 		return knowledgeBasePanel;
+	}
+
+	public ScenarioListPanel getScenarioListPanel() {
+		return scenarioListPanel;
 	}
 
 	public JSplitPane getMainSplit() {
@@ -200,6 +219,7 @@ public abstract class BaseGUIBuilder {
 		if (enable) {
 			getRequirementsPanel().setVisible(false);
 			getKnowledgeBasePanel().setVisible(false);
+			getScenarioListPanel().setVisible(false);
 			int mailDividerLoc = Math.max(Constants.MIN_MAIL_SPLITPANEL_SIZE, Config.getInstance().getMail_split_position());
 			mailSplit.setDividerLocation(mailDividerLoc);
 			mailSplit.setDividerSize(2);
@@ -210,11 +230,29 @@ public abstract class BaseGUIBuilder {
 	}
 
 	// MODIFIED: Assistant panels
+	public void setReportPanelEnabled(boolean enable) {
+		getReportPanel().setVisible(enable);
+		if (enable) {
+			getMailPanel().setVisible(false);
+			getRequirementsPanel().setVisible(false);
+			getKnowledgeBasePanel().setVisible(false);
+			getScenarioListPanel().setVisible(false);
+			int mailDividerLoc = Math.max(Constants.MIN_MAIL_SPLITPANEL_SIZE, Config.getInstance().getMail_split_position());
+			reportSplit.setDividerLocation(mailDividerLoc);
+			reportSplit.setDividerSize(2);
+		}
+		else {
+			reportSplit.setDividerSize(0);
+		}
+	}
+
 	public void setRequirementsPanelEnabled(boolean enable) {
 		getRequirementsPanel().setVisible(enable);
 		if (enable) {
 			getMailPanel().setVisible(false);
+			getReportPanel().setVisible(false);
 			getKnowledgeBasePanel().setVisible(false);
+			getScenarioListPanel().setVisible(false);
 			int mailDividerLoc = Math.max(Constants.MIN_MAIL_SPLITPANEL_SIZE, Config.getInstance().getMail_split_position());
 			requirementsSplit.setDividerLocation(mailDividerLoc);
 			requirementsSplit.setDividerSize(2);
@@ -228,13 +266,31 @@ public abstract class BaseGUIBuilder {
 		getKnowledgeBasePanel().setVisible(enable);
 		if (enable) {
 			getMailPanel().setVisible(false);
+			getReportPanel().setVisible(false);
 			getRequirementsPanel().setVisible(false);
+			getScenarioListPanel().setVisible(false);
 			int mailDividerLoc = Math.max(Constants.MIN_MAIL_SPLITPANEL_SIZE, Config.getInstance().getMail_split_position());
 			knowledgeBaseSplit.setDividerLocation(mailDividerLoc);
 			knowledgeBaseSplit.setDividerSize(2);
 		}
 		else {
 			knowledgeBaseSplit.setDividerSize(0);
+		}
+	}
+
+	public void setScenarioListPanelEnabled(boolean enable) {
+		getScenarioListPanel().setVisible(enable);
+		if (enable) {
+			getMailPanel().setVisible(false);
+			getReportPanel().setVisible(false);
+			getRequirementsPanel().setVisible(false);
+			getKnowledgeBasePanel().setVisible(false);
+			int mailDividerLoc = Math.max(Constants.MIN_MAIL_SPLITPANEL_SIZE, Config.getInstance().getMail_split_position());
+			scenarioListSplit.setDividerLocation(mailDividerLoc);
+			scenarioListSplit.setDividerSize(2);
+		}
+		else {
+			scenarioListSplit.setDividerSize(0);
 		}
 	}
 
