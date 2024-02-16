@@ -86,20 +86,6 @@ public class DuckHandler {
 
 		for (GridElement r : relations) {
 			Rectangle stickRectangle = ((Relation) r).getRealRectangle();
-			String relation_type = r.getPanelAttributes();
-
-			if (relation_type.contains("includes")) {
-				relation_type = "includes";
-			}
-			else if (relation_type.contains("extends")) {
-				relation_type = "extends";
-			}
-			else if (relation_type.contains("-")) {
-				relation_type = "abstraction";
-			}
-			else {
-				relation_type = "actor-usecase";
-			}
 
 			Double p0x = 0.0;
 			Double p0y = 0.0;
@@ -109,6 +95,8 @@ public class DuckHandler {
 			Iterator<PointDoubleIndexed> stickCoords = ((Relation) r).getStickablePoints().iterator();
 			String entity1 = "nothing";
 			String entity2 = "nothing";
+			String entity1type = "";
+			String entity2type = "";
 
 			int i = 0;
 			while (stickCoords.hasNext()) {
@@ -127,18 +115,59 @@ public class DuckHandler {
 				for (int j = 0; j < entities.size(); j++) {
 					if (p0x >= rectX1s.get(j) && p0y >= rectY1s.get(j) && p0x <= rectX2s.get(j) && p0y <= rectY2s.get(j)) {
 						entity1 = entities.get(j).getPanelAttributes();
+						entity1type = entities.get(j).getClass().toString();
+						if (entity1type.contains("Actor")) {
+							entity1type = "actor";
+						}
+						else if (entity1type.contains("UseCase")) {
+							entity1type = "use case";
+						}
 					}
 					else if (p1x >= rectX1s.get(j) && p1y >= rectY1s.get(j) && p1x <= rectX2s.get(j) && p1y <= rectY2s.get(j)) {
 						entity2 = entities.get(j).getPanelAttributes();
+						entity2type = entities.get(j).getClass().toString();
+						if (entity2type.contains("Actor")) {
+							entity2type = "actor";
+						}
+						else if (entity2type.contains("UseCase")) {
+							entity2type = "use case";
+						}
 					}
 				}
 
 				i++;
 			}
 
-			// System.out.println("Type " + relation_type + "\nReal rectangle: " + stickRectangle.toString());
+			String relation_type = r.getPanelAttributes();
+
+			if (relation_type.contains("includes")) {
+				relation_type = "includes";
+				if (entity1type.equals("actor") || entity2type.equals("actor")) {
+					System.out.println("Warning: Cannot connect " + entity1 + " (" + entity1type + ") and " + entity2 + " (" + entity2type + ") with an 'includes' relation!");
+				}
+			}
+			else if (relation_type.contains("extends")) {
+				relation_type = "extends";
+				if (entity1type.equals("actor") || entity2type.equals("actor")) {
+					System.out.println("Warning: Cannot connect " + entity1 + " (" + entity1type + ") and " + entity2 + " (" + entity2type + ") with an 'extends' relation!");
+				}
+			}
+			else if (relation_type.contains("-")) {
+				relation_type = "abstraction";
+				if (entity1type.equals("use case") || entity2type.equals("use case")) {
+					System.out.println("Warning: Cannot connect " + entity1 + " (" + entity1type + ") and " + entity2 + " (" + entity2type + ") with an 'abstraction' relation!");
+				}
+			}
+			else {
+				relation_type = "actor-usecase";
+				if (entity1type.equals(entity2type)) {
+					System.out.println("Warning: Cannot connect two " + entity1type + " entities (" + entity1 + " and " + entity2 + ") with an 'actor-usecase' relation!");
+				}
+			}
 
 			System.out.println("An '" + relation_type + "' relation connects " + entity1 + " and " + entity2);
+			// System.out.println(entity1type + " and " + entity2type);
+
 		}
 
 	}
