@@ -147,6 +147,8 @@ public abstract class BaseGUI {
 
 	public abstract void setKnowledgeBasePanelEnabled(boolean enable);
 
+	public abstract KnowledgeBasePanel getKnowledgeBasePanel();
+
 	public abstract boolean isKnowledgeBasePanelVisible();
 
 	public abstract void setScenarioListPanelEnabled(boolean enable);

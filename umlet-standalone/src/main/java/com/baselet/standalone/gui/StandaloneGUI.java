@@ -27,6 +27,7 @@ import com.baselet.diagram.DrawPanel;
 import com.baselet.element.interfaces.GridElement;
 import com.baselet.element.old.custom.CustomElementHandler;
 import com.baselet.gui.BaseGUI;
+import com.baselet.gui.KnowledgeBasePanel;
 import com.baselet.gui.pane.OwnSyntaxPane;
 
 public class StandaloneGUI extends BaseGUI {
@@ -228,6 +229,11 @@ public class StandaloneGUI extends BaseGUI {
 	@Override
 	public boolean isKnowledgeBasePanelVisible() {
 		return guiBuilder.getKnowledgeBasePanel().isVisible();
+	}
+
+	@Override
+	public KnowledgeBasePanel getKnowledgeBasePanel() {
+		return guiBuilder.getKnowledgeBasePanel();
 	}
 
 	@Override

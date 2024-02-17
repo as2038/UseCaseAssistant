@@ -3,6 +3,9 @@ package com.baselet.assistant;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.baselet.gui.BaseGUI;
+import com.baselet.gui.CurrentGui;
+
 public class KnowledgeBase {
 
 	private String last_temp_name;
@@ -10,6 +13,8 @@ public class KnowledgeBase {
 	private final Map<String, Actor> actor_map;
 	private final Map<String, Action> action_map;
 	private final DuckHandler duck_handler;
+
+	BaseGUI gui = CurrentGui.getInstance().getGui();
 
 	public KnowledgeBase() {
 		scenario_map = new HashMap<String, Scenario>();
@@ -24,6 +29,7 @@ public class KnowledgeBase {
 
 	public void addActor(Actor new_actor) {
 		actor_map.put(new_actor.getName(), new_actor);
+		gui.getKnowledgeBasePanel().addEntityToTable(new_actor.getName(), "actor");
 	}
 
 	public void addAction(Action new_action) {
@@ -57,5 +63,4 @@ public class KnowledgeBase {
 	public DuckHandler getDuckHandler() {
 		return duck_handler;
 	}
-
 }
