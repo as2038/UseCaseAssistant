@@ -107,6 +107,7 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 			public void run() {
 				scenarioframe.setLocationRelativeTo(CurrentGui.getInstance().getGui().getMainFrame());
 				scenarioframe.setVisible(true);
+				scenarioframe.setSize(300, 300);
 				scenarioframe.toFront();
 
 				temp_name = CurrentGui.getInstance().getGui().getPropertyPane().getText();

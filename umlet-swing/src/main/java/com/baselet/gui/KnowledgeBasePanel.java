@@ -1,5 +1,6 @@
 package com.baselet.gui;
 
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -9,17 +10,16 @@ import java.awt.Insets;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 public class KnowledgeBasePanel extends JPanel {
 
-	private JTable knowledgeTable;
+	private final JTable knowledgeTable;
 	private final DefaultTableModel model = new DefaultTableModel();
-	private final String[][] knowledgeData = {
-			{ "", "", "" },
-			{ "", "", "" }
-	};
+
+	private final JScrollPane sp;
 
 	private final int paddingTop = 1;
 	private final int paddingBottom = 1;
@@ -53,31 +53,35 @@ public class KnowledgeBasePanel extends JPanel {
 	public KnowledgeBasePanel() {
 		initAndFillComponents();
 
-		setLayout(layout);
+		// setLayout(layout);
 		setSize(new Dimension(0, 250));
-
-		int line = 0;
-		line++;
-		addComponent(this, layout, knowledgeTable, 4, line, 1, 1, fillWidth, leftWeight, 0, paddingText);
-		line++;
-		addComponent(this, layout, bt_newentity, 4, line, 1, 1, fillWidth, leftWeight, 0, paddingText);
-		addComponent(this, layout, bt_delete, 5, line, 1, 1, fillWidth, leftWeight, 0, paddingText);
-		addComponent(this, layout, bt_close, 6, line, 1, 1, fillWidth, leftWeight, 0, paddingText);
-	}
-
-	private void initAndFillComponents() {
-		setAllFonts();
-		// String[] columnNames = { "Entity Name", "Entity Type", "Warnings" };
 
 		model.addColumn("Entity Name");
 		model.addColumn("Entity Type");
 		model.addColumn("Warnings");
 
 		knowledgeTable = new JTable(model);
-		knowledgeTable.setBounds(30, 40, 200, 300);
 
-		// JScrollPane sp = new JScrollPane(knowledgeTable);
-		// knowledgeTable.add(sp);
+		sp = new JScrollPane();
+		sp.setViewportView(knowledgeTable);
+		// int line = 0;
+		this.add(sp, BorderLayout.NORTH);
+		this.add(bt_newentity, BorderLayout.NORTH);
+		this.add(bt_delete, BorderLayout.NORTH);
+		this.add(bt_close, BorderLayout.NORTH);
+
+		// addComponent(this, layout, sp, 1, line, 1, 1, fillWidth, leftWeight, 0, paddingText);
+		// line++;
+		// addComponent(this, layout, knowledgeTable, 1, line, 1, 1, fillWidth, leftWeight, 0, paddingText);
+		// line++;
+		// addComponent(this, layout, bt_newentity, 4, line, 1, 1, fillWidth, leftWeight, 0, paddingText);
+		// addComponent(this, layout, bt_delete, 5, line, 1, 1, fillWidth, leftWeight, 0, paddingText);
+		// addComponent(this, layout, bt_close, 6, line, 1, 1, fillWidth, leftWeight, 0, paddingText);
+	}
+
+	private void initAndFillComponents() {
+		setAllFonts();
+		/* model.addColumn("Entity Name"); model.addColumn("Entity Type"); model.addColumn("Warnings"); knowledgeTable = new JTable(model); sp = new JScrollPane(knowledgeTable); sp.setSize(300, 300); sp.setVisible(true); // add(new JScrollPane(knowledgeTable)); knowledgeTable.setBounds(30, 40, 200, 300); */
 
 	}
 
@@ -105,7 +109,8 @@ public class KnowledgeBasePanel extends JPanel {
 	public void addEntityToTable(String name, String type) {
 		DefaultTableModel model = (DefaultTableModel) knowledgeTable.getModel();
 		model.addRow(new Object[] { name, type, "0" });
-		knowledgeTable.repaint();
+		knowledgeTable.invalidate();
+		sp.repaint();
 	}
 
 }

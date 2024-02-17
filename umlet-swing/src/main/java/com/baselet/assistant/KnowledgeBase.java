@@ -34,6 +34,7 @@ public class KnowledgeBase {
 
 	public void addAction(Action new_action) {
 		action_map.put(new_action.getName(), new_action);
+		gui.getKnowledgeBasePanel().addEntityToTable(new_action.getName(), "action");
 	}
 
 	public Scenario getScenario(String scenario_name) {

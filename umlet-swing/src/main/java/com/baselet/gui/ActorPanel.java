@@ -113,6 +113,7 @@ public class ActorPanel extends JPanel implements ActionListener {
 			public void run() {
 				actorframe.setLocationRelativeTo(CurrentGui.getInstance().getGui().getMainFrame());
 				actorframe.setVisible(true);
+				actorframe.setSize(300, 300);
 				actorframe.toFront();
 
 				temp_name = CurrentGui.getInstance().getGui().getPropertyPane().getText();
