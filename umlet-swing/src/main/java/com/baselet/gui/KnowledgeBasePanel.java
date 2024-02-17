@@ -17,7 +17,7 @@ import javax.swing.table.DefaultTableModel;
 public class KnowledgeBasePanel extends JPanel {
 
 	private final JTable knowledgeTable;
-	private final DefaultTableModel model = new DefaultTableModel();
+	// private final DefaultTableModel model;
 
 	private final JScrollPane sp;
 
@@ -55,6 +55,13 @@ public class KnowledgeBasePanel extends JPanel {
 
 		// setLayout(layout);
 		setSize(new Dimension(0, 250));
+
+		DefaultTableModel model = new DefaultTableModel() {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
 
 		model.addColumn("Entity Name");
 		model.addColumn("Entity Type");
@@ -109,8 +116,6 @@ public class KnowledgeBasePanel extends JPanel {
 	public void addEntityToTable(String name, String type) {
 		DefaultTableModel model = (DefaultTableModel) knowledgeTable.getModel();
 		model.addRow(new Object[] { name, type, "0" });
-		knowledgeTable.invalidate();
-		sp.repaint();
 	}
 
 }
