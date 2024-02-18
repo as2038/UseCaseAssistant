@@ -36,7 +36,7 @@ public class MenuConstants {
 
 	// ASSISTANT
 	public static final String ASSISTANT = "Assistant";
-	public static final String CHECK_CONSISTENCY = "Check Consistency";
+	public static final String VALIDATION = "Validation";
 	public static final String REQUIREMENTS = "Requirements";
 	public static final String KNOWLEDGE_BASE = "Knowledge Base";
 	public static final String SCENARIOS = "Scenarios";

@@ -2,7 +2,6 @@ package com.baselet.gui.menu;
 
 import static com.baselet.control.constants.MenuConstants.ABOUT_PROGRAM;
 import static com.baselet.control.constants.MenuConstants.ALIGN;
-import static com.baselet.control.constants.MenuConstants.CHECK_CONSISTENCY;
 import static com.baselet.control.constants.MenuConstants.CLOSE;
 import static com.baselet.control.constants.MenuConstants.COPY;
 import static com.baselet.control.constants.MenuConstants.CUSTOM_ELEMENTS_TUTORIAL;
@@ -45,6 +44,7 @@ import static com.baselet.control.constants.MenuConstants.SET_BACKGROUND_COLOR;
 import static com.baselet.control.constants.MenuConstants.SET_FOREGROUND_COLOR;
 import static com.baselet.control.constants.MenuConstants.UNDO;
 import static com.baselet.control.constants.MenuConstants.UNGROUP;
+import static com.baselet.control.constants.MenuConstants.VALIDATION;
 import static com.baselet.control.constants.MenuConstants.VIDEO_TUTORIAL;
 
 import java.awt.event.ActionEvent;
@@ -241,8 +241,8 @@ public class MenuFactorySwing extends MenuFactory {
 	}
 
 	// MODIFIED: Check consistency
-	public JMenuItem createCheckConsistency() {
-		return createJMenuItem(false, CHECK_CONSISTENCY, CHECK_CONSISTENCY, 1);
+	public JMenuItem createValidation() {
+		return createJMenuItem(false, VALIDATION, VALIDATION, 1);
 	}
 
 	public JMenuItem createRequirements() {

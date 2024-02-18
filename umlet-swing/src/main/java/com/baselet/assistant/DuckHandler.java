@@ -21,7 +21,8 @@ public class DuckHandler {
 		// TODO Auto-generated constructor stub
 	}
 
-	public void checkConsistency() {
+	public ArrayList<String> checkConsistency() {
+		ArrayList<String> warnings = new ArrayList<String>();
 		boolean noProblems = true;
 		Main main = Main.getInstance();
 		KnowledgeBase knowledgeBase = main.getKnowledgeBase();
@@ -31,7 +32,8 @@ public class DuckHandler {
 			String s_name = s.getName();
 			String pc = s.getPostcond();
 			if (knowledgeBase.getActor(s.getPrac()) == null) {
-				System.out.println("ERROR (" + s_name + "): Actor '" + s.getPrac() + "' does not exist in the Knowledge Base.");
+				// System.out.println("Warning: (" + s_name + "): Actor '" + s.getPrac() + "' does not exist in the Knowledge Base.");
+				warnings.add("Warning: (" + s_name + "): Actor '" + s.getPrac() + "' does not exist in the Knowledge Base.\n");
 				noProblems = false;
 			}
 
@@ -41,27 +43,27 @@ public class DuckHandler {
 				if (!a.equals("")) {
 					Action act = knowledgeBase.getAction(a);
 					if (act == null) {
-						System.out.println("ERROR (" + s_name + "): Action '" + a + "' does not exist in the Knowledge Base.");
+						// System.out.println("Warning: (" + s_name + "): Action '" + a + "' does not exist in the Knowledge Base.");
+						warnings.add("Warning: (" + s_name + "): Action '" + a + "' does not exist in the Knowledge Base.\n");
 						noProblems = false;
 					}
 					else {
 						if (!knowledgeBase.getActor(s.getPrac()).getActionList().contains(act)) {
-							System.out.println("ERROR (" + s_name + "): Actor '" + s.getPrac() + "' does not have action '" + a + ".");
+							// System.out.println("Warning: (" + s_name + "): Actor '" + s.getPrac() + "' does not have action '" + a + ".");
+							warnings.add("Warning: (" + s_name + "): Actor '" + s.getPrac() + "' does not have action '" + a + ".\n");
 							noProblems = false;
 						}
 						else {
 							if (!act.getPostcond().equals(pc)) {
-								System.out.println("ERROR (" + s_name + "): postcondition not satisfied.");
+								// System.out.println("Warning: (" + s_name + "): postcondition not satisfied.");
+								warnings.add("Warning: (" + s_name + "): postcondition not satisfied.\n");
 								noProblems = false;
 							}
 						}
 					}
 				}
 			}
-			System.out.println();
-			if (noProblems) {
-				System.out.println("No problems found!");
-			}
+
 		}
 		System.out.println();
 		ArrayList<GridElement> entities = new ArrayList<GridElement>();
@@ -144,32 +146,43 @@ public class DuckHandler {
 			if (relation_type.contains("includes")) {
 				relation_type = "includes";
 				if (entity1type.equals("actor") || entity2type.equals("actor")) {
-					System.out.println("Warning: Cannot connect " + entity1 + " (" + entity1type + ") and " + entity2 + " (" + entity2type + ") with an 'includes' relation!");
+					// System.out.println("Warning: Cannot connect " + entity1 + " (" + entity1type + ") and " + entity2 + " (" + entity2type + ") with an 'includes' relation!");
+					warnings.add("Warning: Cannot connect " + entity1 + " (" + entity1type + ") and " + entity2 + " (" + entity2type + ") with an 'includes' relation!\n");
+					noProblems = false;
 				}
 			}
 			else if (relation_type.contains("extends")) {
 				relation_type = "extends";
 				if (entity1type.equals("actor") || entity2type.equals("actor")) {
-					System.out.println("Warning: Cannot connect " + entity1 + " (" + entity1type + ") and " + entity2 + " (" + entity2type + ") with an 'extends' relation!");
+					// System.out.println("Warning: Cannot connect " + entity1 + " (" + entity1type + ") and " + entity2 + " (" + entity2type + ") with an 'extends' relation!");
+					warnings.add("Warning: Cannot connect " + entity1 + " (" + entity1type + ") and " + entity2 + " (" + entity2type + ") with an 'extends' relation!\n");
+					noProblems = false;
 				}
 			}
 			else if (relation_type.contains("-")) {
 				relation_type = "abstraction";
 				if (entity1type.equals("use case") || entity2type.equals("use case")) {
-					System.out.println("Warning: Cannot connect " + entity1 + " (" + entity1type + ") and " + entity2 + " (" + entity2type + ") with an 'abstraction' relation!");
+					// System.out.println("Warning: Cannot connect " + entity1 + " (" + entity1type + ") and " + entity2 + " (" + entity2type + ") with an 'abstraction' relation!");
+					warnings.add("Warning: Cannot connect " + entity1 + " (" + entity1type + ") and " + entity2 + " (" + entity2type + ") with an 'abstraction' relation!\n");
+					noProblems = false;
 				}
 			}
 			else {
 				relation_type = "actor-usecase";
 				if (entity1type.equals(entity2type)) {
-					System.out.println("Warning: Cannot connect two " + entity1type + " entities (" + entity1 + " and " + entity2 + ") with an 'actor-usecase' relation!");
+					// System.out.println("Warning: Cannot connect two " + entity1type + " entities (" + entity1 + " and " + entity2 + ") with an 'actor-usecase' relation!");
+					warnings.add("Warning: Cannot connect two " + entity1type + " entities (" + entity1 + " and " + entity2 + ") with an 'actor-usecase' relation!\n");
+					noProblems = false;
 				}
 			}
 
-			System.out.println("An '" + relation_type + "' relation connects " + entity1 + " and " + entity2);
-			// System.out.println(entity1type + " and " + entity2type);
-
+			// System.out.println("An '" + relation_type + "' relation connects " + entity1 + " and " + entity2);
 		}
+		if (noProblems) {
+			// System.out.println("No problems found!");
+			warnings.add("No problems found!");
+		}
+		return warnings;
 
 	}
 

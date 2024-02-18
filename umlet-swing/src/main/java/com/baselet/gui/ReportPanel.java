@@ -6,6 +6,9 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -13,7 +16,10 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-public class ReportPanel extends JPanel {
+import com.baselet.control.Main;
+import com.baselet.control.config.Config;
+
+public class ReportPanel extends JPanel implements ActionListener {
 
 	private final int paddingTop = 1;
 	private final int paddingBottom = 1;
@@ -29,6 +35,7 @@ public class ReportPanel extends JPanel {
 	private final JTextArea ta_warnings = new JTextArea(5, 5);
 	JScrollPane sp_warnings = new JScrollPane(ta_warnings);
 
+	private final JButton bt_check = new JButton("Check Consistency");
 	private final JButton bt_close = new JButton("Close");
 
 	private final Insets paddingLeftLabel = new Insets(paddingTop, outerPaddingLeft, paddingBottom, halfHorizontalDividerSpace);
@@ -55,9 +62,18 @@ public class ReportPanel extends JPanel {
 		int line = 0;
 
 		line++;
-		addComponent(this, layout, lb_warnings, 1, line, 1, 1, fillWidth, leftWeight, 0, paddingText);
+		addComponent(this, layout, lb_warnings, 0, line, 1, 1, fillWidth, leftWeight, 0, paddingText);
 		line++;
-		addComponent(this, layout, sp_warnings, 1, line, 1, 1, fillWidth, leftWeight, 0, paddingText);
+		addComponent(this, layout, sp_warnings, 0, line, 5, 1, fillWidth, leftWeight, 0, paddingText);
+		line++;
+		addComponent(this, layout, bt_check, 0, line, 1, 1, fillWidth, leftWeight, 0, paddingText);
+		line++;
+		addComponent(this, layout, bt_close, 0, line, 1, 1, fillWidth, leftWeight, 0, paddingText);
+
+		bt_check.setActionCommand("Check");
+		bt_check.addActionListener(this);
+		bt_close.setActionCommand("Close");
+		bt_close.addActionListener(this);
 	}
 
 	private void initAndFillComponents() {
@@ -83,6 +99,29 @@ public class ReportPanel extends JPanel {
 		Font font = new Font(Font.SANS_SERIF, Font.PLAIN, 12);
 		Font fontBold = new Font(Font.SANS_SERIF, Font.BOLD, 12);
 		Font fontSmallItalic = new Font(Font.SANS_SERIF, Font.ITALIC, 10);
+
+		ta_warnings.setFont(font);
+
+	}
+
+	public void closePanel() {
+		Config.getInstance().setMail_split_position((int) this.getSize().getHeight());
+		CurrentGui.getInstance().getGui().setRequirementsPanelEnabled(false);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent ae) {
+		if (ae.getActionCommand().equals("Check")) {
+			ta_warnings.setText("");
+			Main main = Main.getInstance();
+			ArrayList<String> warnings = main.getKnowledgeBase().getDuckHandler().checkConsistency();
+			for (String s : warnings) {
+				ta_warnings.append(s);
+			}
+		}
+		if (ae.getActionCommand().equals("Close")) {
+			closePanel();
+		}
 
 	}
 

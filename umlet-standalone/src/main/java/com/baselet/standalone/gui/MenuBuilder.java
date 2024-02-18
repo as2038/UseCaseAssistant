@@ -87,7 +87,7 @@ public class MenuBuilder {
 
 		// MODIFIED: Assistant Menu
 		JMenu assistantMenu = new JMenu(MenuConstants.ASSISTANT);
-		assistantMenu.add(menuFactory.createCheckConsistency());
+		assistantMenu.add(menuFactory.createValidation());
 		assistantMenu.addSeparator();
 		assistantMenu.add(menuFactory.createRequirements());
 		assistantMenu.add(menuFactory.createKnowledgeBase());

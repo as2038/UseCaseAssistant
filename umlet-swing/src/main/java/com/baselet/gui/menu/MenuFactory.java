@@ -2,7 +2,6 @@ package com.baselet.gui.menu;
 
 import static com.baselet.control.constants.MenuConstants.ABOUT_PROGRAM;
 import static com.baselet.control.constants.MenuConstants.ALIGN;
-import static com.baselet.control.constants.MenuConstants.CHECK_CONSISTENCY;
 import static com.baselet.control.constants.MenuConstants.CLOSE;
 import static com.baselet.control.constants.MenuConstants.COPY;
 import static com.baselet.control.constants.MenuConstants.CUSTOM_ELEMENTS_TUTORIAL;
@@ -45,6 +44,7 @@ import static com.baselet.control.constants.MenuConstants.SET_BACKGROUND_COLOR;
 import static com.baselet.control.constants.MenuConstants.SET_FOREGROUND_COLOR;
 import static com.baselet.control.constants.MenuConstants.UNDO;
 import static com.baselet.control.constants.MenuConstants.UNGROUP;
+import static com.baselet.control.constants.MenuConstants.VALIDATION;
 import static com.baselet.control.constants.MenuConstants.VIDEO_TUTORIAL;
 
 import java.awt.MouseInfo;
@@ -188,8 +188,8 @@ public class MenuFactory {
 					actualHandler.getController().executeCommand(new Paste(ctxMenuLocation));
 				}
 				// MODIFIED: Assistant Functions
-				else if (menuItem.equals(CHECK_CONSISTENCY)) {
-					duckHandler.checkConsistency();
+				else if (menuItem.equals(VALIDATION)) {
+					// duckHandler.checkConsistency();
 					gui.setReportPanelEnabled(!gui.isReportPanelVisible());
 				}
 				else if (menuItem.equals(REQUIREMENTS)) {
