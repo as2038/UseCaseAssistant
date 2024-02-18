@@ -12,6 +12,7 @@ import com.baselet.element.sticking.PointDoubleIndexed;
 import com.baselet.gui.ActorPanel;
 import com.baselet.gui.CurrentGui;
 import com.baselet.gui.DUCKHelpPanel;
+import com.baselet.gui.EARSPanel;
 import com.baselet.gui.ScenarioPanel;
 
 public class DuckHandler {
@@ -195,5 +196,9 @@ public class DuckHandler {
 
 	public void showHelp() {
 		DUCKHelpPanel.getInstance().showDuckHelpPanel();
+	}
+
+	public void showEARS() {
+		EARSPanel.getInstance().showEARSPanel();
 	}
 }

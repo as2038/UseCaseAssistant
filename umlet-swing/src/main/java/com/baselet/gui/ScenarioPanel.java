@@ -15,8 +15,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 
 import com.baselet.assistant.Scenario;
 import com.baselet.control.Main;
@@ -33,6 +35,23 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 	}
 
 	private final JFrame scenarioframe;
+
+	private final JScrollPane spMain;
+	private final JScrollPane spAlt;
+	private final JTable mainFlowTable;
+	private final JTable altFlowTable;
+	private final DefaultTableModel mainFlowModel = new DefaultTableModel() {
+		@Override
+		public boolean isCellEditable(int row, int column) {
+			return false;
+		}
+	};
+	private final DefaultTableModel altFlowModel = new DefaultTableModel() {
+		@Override
+		public boolean isCellEditable(int row, int column) {
+			return false;
+		}
+	};
 
 	private final JLabel lb_prac = new JLabel("Primary actor:");
 	private final JTextField tf_prac = new JTextField();
@@ -60,12 +79,71 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 	private ScenarioPanel() {
 		setLayout(new GridLayout(0, 2, 4, 4));
 		setAlignmentX(Component.LEFT_ALIGNMENT);
+
+		mainFlowModel.addColumn("Actor");
+		mainFlowModel.addColumn("Action");
+		mainFlowModel.setRowCount(0);
+		mainFlowTable = new JTable(mainFlowModel);
+
+		spMain = new JScrollPane();
+		spMain.setViewportView(mainFlowTable);
+
+		altFlowModel.addColumn("Actor");
+		altFlowModel.addColumn("Action");
+		altFlowModel.setRowCount(0);
+		altFlowTable = new JTable(altFlowModel);
+
+		spAlt = new JScrollPane();
+		spAlt.setViewportView(altFlowTable);
+
+		JButton button_addmain = new JButton("Add");
+		button_addmain.setActionCommand("AddMain");
+		button_addmain.addActionListener(this);
+		JButton button_editmain = new JButton("Edit");
+		button_editmain.setActionCommand("EditMain");
+		button_editmain.addActionListener(this);
+		JButton button_deletemain = new JButton("Delete");
+		button_deletemain.setActionCommand("DeleteMain");
+
+		JButton button_addalt = new JButton("Add");
+		button_addalt.setActionCommand("AddAlt");
+		button_addalt.addActionListener(this);
+		JButton button_editalt = new JButton("Edit");
+		button_editalt.setActionCommand("EditAlt");
+		button_editalt.addActionListener(this);
+		JButton button_deletealt = new JButton("Delete");
+		button_deletealt.setActionCommand("DeleteAlt");
+
 		JButton button_save = new JButton("Save");
 		button_save.setActionCommand("Save");
 		button_save.addActionListener(this);
 		JButton button_close = new JButton("Close");
 		button_close.setActionCommand("Close");
 		button_close.addActionListener(this);
+
+		JPanel main_button_panel = new JPanel();
+		main_button_panel.setLayout(new BoxLayout(main_button_panel, BoxLayout.X_AXIS));
+		main_button_panel.add(Box.createHorizontalGlue());
+		main_button_panel.add(button_addmain);
+		main_button_panel.add(Box.createRigidArea(new Dimension(20, 0)));
+		main_button_panel.add(button_editmain);
+		main_button_panel.add(Box.createHorizontalGlue());
+		main_button_panel.add(Box.createRigidArea(new Dimension(20, 0)));
+		main_button_panel.add(button_deletemain);
+		main_button_panel.add(Box.createHorizontalGlue());
+		main_button_panel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+		JPanel alt_button_panel = new JPanel();
+		alt_button_panel.setLayout(new BoxLayout(alt_button_panel, BoxLayout.X_AXIS));
+		alt_button_panel.add(Box.createHorizontalGlue());
+		alt_button_panel.add(button_addalt);
+		alt_button_panel.add(Box.createRigidArea(new Dimension(20, 0)));
+		alt_button_panel.add(button_editalt);
+		alt_button_panel.add(Box.createHorizontalGlue());
+		alt_button_panel.add(Box.createRigidArea(new Dimension(20, 0)));
+		alt_button_panel.add(button_deletealt);
+		alt_button_panel.add(Box.createHorizontalGlue());
+		alt_button_panel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
 		JPanel button_panel = new JPanel();
 		button_panel.setLayout(new BoxLayout(button_panel, BoxLayout.X_AXIS));
@@ -87,9 +165,11 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 		parent.add(lb_postc);
 		parent.add(tf_postc);
 		parent.add(lb_mainflow);
-		parent.add(sp_mainflow);
+		parent.add(spMain);
+		parent.add(main_button_panel);
 		parent.add(lb_altflow);
-		parent.add(sp_altflow);
+		parent.add(spAlt);
+		parent.add(alt_button_panel);
 		parent.add(button_panel);
 
 		Font font = new Font(Font.SANS_SERIF, Font.PLAIN, 12);
@@ -107,7 +187,7 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 			public void run() {
 				scenarioframe.setLocationRelativeTo(CurrentGui.getInstance().getGui().getMainFrame());
 				scenarioframe.setVisible(true);
-				scenarioframe.setSize(300, 300);
+				scenarioframe.setSize(300, 350);
 				scenarioframe.toFront();
 
 				temp_name = CurrentGui.getInstance().getGui().getPropertyPane().getText();
