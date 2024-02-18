@@ -7,8 +7,11 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
 public class ReportPanel extends JPanel {
 
@@ -23,6 +26,10 @@ public class ReportPanel extends JPanel {
 
 	// UI
 	private final JLabel lb_warnings = new JLabel("Warnings:");
+	private final JTextArea ta_warnings = new JTextArea(5, 5);
+	JScrollPane sp_warnings = new JScrollPane(ta_warnings);
+
+	private final JButton bt_close = new JButton("Close");
 
 	private final Insets paddingLeftLabel = new Insets(paddingTop, outerPaddingLeft, paddingBottom, halfHorizontalDividerSpace);
 	private final Insets paddingMessagebox = new Insets(paddingTop, outerPaddingLeft, paddingBottom, outerPaddingRight);
@@ -48,7 +55,9 @@ public class ReportPanel extends JPanel {
 		int line = 0;
 
 		line++;
-		addComponent(this, layout, lb_warnings, 4, line, 1, 1, fillWidth, leftWeight, 0, paddingText);
+		addComponent(this, layout, lb_warnings, 1, line, 1, 1, fillWidth, leftWeight, 0, paddingText);
+		line++;
+		addComponent(this, layout, sp_warnings, 1, line, 1, 1, fillWidth, leftWeight, 0, paddingText);
 	}
 
 	private void initAndFillComponents() {

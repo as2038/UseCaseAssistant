@@ -1,5 +1,6 @@
 package com.baselet.gui;
 
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -9,15 +10,28 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 import com.baselet.control.Main;
+import com.baselet.control.config.Config;
 
-public class RequirementsPanel extends JPanel {
+public class RequirementsPanel extends JPanel implements ActionListener {
 
 	private static final long serialVersionUID = 2L;
+
+	private final JTable requirementsTable;
+	private final JScrollPane sp;
+
+	DefaultTableModel reqModel = new DefaultTableModel() {
+		@Override
+		public boolean isCellEditable(int row, int column) {
+			return false;
+		}
+	};
 
 	private final int paddingTop = 1;
 	private final int paddingBottom = 1;
@@ -28,8 +42,9 @@ public class RequirementsPanel extends JPanel {
 
 	private final GridBagLayout layout = new GridBagLayout();
 
-	private final JButton bt_add = new JButton("Add");
-	private final JButton bt_reset = new JButton("Reset");
+	private final JButton bt_newreq = new JButton("New Requirement");
+	private final JButton bt_edit = new JButton("Edit");
+	private final JButton bt_delete = new JButton("Delete");
 	private final JButton bt_close = new JButton("Close");
 
 	// private final JTextArea ta_text = new JTextArea(5, 5);
@@ -53,21 +68,30 @@ public class RequirementsPanel extends JPanel {
 	public RequirementsPanel() {
 		initAndFillComponents();
 
-		setLayout(layout);
+		reqModel.addColumn("Name");
+		reqModel.addColumn("Type");
+		reqModel.addColumn("Satisfied?");
+
+		requirementsTable = new JTable(reqModel);
+
+		sp = new JScrollPane();
+		sp.setViewportView(requirementsTable);
 		setSize(new Dimension(0, 250));
 
-		int line = 0;
-
-		addComponent(this, layout, Box.createRigidArea(new Dimension(0, verticalDividerSpace)), 0, line, 1, 1, fillWidth, fullWeight, 0, noPadding);
-		line++;
-		addComponent(this, layout, bt_add, 4, line, 1, 1, fillWidth, leftWeight, 0, paddingText);
-		addComponent(this, layout, bt_reset, 5, line, 1, 1, fillWidth, leftWeight, 0, paddingText);
-		addComponent(this, layout, bt_close, 6, line, 1, 1, fillWidth, leftWeight, 0, paddingText);
+		this.add(sp, BorderLayout.NORTH);
+		this.add(bt_newreq, BorderLayout.NORTH);
+		bt_newreq.setActionCommand("Add");
+		bt_newreq.addActionListener(this);
+		this.add(bt_edit, BorderLayout.NORTH);
+		this.add(bt_delete, BorderLayout.NORTH);
+		this.add(bt_close, BorderLayout.NORTH);
+		bt_close.setActionCommand("Close");
+		bt_close.addActionListener(this);
 
 	}
 
 	private void initAndFillComponents() {
-		bt_add.addActionListener(new AddActionListener());
+		// bt_newreq.addActionListener(new AddActionListener());
 		setAllFonts();
 
 	}
@@ -99,12 +123,21 @@ public class RequirementsPanel extends JPanel {
 
 	}
 
-	private class AddActionListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent e) {
+	public void closePanel() {
+		Config.getInstance().setMail_split_position((int) this.getSize().getHeight());
+		CurrentGui.getInstance().getGui().setRequirementsPanelEnabled(false);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent ae) {
+		if (ae.getActionCommand().equals("Add")) {
 			Main main = Main.getInstance();
 			main.getKnowledgeBase().getDuckHandler().showEARS();
 		}
+		if (ae.getActionCommand().equals("Close")) {
+			closePanel();
+		}
+
 	}
 
 }

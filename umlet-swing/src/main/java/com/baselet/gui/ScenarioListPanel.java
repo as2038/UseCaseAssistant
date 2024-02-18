@@ -1,5 +1,6 @@
 package com.baselet.gui;
 
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -9,8 +10,21 @@ import java.awt.Insets;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 public class ScenarioListPanel extends JPanel {
+
+	private final JTable scenarioTable;
+	private final JScrollPane sp;
+
+	DefaultTableModel scenarioModel = new DefaultTableModel() {
+		@Override
+		public boolean isCellEditable(int row, int column) {
+			return false;
+		}
+	};
 
 	private final int paddingTop = 1;
 	private final int paddingBottom = 1;
@@ -23,6 +37,7 @@ public class ScenarioListPanel extends JPanel {
 
 	// UI
 	private final JButton bt_newscenario = new JButton("New Scenario");
+	private final JButton bt_edit = new JButton("Edit");
 	private final JButton bt_delete = new JButton("Delete");
 	private final JButton bt_close = new JButton("Close");
 
@@ -44,15 +59,22 @@ public class ScenarioListPanel extends JPanel {
 	public ScenarioListPanel() {
 		initAndFillComponents();
 
-		setLayout(layout);
 		setSize(new Dimension(0, 250));
 
-		int line = 0;
+		scenarioModel.addColumn("Name");
+		scenarioModel.addColumn("Primary Actor");
+		scenarioModel.addColumn("Warnings");
 
-		line++;
-		addComponent(this, layout, bt_newscenario, 4, line, 1, 1, fillWidth, leftWeight, 0, paddingText);
-		addComponent(this, layout, bt_delete, 5, line, 1, 1, fillWidth, leftWeight, 0, paddingText);
-		addComponent(this, layout, bt_close, 6, line, 1, 1, fillWidth, leftWeight, 0, paddingText);
+		scenarioTable = new JTable(scenarioModel);
+
+		sp = new JScrollPane();
+		sp.setViewportView(scenarioTable);
+
+		this.add(sp, BorderLayout.NORTH);
+		this.add(bt_newscenario, BorderLayout.NORTH);
+		this.add(bt_edit, BorderLayout.NORTH);
+		this.add(bt_delete, BorderLayout.NORTH);
+		this.add(bt_close, BorderLayout.NORTH);
 	}
 
 	private void initAndFillComponents() {

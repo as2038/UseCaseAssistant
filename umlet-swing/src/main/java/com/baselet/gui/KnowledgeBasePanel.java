@@ -17,9 +17,14 @@ import javax.swing.table.DefaultTableModel;
 public class KnowledgeBasePanel extends JPanel {
 
 	private final JTable knowledgeTable;
-	// private final DefaultTableModel model;
-
 	private final JScrollPane sp;
+
+	DefaultTableModel model = new DefaultTableModel() {
+		@Override
+		public boolean isCellEditable(int row, int column) {
+			return false;
+		}
+	};
 
 	private final int paddingTop = 1;
 	private final int paddingBottom = 1;
@@ -32,6 +37,7 @@ public class KnowledgeBasePanel extends JPanel {
 
 	// UI
 	private final JButton bt_newentity = new JButton("New Entity");
+	private final JButton bt_edit = new JButton("Edit");
 	private final JButton bt_delete = new JButton("Delete");
 	private final JButton bt_close = new JButton("Close");
 
@@ -53,15 +59,7 @@ public class KnowledgeBasePanel extends JPanel {
 	public KnowledgeBasePanel() {
 		initAndFillComponents();
 
-		// setLayout(layout);
 		setSize(new Dimension(0, 250));
-
-		DefaultTableModel model = new DefaultTableModel() {
-			@Override
-			public boolean isCellEditable(int row, int column) {
-				return false;
-			}
-		};
 
 		model.addColumn("Entity Name");
 		model.addColumn("Entity Type");
@@ -71,24 +69,16 @@ public class KnowledgeBasePanel extends JPanel {
 
 		sp = new JScrollPane();
 		sp.setViewportView(knowledgeTable);
-		// int line = 0;
+
 		this.add(sp, BorderLayout.NORTH);
 		this.add(bt_newentity, BorderLayout.NORTH);
+		this.add(bt_edit, BorderLayout.NORTH);
 		this.add(bt_delete, BorderLayout.NORTH);
 		this.add(bt_close, BorderLayout.NORTH);
-
-		// addComponent(this, layout, sp, 1, line, 1, 1, fillWidth, leftWeight, 0, paddingText);
-		// line++;
-		// addComponent(this, layout, knowledgeTable, 1, line, 1, 1, fillWidth, leftWeight, 0, paddingText);
-		// line++;
-		// addComponent(this, layout, bt_newentity, 4, line, 1, 1, fillWidth, leftWeight, 0, paddingText);
-		// addComponent(this, layout, bt_delete, 5, line, 1, 1, fillWidth, leftWeight, 0, paddingText);
-		// addComponent(this, layout, bt_close, 6, line, 1, 1, fillWidth, leftWeight, 0, paddingText);
 	}
 
 	private void initAndFillComponents() {
 		setAllFonts();
-		/* model.addColumn("Entity Name"); model.addColumn("Entity Type"); model.addColumn("Warnings"); knowledgeTable = new JTable(model); sp = new JScrollPane(knowledgeTable); sp.setSize(300, 300); sp.setVisible(true); // add(new JScrollPane(knowledgeTable)); knowledgeTable.setBounds(30, 40, 200, 300); */
 
 	}
 
