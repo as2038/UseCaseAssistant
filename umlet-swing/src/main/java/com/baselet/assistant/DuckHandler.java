@@ -29,15 +29,20 @@ public class DuckHandler {
 		KnowledgeBase knowledgeBase = main.getKnowledgeBase();
 		HashMap<String, Scenario> scenario_map = (HashMap<String, Scenario>) knowledgeBase.getScenarioMap();
 		HashMap<String, Actor> actor_map = (HashMap<String, Actor>) knowledgeBase.getActorMap();
-		// HashMap<String, String> entity_map = new HashMap<String, String>();
+		ArrayList<RelationTriple> relation_list = new ArrayList<RelationTriple>();
+
 		for (Map.Entry<String, Scenario> set : scenario_map.entrySet()) {
 
 			Scenario s = set.getValue();
 			String s_name = s.getName();
 			String pc = s.getPostcond();
+			String pa = s.getPrac();
+			String sa = s.getSecac()[0];
 			// entity_map.put(s_name, "scenario");
+			relation_list.add(new RelationTriple(s_name, pa, "actor-usecase"));
+			// relation_list.add(new RelationTriple(s_name, sa, "actor-usecase"));
 
-			if (knowledgeBase.getActor(s.getPrac()) == null) {
+			if (knowledgeBase.getActor(pa) == null) {
 				// System.out.println("Warning: (" + s_name + "): Actor '" + s.getPrac() + "' does not exist in the Knowledge Base.");
 				warnings.add("Warning: (" + s_name + "): Actor '" + s.getPrac() + "' does not exist in the Knowledge Base.\n");
 				noProblems = false;
@@ -101,7 +106,7 @@ public class DuckHandler {
 						// scenario_map.remove(entity_name);
 					}
 					else {
-						warnings.add("Warning: The diagram has a usecase called '" + entity_name + "', however it does not exist in the Knowledge Base.\n");
+						warnings.add("Warning: (Diagram) No scenario exists for the use case '" + entity_name + "'.\n");
 						noProblems = false;
 					}
 				}
@@ -110,7 +115,7 @@ public class DuckHandler {
 						// actor_map.remove(entity_name);
 					}
 					else {
-						warnings.add("Warning: The diagram has an actor called '" + entity_name + "', however it does not exist in the Knowledge Base.\n");
+						warnings.add("Warning: (Diagram) Actor '" + entity_name + "' does not exist in the Knowledge Base.\n");
 						noProblems = false;
 					}
 
@@ -200,21 +205,48 @@ public class DuckHandler {
 			}
 			else {
 				relation_type = "actor-usecase";
-				if (entity1type.equals(entity2type)) {
+
+				if (!(entity1type.equals("use case") && entity2type.equals("actor") || entity2type.equals("use case") && entity1type.equals("actor"))) {
+
+					// if (entity1type.equals(entity2type)) {
 					// System.out.println("Warning: Cannot connect two " + entity1type + " entities (" + entity1 + " and " + entity2 + ") with an 'actor-usecase' relation!");
-					warnings.add("Warning: Cannot connect two " + entity1type + " entities (" + entity1 + " and " + entity2 + ") with an 'actor-usecase' relation.\n");
+					warnings.add("Warning: Cannot connect an " + entity1type + "(" + entity1 + ") and " + entity2type + "(" + entity2 + ") with an 'actor-usecase' relation.\n");
 					noProblems = false;
 				}
+
+				else {
+					if (entity2type.equals("use case")) {
+						String temp_a = entity1;
+						entity1 = entity2;
+						entity2 = temp_a;
+					}
+
+					for (int k = 0; k < relation_list.size(); k++) {
+						RelationTriple temp_r = relation_list.get(k);
+						if (temp_r.getType().equals("actor-usecase")) {
+							if (entity1.contains(temp_r.getFirstEntity()) && entity2.contains(temp_r.getSecondEntity())) {
+								System.out.println(entity1 + " and " + entity2 + " matched on the diagram!");
+								relation_list.remove(k);
+								break;
+							}
+
+						}
+
+					}
+
+				}
+
 			}
 
 			// System.out.println("An '" + relation_type + "' relation connects " + entity1 + " and " + entity2);
 		}
-		if (noProblems) {
+		if (noProblems)
+
+		{
 			// System.out.println("No problems found!");
 			warnings.add("No problems found!");
 		}
 		return warnings;
-
 	}
 
 	public void showProperties() {

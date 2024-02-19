@@ -223,8 +223,10 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent ae) {
 		if (ae.getActionCommand().equals("Save")) {
 			temp_mainflow.add(ta_mainflow.getText());
+			String[] temp_secacs = new String[1];
+			temp_secacs[0] = tf_secac.getText();
 			Main main = Main.getInstance();
-			main.getKnowledgeBase().addScenario(new Scenario(temp_name, tf_prac.getText(), tf_prec.getText(), tf_postc.getText(), temp_mainflow));
+			main.getKnowledgeBase().addScenario(new Scenario(temp_name, tf_prac.getText(), temp_secacs, tf_prec.getText(), tf_postc.getText(), temp_mainflow));
 			hideScenarioPanel();
 		}
 		if (ae.getActionCommand().equals("Close")) {
