@@ -106,7 +106,7 @@ public class ReportPanel extends JPanel implements ActionListener {
 
 	public void closePanel() {
 		Config.getInstance().setMail_split_position((int) this.getSize().getHeight());
-		CurrentGui.getInstance().getGui().setRequirementsPanelEnabled(false);
+		CurrentGui.getInstance().getGui().setReportPanelEnabled(false);
 	}
 
 	@Override

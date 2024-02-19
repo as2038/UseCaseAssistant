@@ -28,6 +28,8 @@ import com.baselet.element.interfaces.GridElement;
 import com.baselet.element.old.custom.CustomElementHandler;
 import com.baselet.gui.BaseGUI;
 import com.baselet.gui.KnowledgeBasePanel;
+import com.baselet.gui.RequirementsPanel;
+import com.baselet.gui.ScenarioListPanel;
 import com.baselet.gui.pane.OwnSyntaxPane;
 
 public class StandaloneGUI extends BaseGUI {
@@ -222,6 +224,11 @@ public class StandaloneGUI extends BaseGUI {
 	}
 
 	@Override
+	public RequirementsPanel getRequirementsPanel() {
+		return guiBuilder.getRequirementsPanel();
+	}
+
+	@Override
 	public void setKnowledgeBasePanelEnabled(boolean enable) {
 		guiBuilder.setKnowledgeBasePanelEnabled(enable);
 	}
@@ -244,6 +251,11 @@ public class StandaloneGUI extends BaseGUI {
 	@Override
 	public boolean isScenarioListPanelVisible() {
 		return guiBuilder.getScenarioListPanel().isVisible();
+	}
+
+	@Override
+	public ScenarioListPanel getScenarioListPanel() {
+		return guiBuilder.getScenarioListPanel();
 	}
 
 	@Override

@@ -25,6 +25,7 @@ public class KnowledgeBase {
 
 	public void addScenario(Scenario new_scenario) {
 		scenario_map.put(new_scenario.getName(), new_scenario);
+		gui.getScenarioListPanel().addScenarioToTable(new_scenario.getName(), new_scenario.getPrac());
 	}
 
 	public void addActor(Actor new_actor) {
@@ -59,6 +60,10 @@ public class KnowledgeBase {
 
 	public Map<String, Scenario> getScenarioMap() {
 		return scenario_map;
+	}
+
+	public Map<String, Actor> getActorMap() {
+		return actor_map;
 	}
 
 	public DuckHandler getDuckHandler() {

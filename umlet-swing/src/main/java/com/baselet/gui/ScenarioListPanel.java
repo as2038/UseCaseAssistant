@@ -7,6 +7,8 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -14,7 +16,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-public class ScenarioListPanel extends JPanel {
+import com.baselet.control.config.Config;
+
+public class ScenarioListPanel extends JPanel implements ActionListener {
 
 	private final JTable scenarioTable;
 	private final JScrollPane sp;
@@ -75,6 +79,11 @@ public class ScenarioListPanel extends JPanel {
 		this.add(bt_edit, BorderLayout.NORTH);
 		this.add(bt_delete, BorderLayout.NORTH);
 		this.add(bt_close, BorderLayout.NORTH);
+
+		bt_newscenario.setActionCommand("Add");
+		bt_newscenario.addActionListener(this);
+		bt_close.setActionCommand("Close");
+		bt_close.addActionListener(this);
 	}
 
 	private void initAndFillComponents() {
@@ -100,6 +109,27 @@ public class ScenarioListPanel extends JPanel {
 		Font font = new Font(Font.SANS_SERIF, Font.PLAIN, 12);
 		Font fontBold = new Font(Font.SANS_SERIF, Font.BOLD, 12);
 		Font fontSmallItalic = new Font(Font.SANS_SERIF, Font.ITALIC, 10);
+
+	}
+
+	public void addScenarioToTable(String name, String primaryActor) {
+		DefaultTableModel model = (DefaultTableModel) scenarioTable.getModel();
+		model.addRow(new Object[] { name, primaryActor, "0" });
+	}
+
+	public void closePanel() {
+		Config.getInstance().setMail_split_position((int) this.getSize().getHeight());
+		CurrentGui.getInstance().getGui().setScenarioListPanelEnabled(false);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent ae) {
+		if (ae.getActionCommand().equals("Add")) {
+			ScenarioPanel.getInstance().showScenarioPanel();
+		}
+		if (ae.getActionCommand().equals("Close")) {
+			closePanel();
+		}
 
 	}
 

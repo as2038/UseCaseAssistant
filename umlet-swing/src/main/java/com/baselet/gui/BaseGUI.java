@@ -143,6 +143,8 @@ public abstract class BaseGUI {
 
 	public abstract void setRequirementsPanelEnabled(boolean enable);
 
+	public abstract RequirementsPanel getRequirementsPanel();
+
 	public abstract boolean isRequirementsPanelVisible();
 
 	public abstract void setKnowledgeBasePanelEnabled(boolean enable);
@@ -152,6 +154,8 @@ public abstract class BaseGUI {
 	public abstract boolean isKnowledgeBasePanelVisible();
 
 	public abstract void setScenarioListPanelEnabled(boolean enable);
+
+	public abstract ScenarioListPanel getScenarioListPanel();
 
 	public abstract boolean isScenarioListPanelVisible();
 

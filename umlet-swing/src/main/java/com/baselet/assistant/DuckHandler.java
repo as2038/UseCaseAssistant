@@ -1,6 +1,7 @@
 package com.baselet.assistant;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -26,11 +27,16 @@ public class DuckHandler {
 		boolean noProblems = true;
 		Main main = Main.getInstance();
 		KnowledgeBase knowledgeBase = main.getKnowledgeBase();
+		HashMap<String, Scenario> scenario_map = (HashMap<String, Scenario>) knowledgeBase.getScenarioMap();
+		HashMap<String, Actor> actor_map = (HashMap<String, Actor>) knowledgeBase.getActorMap();
+		// HashMap<String, String> entity_map = new HashMap<String, String>();
+		for (Map.Entry<String, Scenario> set : scenario_map.entrySet()) {
 
-		for (Map.Entry<String, Scenario> set : knowledgeBase.getScenarioMap().entrySet()) {
 			Scenario s = set.getValue();
 			String s_name = s.getName();
 			String pc = s.getPostcond();
+			// entity_map.put(s_name, "scenario");
+
 			if (knowledgeBase.getActor(s.getPrac()) == null) {
 				// System.out.println("Warning: (" + s_name + "): Actor '" + s.getPrac() + "' does not exist in the Knowledge Base.");
 				warnings.add("Warning: (" + s_name + "): Actor '" + s.getPrac() + "' does not exist in the Knowledge Base.\n");
@@ -65,6 +71,8 @@ public class DuckHandler {
 			}
 
 		}
+		/* for (Map.Entry<String, Actor> set : knowledgeBase.getActorMap().entrySet()) { Actor a = set.getValue(); entity_map.put(a.getName(), "actor"); } */
+
 		System.out.println();
 		ArrayList<GridElement> entities = new ArrayList<GridElement>();
 		ArrayList<GridElement> relations = new ArrayList<GridElement>();
@@ -74,7 +82,10 @@ public class DuckHandler {
 		ArrayList<Double> rectY2s = new ArrayList<Double>();
 
 		for (GridElement ge : CurrentGui.getInstance().getGui().getCurrentDiagram().getGridElements()) {
-			if (ge.getClass().toString().contains("Relation")) {
+			String entity_name = ge.getPanelAttributes();
+			String entity_class = ge.getClass().toString();
+
+			if (entity_class.contains("Relation")) {
 				relations.add(ge);
 			}
 			else {
@@ -84,6 +95,26 @@ public class DuckHandler {
 				rectY1s.add((double) rect.getY());
 				rectX2s.add((double) rect.getX2());
 				rectY2s.add((double) rect.getY2());
+
+				if (entity_class.contains("UseCase")) {
+					if (scenario_map.containsKey(entity_name)) {
+						// scenario_map.remove(entity_name);
+					}
+					else {
+						warnings.add("Warning: The diagram has a usecase called '" + entity_name + "', however it does not exist in the Knowledge Base.\n");
+						noProblems = false;
+					}
+				}
+				else if (entity_class.contains("Actor")) {
+					if (actor_map.containsKey(entity_name)) {
+						// actor_map.remove(entity_name);
+					}
+					else {
+						warnings.add("Warning: The diagram has an actor called '" + entity_name + "', however it does not exist in the Knowledge Base.\n");
+						noProblems = false;
+					}
+
+				}
 			}
 		}
 
@@ -147,7 +178,7 @@ public class DuckHandler {
 				relation_type = "includes";
 				if (entity1type.equals("actor") || entity2type.equals("actor")) {
 					// System.out.println("Warning: Cannot connect " + entity1 + " (" + entity1type + ") and " + entity2 + " (" + entity2type + ") with an 'includes' relation!");
-					warnings.add("Warning: Cannot connect " + entity1 + " (" + entity1type + ") and " + entity2 + " (" + entity2type + ") with an 'includes' relation!\n");
+					warnings.add("Warning: Cannot connect " + entity1 + " (" + entity1type + ") and " + entity2 + " (" + entity2type + ") with an 'includes' relation.\n");
 					noProblems = false;
 				}
 			}
@@ -155,7 +186,7 @@ public class DuckHandler {
 				relation_type = "extends";
 				if (entity1type.equals("actor") || entity2type.equals("actor")) {
 					// System.out.println("Warning: Cannot connect " + entity1 + " (" + entity1type + ") and " + entity2 + " (" + entity2type + ") with an 'extends' relation!");
-					warnings.add("Warning: Cannot connect " + entity1 + " (" + entity1type + ") and " + entity2 + " (" + entity2type + ") with an 'extends' relation!\n");
+					warnings.add("Warning: Cannot connect " + entity1 + " (" + entity1type + ") and " + entity2 + " (" + entity2type + ") with an 'extends' relation.\n");
 					noProblems = false;
 				}
 			}
@@ -163,7 +194,7 @@ public class DuckHandler {
 				relation_type = "abstraction";
 				if (entity1type.equals("use case") || entity2type.equals("use case")) {
 					// System.out.println("Warning: Cannot connect " + entity1 + " (" + entity1type + ") and " + entity2 + " (" + entity2type + ") with an 'abstraction' relation!");
-					warnings.add("Warning: Cannot connect " + entity1 + " (" + entity1type + ") and " + entity2 + " (" + entity2type + ") with an 'abstraction' relation!\n");
+					warnings.add("Warning: Cannot connect " + entity1 + " (" + entity1type + ") and " + entity2 + " (" + entity2type + ") with an 'abstraction' relation.\n");
 					noProblems = false;
 				}
 			}
@@ -171,7 +202,7 @@ public class DuckHandler {
 				relation_type = "actor-usecase";
 				if (entity1type.equals(entity2type)) {
 					// System.out.println("Warning: Cannot connect two " + entity1type + " entities (" + entity1 + " and " + entity2 + ") with an 'actor-usecase' relation!");
-					warnings.add("Warning: Cannot connect two " + entity1type + " entities (" + entity1 + " and " + entity2 + ") with an 'actor-usecase' relation!\n");
+					warnings.add("Warning: Cannot connect two " + entity1type + " entities (" + entity1 + " and " + entity2 + ") with an 'actor-usecase' relation.\n");
 					noProblems = false;
 				}
 			}
