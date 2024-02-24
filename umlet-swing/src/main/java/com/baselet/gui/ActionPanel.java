@@ -12,7 +12,10 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 
 import com.baselet.assistant.Action;
 import com.baselet.assistant.KnowledgeBase;
@@ -31,6 +34,25 @@ public class ActionPanel extends JPanel implements ActionListener {
 
 	private final JFrame actionframe;
 
+	private final JScrollPane spPrec;
+	private final JScrollPane spPost;
+
+	private final JTable precTable;
+	private final DefaultTableModel precModel = new DefaultTableModel() {
+		@Override
+		public boolean isCellEditable(int row, int column) {
+			return false;
+		}
+	};
+
+	private final JTable postTable;
+	private final DefaultTableModel postModel = new DefaultTableModel() {
+		@Override
+		public boolean isCellEditable(int row, int column) {
+			return false;
+		}
+	};
+
 	private final JLabel lb_name = new JLabel("Name:");
 	private final JTextField tf_name = new JTextField();
 
@@ -46,12 +68,77 @@ public class ActionPanel extends JPanel implements ActionListener {
 	public ActionPanel() {
 		setLayout(new GridLayout(0, 2, 4, 4));
 		setAlignmentX(Component.LEFT_ALIGNMENT);
+
+		precModel.addColumn("Actor/Object");
+		precModel.addColumn("State");
+		precModel.addColumn("Value");
+
+		precModel.setRowCount(0);
+
+		precTable = new JTable(precModel);
+
+		spPrec = new JScrollPane();
+		spPrec.setViewportView(precTable);
+
+		postModel.addColumn("Actor/Object");
+		postModel.addColumn("State");
+		postModel.addColumn("Value");
+
+		postModel.setRowCount(0);
+
+		postTable = new JTable(precModel);
+
+		spPost = new JScrollPane();
+		spPost.setViewportView(postTable);
+
+		JButton button_addprec = new JButton("Add");
+		button_addprec.setActionCommand("AddPrec");
+		button_addprec.addActionListener(this);
+		JButton button_editprec = new JButton("Edit");
+		button_editprec.setActionCommand("EditPrec");
+		button_editprec.addActionListener(this);
+		JButton button_deleteprec = new JButton("Delete");
+		button_deleteprec.setActionCommand("DeletePrec");
+
+		JButton button_addpost = new JButton("Add");
+		button_addpost.setActionCommand("AddPost");
+		button_addpost.addActionListener(this);
+		JButton button_editpost = new JButton("Edit");
+		button_editpost.setActionCommand("EditPost");
+		button_editpost.addActionListener(this);
+		JButton button_deletepost = new JButton("Delete");
+		button_deletepost.setActionCommand("DeletePost");
+
 		JButton button_save = new JButton("Save");
 		button_save.setActionCommand("Save");
 		button_save.addActionListener(this);
 		JButton button_close = new JButton("Close");
 		button_close.setActionCommand("Close");
 		button_close.addActionListener(this);
+
+		JPanel prec_button_panel = new JPanel();
+		prec_button_panel.setLayout(new BoxLayout(prec_button_panel, BoxLayout.X_AXIS));
+		prec_button_panel.add(Box.createHorizontalGlue());
+		prec_button_panel.add(button_addprec);
+		prec_button_panel.add(Box.createRigidArea(new Dimension(20, 0)));
+		prec_button_panel.add(button_editprec);
+		prec_button_panel.add(Box.createHorizontalGlue());
+		prec_button_panel.add(Box.createRigidArea(new Dimension(20, 0)));
+		prec_button_panel.add(button_deleteprec);
+		prec_button_panel.add(Box.createHorizontalGlue());
+		prec_button_panel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+		JPanel post_button_panel = new JPanel();
+		post_button_panel.setLayout(new BoxLayout(post_button_panel, BoxLayout.X_AXIS));
+		post_button_panel.add(Box.createHorizontalGlue());
+		post_button_panel.add(button_addpost);
+		post_button_panel.add(Box.createRigidArea(new Dimension(20, 0)));
+		post_button_panel.add(button_editpost);
+		post_button_panel.add(Box.createHorizontalGlue());
+		post_button_panel.add(Box.createRigidArea(new Dimension(20, 0)));
+		post_button_panel.add(button_deletepost);
+		post_button_panel.add(Box.createHorizontalGlue());
+		post_button_panel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
 		JPanel button_panel = new JPanel();
 		button_panel.setLayout(new BoxLayout(button_panel, BoxLayout.X_AXIS));
@@ -69,9 +156,11 @@ public class ActionPanel extends JPanel implements ActionListener {
 		parent.add(lb_object);
 		parent.add(tf_object);
 		parent.add(lb_prec);
-		parent.add(tf_prec);
+		parent.add(spPrec);
+		parent.add(prec_button_panel);
 		parent.add(lb_postc);
-		parent.add(tf_postc);
+		parent.add(spPost);
+		parent.add(post_button_panel);
 		parent.add(button_panel);
 
 		Main main = Main.getInstance();
@@ -87,7 +176,7 @@ public class ActionPanel extends JPanel implements ActionListener {
 			public void run() {
 				actionframe.setLocationRelativeTo(CurrentGui.getInstance().getGui().getMainFrame());
 				actionframe.setVisible(true);
-				actionframe.setSize(300, 200);
+				actionframe.setSize(300, 300);
 				actionframe.toFront();
 			}
 		});

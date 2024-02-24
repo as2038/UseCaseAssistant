@@ -39,8 +39,14 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 
 	private final JScrollPane spMain;
 	private final JScrollPane spAlt;
+	// private final JScrollPane spPrec;
+	// private final JScrollPane spPost;
+
 	private final JTable mainFlowTable;
 	private final JTable altFlowTable;
+	// private final JTable precTable;
+	// private final JTable postTable;
+
 	private final DefaultTableModel mainFlowModel = new DefaultTableModel() {
 		@Override
 		public boolean isCellEditable(int row, int column) {
@@ -48,6 +54,20 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 		}
 	};
 	private final DefaultTableModel altFlowModel = new DefaultTableModel() {
+		@Override
+		public boolean isCellEditable(int row, int column) {
+			return false;
+		}
+	};
+
+	private final DefaultTableModel precModel = new DefaultTableModel() {
+		@Override
+		public boolean isCellEditable(int row, int column) {
+			return false;
+		}
+	};
+
+	private final DefaultTableModel postModel = new DefaultTableModel() {
 		@Override
 		public boolean isCellEditable(int row, int column) {
 			return false;
