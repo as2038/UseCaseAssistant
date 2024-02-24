@@ -44,7 +44,7 @@ public class DuckHandler {
 
 			if (knowledgeBase.getActor(pa) == null) {
 				// System.out.println("Warning: (" + s_name + "): Actor '" + s.getPrac() + "' does not exist in the Knowledge Base.");
-				warnings.add("Warning: (" + s_name + "): Actor '" + s.getPrac() + "' does not exist in the Knowledge Base.\n");
+				warnings.add("Warning (" + s_name + "): Actor '" + s.getPrac() + "' does not exist in the Knowledge Base.\n");
 				noProblems = false;
 			}
 
@@ -55,19 +55,19 @@ public class DuckHandler {
 					Action act = knowledgeBase.getAction(a);
 					if (act == null) {
 						// System.out.println("Warning: (" + s_name + "): Action '" + a + "' does not exist in the Knowledge Base.");
-						warnings.add("Warning: (" + s_name + "): Action '" + a + "' does not exist in the Knowledge Base.\n");
+						warnings.add("Warning (" + s_name + "): Action '" + a + "' does not exist in the Knowledge Base.\n");
 						noProblems = false;
 					}
 					else {
 						if (!knowledgeBase.getActor(s.getPrac()).getActionList().contains(act)) {
 							// System.out.println("Warning: (" + s_name + "): Actor '" + s.getPrac() + "' does not have action '" + a + ".");
-							warnings.add("Warning: (" + s_name + "): Actor '" + s.getPrac() + "' does not have action '" + a + ".\n");
+							warnings.add("Warning (" + s_name + "): Actor '" + s.getPrac() + "' does not have action '" + a + ".\n");
 							noProblems = false;
 						}
 						else {
 							if (!act.getPostcond().equals(pc)) {
 								// System.out.println("Warning: (" + s_name + "): postcondition not satisfied.");
-								warnings.add("Warning: (" + s_name + "): postcondition not satisfied.\n");
+								warnings.add("Warning (" + s_name + "): postcondition not satisfied.\n");
 								noProblems = false;
 							}
 						}
@@ -106,7 +106,7 @@ public class DuckHandler {
 						// scenario_map.remove(entity_name);
 					}
 					else {
-						warnings.add("Warning: (Diagram) No scenario exists for the use case '" + entity_name + "'.\n");
+						warnings.add("Warning (Diagram): No scenario exists for the use case '" + entity_name + "'.\n");
 						noProblems = false;
 					}
 				}
@@ -115,7 +115,7 @@ public class DuckHandler {
 						// actor_map.remove(entity_name);
 					}
 					else {
-						warnings.add("Warning: (Diagram) Actor '" + entity_name + "' does not exist in the Knowledge Base.\n");
+						warnings.add("Warning (Diagram): Actor '" + entity_name + "' does not exist in the Knowledge Base.\n");
 						noProblems = false;
 					}
 
@@ -183,7 +183,7 @@ public class DuckHandler {
 				relation_type = "includes";
 				if (entity1type.equals("actor") || entity2type.equals("actor")) {
 					// System.out.println("Warning: Cannot connect " + entity1 + " (" + entity1type + ") and " + entity2 + " (" + entity2type + ") with an 'includes' relation!");
-					warnings.add("Warning: Cannot connect " + entity1 + " (" + entity1type + ") and " + entity2 + " (" + entity2type + ") with an 'includes' relation.\n");
+					warnings.add("Warning (Diagram): Cannot connect " + entity1 + " (" + entity1type + ") and " + entity2 + " (" + entity2type + ") with an 'includes' relation.\n");
 					noProblems = false;
 				}
 			}
@@ -191,7 +191,7 @@ public class DuckHandler {
 				relation_type = "extends";
 				if (entity1type.equals("actor") || entity2type.equals("actor")) {
 					// System.out.println("Warning: Cannot connect " + entity1 + " (" + entity1type + ") and " + entity2 + " (" + entity2type + ") with an 'extends' relation!");
-					warnings.add("Warning: Cannot connect " + entity1 + " (" + entity1type + ") and " + entity2 + " (" + entity2type + ") with an 'extends' relation.\n");
+					warnings.add("Warning (Diagram): Cannot connect " + entity1 + " (" + entity1type + ") and " + entity2 + " (" + entity2type + ") with an 'extends' relation.\n");
 					noProblems = false;
 				}
 			}
@@ -199,7 +199,7 @@ public class DuckHandler {
 				relation_type = "abstraction";
 				if (entity1type.equals("use case") || entity2type.equals("use case")) {
 					// System.out.println("Warning: Cannot connect " + entity1 + " (" + entity1type + ") and " + entity2 + " (" + entity2type + ") with an 'abstraction' relation!");
-					warnings.add("Warning: Cannot connect " + entity1 + " (" + entity1type + ") and " + entity2 + " (" + entity2type + ") with an 'abstraction' relation.\n");
+					warnings.add("Warning (Diagram): Cannot connect " + entity1 + " (" + entity1type + ") and " + entity2 + " (" + entity2type + ") with an 'abstraction' relation.\n");
 					noProblems = false;
 				}
 			}
@@ -210,7 +210,7 @@ public class DuckHandler {
 
 					// if (entity1type.equals(entity2type)) {
 					// System.out.println("Warning: Cannot connect two " + entity1type + " entities (" + entity1 + " and " + entity2 + ") with an 'actor-usecase' relation!");
-					warnings.add("Warning: Cannot connect an " + entity1type + "(" + entity1 + ") and " + entity2type + "(" + entity2 + ") with an 'actor-usecase' relation.\n");
+					warnings.add("Warning (Diagram): Cannot connect an " + entity1type + "(" + entity1 + ") and " + entity2type + "(" + entity2 + ") with an 'actor-usecase' relation.\n");
 					noProblems = false;
 				}
 
@@ -220,18 +220,21 @@ public class DuckHandler {
 						entity1 = entity2;
 						entity2 = temp_a;
 					}
-
+					boolean matched = false;
 					for (int k = 0; k < relation_list.size(); k++) {
 						RelationTriple temp_r = relation_list.get(k);
 						if (temp_r.getType().equals("actor-usecase")) {
 							if (entity1.contains(temp_r.getFirstEntity()) && entity2.contains(temp_r.getSecondEntity())) {
-								System.out.println(entity1 + " and " + entity2 + " matched on the diagram!");
+								// System.out.println(entity1 + " and " + entity2 + " matched on the diagram!");
+								matched = true;
 								relation_list.remove(k);
 								break;
 							}
-
 						}
-
+					}
+					if (!matched) {
+						warnings.add("Warning (Diagram): Actor '" + entity2 + "' is not mentioned in use case '" + entity1 + "', but a connection was drawn.\n");
+						noProblems = false;
 					}
 
 				}
@@ -240,9 +243,11 @@ public class DuckHandler {
 
 			// System.out.println("An '" + relation_type + "' relation connects " + entity1 + " and " + entity2);
 		}
-		if (noProblems)
-
-		{
+		for (RelationTriple rt : relation_list) {
+			warnings.add("Warning (Diagram): Use case '" + rt.getFirstEntity() + "' has a reference to actor '" + rt.getSecondEntity() + "', but no connection was drawn.\n");
+			noProblems = false;
+		}
+		if (noProblems) {
 			// System.out.println("No problems found!");
 			warnings.add("No problems found!");
 		}

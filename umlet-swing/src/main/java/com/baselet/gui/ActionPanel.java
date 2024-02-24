@@ -87,7 +87,7 @@ public class ActionPanel extends JPanel implements ActionListener {
 			public void run() {
 				actionframe.setLocationRelativeTo(CurrentGui.getInstance().getGui().getMainFrame());
 				actionframe.setVisible(true);
-				actionframe.setSize(300, 300);
+				actionframe.setSize(300, 200);
 				actionframe.toFront();
 			}
 		});

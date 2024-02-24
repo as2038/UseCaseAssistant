@@ -13,6 +13,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -221,6 +222,32 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent ae) {
+		if (ae.getActionCommand().equals("AddMain")) {
+
+			JTextField mainActor = new JTextField();
+			JTextField mainAction = new JTextField();
+
+			Object[] addMainFields = {
+					"Actor:", mainActor,
+					"Action:", mainAction
+			};
+			JOptionPane.showConfirmDialog(null, addMainFields, "Add action to main flow", JOptionPane.CANCEL_OPTION);
+			System.out.println(mainActor.getText() + " " + mainAction.getText());
+		}
+
+		if (ae.getActionCommand().equals("AddAlt")) {
+
+			JTextField altActor = new JTextField();
+			JTextField altAction = new JTextField();
+
+			Object[] addMainFields = {
+					"Actor:", altActor,
+					"Action:", altAction
+			};
+			JOptionPane.showConfirmDialog(null, addMainFields, "Add action to alternative flow", JOptionPane.CANCEL_OPTION);
+			System.out.println(altActor.getText() + " " + altAction.getText());
+		}
+
 		if (ae.getActionCommand().equals("Save")) {
 			temp_mainflow.add(ta_mainflow.getText());
 			String[] temp_secacs = new String[1];
