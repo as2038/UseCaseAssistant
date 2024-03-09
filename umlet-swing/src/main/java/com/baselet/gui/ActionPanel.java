@@ -8,9 +8,12 @@ import java.awt.event.ActionListener;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -191,6 +194,32 @@ public class ActionPanel extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent ae) {
 		Main main = Main.getInstance();
 		KnowledgeBase kb = main.getKnowledgeBase();
+		String[] valueOptions = { "True", "False" };
+
+		if (ae.getActionCommand().equals("AddPrec")) {
+			JTextField precState = new JTextField();
+			JComboBox precValue = new JComboBox();
+			precValue.setModel(new DefaultComboBoxModel(valueOptions));
+
+			Object[] addMainFields = {
+					"State:", precState,
+					"Value:", precValue
+			};
+			JOptionPane.showConfirmDialog(null, addMainFields, "Add a state to preconditions", JOptionPane.CANCEL_OPTION);
+			main.getKnowledgeBase().addState(precState.getText());
+		}
+		if (ae.getActionCommand().equals("AddPost")) {
+			JTextField postState = new JTextField();
+			JComboBox postValue = new JComboBox();
+			postValue.setModel(new DefaultComboBoxModel(valueOptions));
+
+			Object[] addMainFields = {
+					"State:", postState,
+					"Value:", postValue
+			};
+			JOptionPane.showConfirmDialog(null, addMainFields, "Add a state to postconditions", JOptionPane.CANCEL_OPTION);
+			main.getKnowledgeBase().addState(postState.getText());
+		}
 		if (ae.getActionCommand().equals("Save")) {
 			Action new_action = new Action(tf_name.getText(), tf_prec.getText(), tf_postc.getText());
 			kb.getActor(kb.getLastTempName()).addAction(new_action);
