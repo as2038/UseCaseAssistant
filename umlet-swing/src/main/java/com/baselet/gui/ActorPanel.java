@@ -65,8 +65,6 @@ public class ActorPanel extends JPanel implements ActionListener {
 
 		actionModel.addColumn("Name");
 		actionModel.addColumn("Object");
-		actionModel.addColumn("Precondition");
-		actionModel.addColumn("Postcondition");
 
 		actionModel.setRowCount(0);
 

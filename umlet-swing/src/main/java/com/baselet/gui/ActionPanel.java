@@ -5,6 +5,8 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Map;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -21,6 +23,7 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import com.baselet.assistant.Action;
+import com.baselet.assistant.Actor;
 import com.baselet.assistant.KnowledgeBase;
 import com.baselet.control.Main;
 
@@ -89,7 +92,7 @@ public class ActionPanel extends JPanel implements ActionListener {
 
 		postModel.setRowCount(0);
 
-		postTable = new JTable(precModel);
+		postTable = new JTable(postModel);
 
 		spPost = new JScrollPane();
 		spPost.setViewportView(postTable);
@@ -194,31 +197,78 @@ public class ActionPanel extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent ae) {
 		Main main = Main.getInstance();
 		KnowledgeBase kb = main.getKnowledgeBase();
+		ArrayList<String> stateAL = kb.getStateList();
+		ArrayList<String> entityAL = kb.getObjectList();
+		Map<String, Actor> actorM = kb.getActorMap();
+		for (String actorStr : actorM.keySet()) {
+			entityAL.add(actorStr);
+		}
+
+		String[] entityOptions = new String[entityAL.size()];
+		String[] stateOptions = new String[stateAL.size()];
 		String[] valueOptions = { "True", "False" };
 
+		for (int i = 0; i < stateAL.size(); i++) {
+			stateOptions[i] = stateAL.get(i);
+		}
+		for (int j = 0; j < entityAL.size(); j++) {
+			entityOptions[j] = entityAL.get(j);
+		}
+
 		if (ae.getActionCommand().equals("AddPrec")) {
-			JTextField precState = new JTextField();
+			JComboBox precEntity = new JComboBox();
+			JComboBox precState = new JComboBox();
 			JComboBox precValue = new JComboBox();
+
 			precValue.setModel(new DefaultComboBoxModel(valueOptions));
+			precState.setModel(new DefaultComboBoxModel(stateOptions));
+			precEntity.setModel(new DefaultComboBoxModel(entityOptions));
+
+			precEntity.setEditable(true);
+			precState.setEditable(true);
 
 			Object[] addMainFields = {
+					"Actor/Object", precEntity,
 					"State:", precState,
 					"Value:", precValue
 			};
 			JOptionPane.showConfirmDialog(null, addMainFields, "Add a state to preconditions", JOptionPane.CANCEL_OPTION);
-			main.getKnowledgeBase().addState(precState.getText());
+			if (!(precEntity.getSelectedItem() == null) && !(precState.getSelectedItem() == null)) {
+				String precActObjStr = precEntity.getSelectedItem().toString();
+				String precStateStr = precState.getSelectedItem().toString();
+				String precValueStr = precValue.getSelectedItem().toString();
+
+				main.getKnowledgeBase().addState(precStateStr);
+				DefaultTableModel precModel = (DefaultTableModel) precTable.getModel();
+				precModel.addRow(new Object[] { precActObjStr, precStateStr, precValueStr });
+			}
 		}
 		if (ae.getActionCommand().equals("AddPost")) {
-			JTextField postState = new JTextField();
+			JComboBox postEntity = new JComboBox();
+			JComboBox postState = new JComboBox();
 			JComboBox postValue = new JComboBox();
+
 			postValue.setModel(new DefaultComboBoxModel(valueOptions));
+			postState.setModel(new DefaultComboBoxModel(stateOptions));
+			postEntity.setModel(new DefaultComboBoxModel(entityOptions));
+
+			postEntity.setEditable(true);
+			postState.setEditable(true);
 
 			Object[] addMainFields = {
+					"Actor/Object", postEntity,
 					"State:", postState,
 					"Value:", postValue
 			};
 			JOptionPane.showConfirmDialog(null, addMainFields, "Add a state to postconditions", JOptionPane.CANCEL_OPTION);
-			main.getKnowledgeBase().addState(postState.getText());
+			if (!(postEntity.getSelectedItem() == null) && !(postState.getSelectedItem() == null)) {
+				String postActObjStr = postEntity.getSelectedItem().toString();
+				String postStateStr = postState.getSelectedItem().toString();
+				String postValueStr = postValue.getSelectedItem().toString();
+				main.getKnowledgeBase().addState(postStateStr);
+				DefaultTableModel postModel = (DefaultTableModel) postTable.getModel();
+				postModel.addRow(new Object[] { postActObjStr, postStateStr, postValueStr });
+			}
 		}
 		if (ae.getActionCommand().equals("Save")) {
 			Action new_action = new Action(tf_name.getText(), tf_prec.getText(), tf_postc.getText());

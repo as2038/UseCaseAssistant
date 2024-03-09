@@ -85,6 +85,14 @@ public class KnowledgeBase {
 		return actor_map;
 	}
 
+	public ArrayList<String> getStateList() {
+		return state_list;
+	}
+
+	public ArrayList<String> getObjectList() {
+		return object_list;
+	}
+
 	public DuckHandler getDuckHandler() {
 		return duck_handler;
 	}
