@@ -7,10 +7,13 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Map;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -21,6 +24,9 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
+import com.baselet.assistant.Action;
+import com.baselet.assistant.Actor;
+import com.baselet.assistant.KnowledgeBase;
 import com.baselet.assistant.Scenario;
 import com.baselet.control.Main;
 
@@ -39,13 +45,13 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 
 	private final JScrollPane spMain;
 	private final JScrollPane spAlt;
-	// private final JScrollPane spPrec;
-	// private final JScrollPane spPost;
+	private final JScrollPane spPrec;
+	private final JScrollPane spPost;
 
 	private final JTable mainFlowTable;
 	private final JTable altFlowTable;
-	// private final JTable precTable;
-	// private final JTable postTable;
+	private final JTable precTable;
+	private final JTable postTable;
 
 	private final DefaultTableModel mainFlowModel = new DefaultTableModel() {
 		@Override
@@ -87,8 +93,6 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 	private final JTextField tf_postc = new JTextField();
 
 	private final JLabel lb_mainflow = new JLabel("Main flow:");
-	private final JTextArea ta_mainflow = new JTextArea(5, 5);
-	JScrollPane sp_mainflow = new JScrollPane(ta_mainflow);
 
 	private final JLabel lb_altflow = new JLabel("Alternative flows:");
 	private final JTextArea ta_altflow = new JTextArea(5, 5);
@@ -116,6 +120,24 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 
 		spAlt = new JScrollPane();
 		spAlt.setViewportView(altFlowTable);
+
+		precModel.addColumn("Actor/Object");
+		precModel.addColumn("State");
+		precModel.addColumn("Value");
+		precModel.setRowCount(0);
+		precTable = new JTable(precModel);
+
+		spPrec = new JScrollPane();
+		spPrec.setViewportView(precTable);
+
+		postModel.addColumn("Actor/Object");
+		postModel.addColumn("State");
+		postModel.addColumn("Value");
+		postModel.setRowCount(0);
+		postTable = new JTable(postModel);
+
+		spPost = new JScrollPane();
+		spPost.setViewportView(postTable);
 
 		JButton button_addmain = new JButton("Add");
 		button_addmain.setActionCommand("AddMain");
@@ -182,9 +204,9 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 		parent.add(lb_secac);
 		parent.add(tf_secac);
 		parent.add(lb_prec);
-		parent.add(tf_prec);
+		parent.add(spPrec);
 		parent.add(lb_postc);
-		parent.add(tf_postc);
+		parent.add(spPost);
 		parent.add(lb_mainflow);
 		parent.add(spMain);
 		parent.add(main_button_panel);
@@ -194,7 +216,6 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 		parent.add(button_panel);
 
 		Font font = new Font(Font.SANS_SERIF, Font.PLAIN, 12);
-		ta_mainflow.setFont(font);
 		ta_altflow.setFont(font);
 
 		scenarioframe = new JFrame("Scenario");
@@ -208,7 +229,7 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 			public void run() {
 				scenarioframe.setLocationRelativeTo(CurrentGui.getInstance().getGui().getMainFrame());
 				scenarioframe.setVisible(true);
-				scenarioframe.setSize(300, 350);
+				scenarioframe.setSize(300, 600);
 				scenarioframe.toFront();
 
 				temp_name = CurrentGui.getInstance().getGui().getPropertyPane().getText();
@@ -221,14 +242,12 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 					tf_secac.setText("");
 					tf_prec.setText(existing_scenario.getPrecond());
 					tf_postc.setText(existing_scenario.getPostcond());
-					ta_mainflow.setText(existing_scenario.getMainflow().get(0));
 				}
 				else {
 					tf_prac.setText("");
 					tf_secac.setText("");
 					tf_prec.setText("");
 					tf_postc.setText("");
-					ta_mainflow.setText("");
 					ta_altflow.setText("");
 				}
 			}
@@ -242,17 +261,38 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent ae) {
+		Main main = Main.getInstance();
+		KnowledgeBase kb = main.getKnowledgeBase();
+		Map<String, Actor> actorM = kb.getActorMap();
+		Map<String, Action> actionM = kb.getActionMap();
+
+		String[] actorOptions = new String[actorM.size()];
+		String[] actionOptions = new String[actionM.size()];
+		int i = 0;
+		for (String actorStr : actorM.keySet()) {
+			actorOptions[i] = actorStr;
+			i++;
+		}
+		i = 0;
+		for (String actionStr : actionM.keySet()) {
+			actionOptions[i] = actionStr;
+			i++;
+		}
+
 		if (ae.getActionCommand().equals("AddMain")) {
 
-			JTextField mainActor = new JTextField();
-			JTextField mainAction = new JTextField();
+			JComboBox mainActor = new JComboBox();
+			JComboBox mainAction = new JComboBox();
+
+			mainActor.setModel(new DefaultComboBoxModel(actorOptions));
+			mainAction.setModel(new DefaultComboBoxModel(actionOptions));
 
 			Object[] addMainFields = {
 					"Actor:", mainActor,
 					"Action:", mainAction
 			};
 			JOptionPane.showConfirmDialog(null, addMainFields, "Add action to main flow", JOptionPane.CANCEL_OPTION);
-			System.out.println(mainActor.getText() + " " + mainAction.getText());
+			// System.out.println(mainActor.getText() + " " + mainAction.getText());
 		}
 
 		if (ae.getActionCommand().equals("AddAlt")) {
@@ -269,10 +309,8 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 		}
 
 		if (ae.getActionCommand().equals("Save")) {
-			temp_mainflow.add(ta_mainflow.getText());
 			String[] temp_secacs = new String[1];
 			temp_secacs[0] = tf_secac.getText();
-			Main main = Main.getInstance();
 			main.getKnowledgeBase().addScenario(new Scenario(temp_name, tf_prac.getText(), temp_secacs, tf_prec.getText(), tf_postc.getText(), temp_mainflow));
 			hideScenarioPanel();
 		}
@@ -280,5 +318,4 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 			hideScenarioPanel();
 		}
 	}
-
 }

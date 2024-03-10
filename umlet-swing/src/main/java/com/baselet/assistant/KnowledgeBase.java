@@ -9,7 +9,7 @@ import com.baselet.gui.CurrentGui;
 
 public class KnowledgeBase {
 
-	private String last_temp_name;
+	private String last_actor_name;
 	private final Map<String, Scenario> scenario_map;
 	private final Map<String, Actor> actor_map;
 	private final Map<String, Action> action_map;
@@ -69,12 +69,12 @@ public class KnowledgeBase {
 		return action_map.get(action_name);
 	}
 
-	public void setLastTempName(String last_temp_name) {
-		this.last_temp_name = last_temp_name;
+	public void setLastActorName(String last_actor_name) {
+		this.last_actor_name = last_actor_name;
 	}
 
-	public String getLastTempName() {
-		return last_temp_name;
+	public String getLastActorName() {
+		return last_actor_name;
 	}
 
 	public Map<String, Scenario> getScenarioMap() {
@@ -83,6 +83,10 @@ public class KnowledgeBase {
 
 	public Map<String, Actor> getActorMap() {
 		return actor_map;
+	}
+
+	public Map<String, Action> getActionMap() {
+		return action_map;
 	}
 
 	public ArrayList<String> getStateList() {

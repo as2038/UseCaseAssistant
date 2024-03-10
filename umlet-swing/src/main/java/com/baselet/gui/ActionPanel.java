@@ -171,7 +171,7 @@ public class ActionPanel extends JPanel implements ActionListener {
 
 		Main main = Main.getInstance();
 
-		actionframe = new JFrame(main.getKnowledgeBase().getLastTempName() + " - New Action");
+		actionframe = new JFrame(main.getKnowledgeBase().getLastActorName() + " - New Action");
 		actionframe.setContentPane(parent);
 		actionframe.pack();
 	}
@@ -182,9 +182,19 @@ public class ActionPanel extends JPanel implements ActionListener {
 			public void run() {
 				actionframe.setLocationRelativeTo(CurrentGui.getInstance().getGui().getMainFrame());
 				actionframe.setVisible(true);
-				actionframe.setSize(300, 300);
+				actionframe.setSize(300, 400);
 				actionframe.toFront();
+
+				Main main = Main.getInstance();
+				Action existing_action = main.getKnowledgeBase().getAction("");
+				if (existing_action != null) {
+
+				}
+				else {
+
+				}
 			}
+
 		});
 
 	}
@@ -272,7 +282,7 @@ public class ActionPanel extends JPanel implements ActionListener {
 		}
 		if (ae.getActionCommand().equals("Save")) {
 			Action new_action = new Action(tf_name.getText(), tf_prec.getText(), tf_postc.getText());
-			kb.getActor(kb.getLastTempName()).addAction(new_action);
+			kb.getActor(kb.getLastActorName()).addAction(new_action);
 			kb.addAction(new_action);
 			hideActionPanel();
 		}

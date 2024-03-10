@@ -137,7 +137,7 @@ public class ActorPanel extends JPanel implements ActionListener {
 			public void run() {
 				actorframe.setLocationRelativeTo(CurrentGui.getInstance().getGui().getMainFrame());
 				actorframe.setVisible(true);
-				actorframe.setSize(350, 300);
+				actorframe.setSize(300, 300);
 				actorframe.toFront();
 
 				temp_name = CurrentGui.getInstance().getGui().getPropertyPane().getText();
@@ -148,17 +148,12 @@ public class ActorPanel extends JPanel implements ActionListener {
 				// DefaultTableModel model = (DefaultTableModel) actionTable.getModel();
 				actionModel.setRowCount(0);
 				if (existing_actor != null) {
-					// tf_alias.setText(existing_actor.getPrac());
-					// tf_goals.setText("");
-					// tf_states.setText(existing_actor.getPrecond());
 					ArrayList<Action> existing_action_list = existing_actor.getActionList();
 					if (existing_action_list.size() > 0) {
-
 						actionModel.setRowCount(0);
 						for (Action a : existing_action_list) {
 							actionModel.addRow(new Object[] { a.getName(), "", a.getPrecond(), a.getPostcond() });
 						}
-
 					}
 					else {
 						actionModel.setRowCount(0);
@@ -184,7 +179,7 @@ public class ActorPanel extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent ae) {
 		Main main = Main.getInstance();
-		main.getKnowledgeBase().setLastTempName(temp_name);
+		main.getKnowledgeBase().setLastActorName(temp_name);
 
 		if (ae.getActionCommand().equals("Add")) {
 			ActionPanel.getInstance().showActionPanel();
@@ -193,8 +188,9 @@ public class ActorPanel extends JPanel implements ActionListener {
 			ActionPanel.getInstance().showActionPanel();
 		}
 		if (ae.getActionCommand().equals("Delete")) {
-			System.out.println(actionTable.getSelectedRow());
-			actionModel.setRowCount(0);
+			int sr = actionTable.getSelectedRow();
+			// System.out.println(actionModel.getValueAt(sr, 0));
+			actionModel.removeRow(sr);
 		}
 		if (ae.getActionCommand().equals("Save")) {
 			Actor new_actor = new Actor(temp_name, temp_action_list);
