@@ -6,17 +6,17 @@ public class Scenario {
 	private final String name;
 	private final String prac;
 	private final String[] secac;
-	private final String precond;
-	private final String postcond;
-	private final ArrayList<String> mainflow;
+	private final ArrayList<StateTriple> precond;
+	private final ArrayList<StateTriple> postcond;
+	private final ArrayList<FlowStep> mainflow_steps;
 
-	public Scenario(String name, String prac, String[] secac, String precond, String postcond, ArrayList<String> mainflow) {
+	public Scenario(String name, String prac, String[] secac, ArrayList<StateTriple> precond, ArrayList<StateTriple> postcond, ArrayList<FlowStep> mainflow_steps) {
 		this.name = name;
 		this.prac = prac;
 		this.precond = precond;
 		this.secac = secac;
 		this.postcond = postcond;
-		this.mainflow = mainflow;
+		this.mainflow_steps = mainflow_steps;
 	}
 
 	public String getName() {
@@ -31,15 +31,15 @@ public class Scenario {
 		return secac;
 	}
 
-	public String getPrecond() {
+	public ArrayList<StateTriple> getPrecond() {
 		return precond;
 	}
 
-	public String getPostcond() {
+	public ArrayList<StateTriple> getPostcond() {
 		return postcond;
 	}
 
-	public ArrayList<String> getMainflow() {
-		return mainflow;
+	public ArrayList<FlowStep> getMainflowSteps() {
+		return mainflow_steps;
 	}
 }

@@ -26,8 +26,10 @@ import javax.swing.table.DefaultTableModel;
 
 import com.baselet.assistant.Action;
 import com.baselet.assistant.Actor;
+import com.baselet.assistant.FlowStep;
 import com.baselet.assistant.KnowledgeBase;
 import com.baselet.assistant.Scenario;
+import com.baselet.assistant.StateTriple;
 import com.baselet.control.Main;
 
 public class ScenarioPanel extends JPanel implements ActionListener {
@@ -99,7 +101,9 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 	JScrollPane sp_altflow = new JScrollPane(ta_altflow);
 
 	private String temp_name;
-	private final ArrayList<String> temp_mainflow = new ArrayList<String>();
+	private final ArrayList<FlowStep> mainflow_steps = new ArrayList<FlowStep>();
+	private final ArrayList<StateTriple> preconditions = new ArrayList<StateTriple>();
+	private final ArrayList<StateTriple> postconditions = new ArrayList<StateTriple>();
 
 	private ScenarioPanel() {
 		setLayout(new GridLayout(0, 2, 4, 4));
@@ -121,7 +125,7 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 		spAlt = new JScrollPane();
 		spAlt.setViewportView(altFlowTable);
 
-		precModel.addColumn("Actor/Object");
+		precModel.addColumn("Entity");
 		precModel.addColumn("State");
 		precModel.addColumn("Value");
 		precModel.setRowCount(0);
@@ -130,7 +134,7 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 		spPrec = new JScrollPane();
 		spPrec.setViewportView(precTable);
 
-		postModel.addColumn("Actor/Object");
+		postModel.addColumn("Entity");
 		postModel.addColumn("State");
 		postModel.addColumn("Value");
 		postModel.setRowCount(0);
@@ -138,6 +142,24 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 
 		spPost = new JScrollPane();
 		spPost.setViewportView(postTable);
+
+		JButton button_addprec = new JButton("Add");
+		button_addprec.setActionCommand("AddPrec");
+		button_addprec.addActionListener(this);
+		JButton button_editprec = new JButton("Edit");
+		button_editprec.setActionCommand("EditPrec");
+		button_editprec.addActionListener(this);
+		JButton button_deleteprec = new JButton("Delete");
+		button_deleteprec.setActionCommand("DeletePrec");
+
+		JButton button_addpost = new JButton("Add");
+		button_addpost.setActionCommand("AddPost");
+		button_addpost.addActionListener(this);
+		JButton button_editpost = new JButton("Edit");
+		button_editpost.setActionCommand("EditPost");
+		button_editpost.addActionListener(this);
+		JButton button_deletepost = new JButton("Delete");
+		button_deletepost.setActionCommand("DeletePost");
 
 		JButton button_addmain = new JButton("Add");
 		button_addmain.setActionCommand("AddMain");
@@ -163,6 +185,30 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 		JButton button_close = new JButton("Close");
 		button_close.setActionCommand("Close");
 		button_close.addActionListener(this);
+
+		JPanel prec_button_panel = new JPanel();
+		prec_button_panel.setLayout(new BoxLayout(prec_button_panel, BoxLayout.X_AXIS));
+		prec_button_panel.add(Box.createHorizontalGlue());
+		prec_button_panel.add(button_addprec);
+		prec_button_panel.add(Box.createRigidArea(new Dimension(20, 0)));
+		prec_button_panel.add(button_editprec);
+		prec_button_panel.add(Box.createHorizontalGlue());
+		prec_button_panel.add(Box.createRigidArea(new Dimension(20, 0)));
+		prec_button_panel.add(button_deleteprec);
+		prec_button_panel.add(Box.createHorizontalGlue());
+		prec_button_panel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+		JPanel post_button_panel = new JPanel();
+		post_button_panel.setLayout(new BoxLayout(post_button_panel, BoxLayout.X_AXIS));
+		post_button_panel.add(Box.createHorizontalGlue());
+		post_button_panel.add(button_addpost);
+		post_button_panel.add(Box.createRigidArea(new Dimension(20, 0)));
+		post_button_panel.add(button_editpost);
+		post_button_panel.add(Box.createHorizontalGlue());
+		post_button_panel.add(Box.createRigidArea(new Dimension(20, 0)));
+		post_button_panel.add(button_deletepost);
+		post_button_panel.add(Box.createHorizontalGlue());
+		post_button_panel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
 		JPanel main_button_panel = new JPanel();
 		main_button_panel.setLayout(new BoxLayout(main_button_panel, BoxLayout.X_AXIS));
@@ -205,8 +251,10 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 		parent.add(tf_secac);
 		parent.add(lb_prec);
 		parent.add(spPrec);
+		parent.add(prec_button_panel);
 		parent.add(lb_postc);
 		parent.add(spPost);
+		parent.add(post_button_panel);
 		parent.add(lb_mainflow);
 		parent.add(spMain);
 		parent.add(main_button_panel);
@@ -240,8 +288,6 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 				if (existing_scenario != null) {
 					tf_prac.setText(existing_scenario.getPrac());
 					tf_secac.setText("");
-					tf_prec.setText(existing_scenario.getPrecond());
-					tf_postc.setText(existing_scenario.getPostcond());
 				}
 				else {
 					tf_prac.setText("");
@@ -252,7 +298,6 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 				}
 			}
 		});
-
 	}
 
 	public void hideScenarioPanel() {
@@ -268,6 +313,24 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 
 		String[] actorOptions = new String[actorM.size()];
 		String[] actionOptions = new String[actionM.size()];
+
+		ArrayList<String> stateAL = kb.getStateList();
+		ArrayList<String> entityAL = kb.getObjectList();
+		for (String actorStr : actorM.keySet()) {
+			entityAL.add(actorStr);
+		}
+
+		String[] entityOptions = new String[entityAL.size()];
+		String[] stateOptions = new String[stateAL.size()];
+		String[] valueOptions = { "True", "False" };
+
+		for (int i = 0; i < stateAL.size(); i++) {
+			stateOptions[i] = stateAL.get(i);
+		}
+		for (int j = 0; j < entityAL.size(); j++) {
+			entityOptions[j] = entityAL.get(j);
+		}
+
 		int i = 0;
 		for (String actorStr : actorM.keySet()) {
 			actorOptions[i] = actorStr;
@@ -279,6 +342,61 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 			i++;
 		}
 
+		if (ae.getActionCommand().equals("AddPrec")) {
+			JComboBox precEntity = new JComboBox();
+			JComboBox precState = new JComboBox();
+			JComboBox precValue = new JComboBox();
+
+			precValue.setModel(new DefaultComboBoxModel(valueOptions));
+			precState.setModel(new DefaultComboBoxModel(stateOptions));
+			precEntity.setModel(new DefaultComboBoxModel(entityOptions));
+
+			precEntity.setEditable(true);
+			precState.setEditable(true);
+
+			Object[] addMainFields = {
+					"Entity", precEntity,
+					"State:", precState,
+					"Value:", precValue
+			};
+			JOptionPane.showConfirmDialog(null, addMainFields, "Add a state to preconditions", JOptionPane.CANCEL_OPTION);
+			if (!(precEntity.getSelectedItem() == null) && !(precState.getSelectedItem() == null)) {
+				String precActObjStr = precEntity.getSelectedItem().toString();
+				String precStateStr = precState.getSelectedItem().toString();
+				String precValueStr = precValue.getSelectedItem().toString();
+
+				main.getKnowledgeBase().addState(precStateStr);
+				DefaultTableModel precModel = (DefaultTableModel) precTable.getModel();
+				precModel.addRow(new Object[] { precActObjStr, precStateStr, precValueStr });
+			}
+		}
+		if (ae.getActionCommand().equals("AddPost")) {
+			JComboBox postEntity = new JComboBox();
+			JComboBox postState = new JComboBox();
+			JComboBox postValue = new JComboBox();
+
+			postValue.setModel(new DefaultComboBoxModel(valueOptions));
+			postState.setModel(new DefaultComboBoxModel(stateOptions));
+			postEntity.setModel(new DefaultComboBoxModel(entityOptions));
+
+			postEntity.setEditable(true);
+			postState.setEditable(true);
+
+			Object[] addMainFields = {
+					"Entity", postEntity,
+					"State:", postState,
+					"Value:", postValue
+			};
+			JOptionPane.showConfirmDialog(null, addMainFields, "Add a state to postconditions", JOptionPane.CANCEL_OPTION);
+			if (!(postEntity.getSelectedItem() == null) && !(postState.getSelectedItem() == null)) {
+				String postActObjStr = postEntity.getSelectedItem().toString();
+				String postStateStr = postState.getSelectedItem().toString();
+				String postValueStr = postValue.getSelectedItem().toString();
+				main.getKnowledgeBase().addState(postStateStr);
+				DefaultTableModel postModel = (DefaultTableModel) postTable.getModel();
+				postModel.addRow(new Object[] { postActObjStr, postStateStr, postValueStr });
+			}
+		}
 		if (ae.getActionCommand().equals("AddMain")) {
 
 			JComboBox mainActor = new JComboBox();
@@ -291,27 +409,40 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 					"Actor:", mainActor,
 					"Action:", mainAction
 			};
-			JOptionPane.showConfirmDialog(null, addMainFields, "Add action to main flow", JOptionPane.CANCEL_OPTION);
-			// System.out.println(mainActor.getText() + " " + mainAction.getText());
+			JOptionPane.showConfirmDialog(null, addMainFields, "Add step to main flow", JOptionPane.CANCEL_OPTION);
+			if (!(mainActor.getSelectedItem() == null) && !(mainAction.getSelectedItem() == null)) {
+				DefaultTableModel mainModel = (DefaultTableModel) mainFlowTable.getModel();
+				mainModel.addRow(new Object[] { mainActor.getSelectedItem(), mainAction.getSelectedItem() });
+			}
 		}
 
 		if (ae.getActionCommand().equals("AddAlt")) {
 
-			JTextField altActor = new JTextField();
-			JTextField altAction = new JTextField();
+			JComboBox altActor = new JComboBox();
+			JComboBox altAction = new JComboBox();
 
-			Object[] addMainFields = {
+			altActor.setModel(new DefaultComboBoxModel(actorOptions));
+			altAction.setModel(new DefaultComboBoxModel(actionOptions));
+
+			Object[] addAltFields = {
 					"Actor:", altActor,
 					"Action:", altAction
 			};
-			JOptionPane.showConfirmDialog(null, addMainFields, "Add action to alternative flow", JOptionPane.CANCEL_OPTION);
-			System.out.println(altActor.getText() + " " + altAction.getText());
+			JOptionPane.showConfirmDialog(null, addAltFields, "Add step to alternative flow", JOptionPane.CANCEL_OPTION);
+			if (!(altActor.getSelectedItem() == null) && !(altAction.getSelectedItem() == null)) {
+				DefaultTableModel altModel = (DefaultTableModel) altFlowTable.getModel();
+				altModel.addRow(new Object[] { altActor.getSelectedItem(), altAction.getSelectedItem() });
+			}
 		}
 
 		if (ae.getActionCommand().equals("Save")) {
 			String[] temp_secacs = new String[1];
 			temp_secacs[0] = tf_secac.getText();
-			main.getKnowledgeBase().addScenario(new Scenario(temp_name, tf_prac.getText(), temp_secacs, tf_prec.getText(), tf_postc.getText(), temp_mainflow));
+			for (int j = 0; j < mainFlowModel.getRowCount(); j++) {
+				FlowStep temp_step = new FlowStep(mainFlowModel.getValueAt(j, 0).toString(), mainFlowModel.getValueAt(j, 1).toString());
+				mainflow_steps.add(temp_step);
+			}
+			main.getKnowledgeBase().addScenario(new Scenario(temp_name, tf_prac.getText(), temp_secacs, preconditions, postconditions, mainflow_steps));
 			hideScenarioPanel();
 		}
 		if (ae.getActionCommand().equals("Close")) {

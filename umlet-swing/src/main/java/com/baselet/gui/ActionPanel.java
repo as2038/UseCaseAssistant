@@ -62,7 +62,7 @@ public class ActionPanel extends JPanel implements ActionListener {
 	private final JLabel lb_name = new JLabel("Name:");
 	private final JTextField tf_name = new JTextField();
 
-	private final JLabel lb_object = new JLabel("Object:");
+	private final JLabel lb_object = new JLabel("Object (optional):");
 	private final JTextField tf_object = new JTextField();
 
 	private final JLabel lb_prec = new JLabel("Preconditions:");
@@ -75,7 +75,7 @@ public class ActionPanel extends JPanel implements ActionListener {
 		setLayout(new GridLayout(0, 2, 4, 4));
 		setAlignmentX(Component.LEFT_ALIGNMENT);
 
-		precModel.addColumn("Actor/Object");
+		precModel.addColumn("Entity");
 		precModel.addColumn("State");
 		precModel.addColumn("Value");
 
@@ -86,7 +86,7 @@ public class ActionPanel extends JPanel implements ActionListener {
 		spPrec = new JScrollPane();
 		spPrec.setViewportView(precTable);
 
-		postModel.addColumn("Actor/Object");
+		postModel.addColumn("Entity");
 		postModel.addColumn("State");
 		postModel.addColumn("Value");
 
@@ -238,7 +238,7 @@ public class ActionPanel extends JPanel implements ActionListener {
 			precState.setEditable(true);
 
 			Object[] addMainFields = {
-					"Actor/Object", precEntity,
+					"Entity", precEntity,
 					"State:", precState,
 					"Value:", precValue
 			};
@@ -266,7 +266,7 @@ public class ActionPanel extends JPanel implements ActionListener {
 			postState.setEditable(true);
 
 			Object[] addMainFields = {
-					"Actor/Object", postEntity,
+					"Entity", postEntity,
 					"State:", postState,
 					"Value:", postValue
 			};

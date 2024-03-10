@@ -35,7 +35,6 @@ public class DuckHandler {
 
 			Scenario s = set.getValue();
 			String s_name = s.getName();
-			String pc = s.getPostcond();
 			String pa = s.getPrac();
 			String sa = s.getSecac()[0];
 			relation_list.add(new RelationTriple(s_name, pa, "actor-usecase"));
@@ -45,29 +44,12 @@ public class DuckHandler {
 				noProblems = false;
 			}
 
-			ArrayList<String> mf = s.getMainflow();
-			for (String a : mf) {
+			ArrayList<FlowStep> mainflow_steps = s.getMainflowSteps();
 
-				if (!a.equals("")) {
-					Action act = knowledgeBase.getAction(a);
-					if (act == null) {
-						warnings.add("Warning (" + s_name + "): Action '" + a + "' does not exist in the Knowledge Base.\n");
-						noProblems = false;
-					}
-					else {
-						if (!knowledgeBase.getActor(s.getPrac()).getActionList().contains(act)) {
-							warnings.add("Warning (" + s_name + "): Actor '" + s.getPrac() + "' does not have action '" + a + ".\n");
-							noProblems = false;
-						}
-						else {
-							if (!act.getPostcond().equals(pc)) {
-								warnings.add("Warning (" + s_name + "): postcondition not satisfied.\n");
-								noProblems = false;
-							}
-						}
-					}
-				}
+			for (FlowStep fs : mainflow_steps) {
+
 			}
+
 		}
 
 		System.out.println();
