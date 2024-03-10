@@ -242,15 +242,19 @@ public class ActionPanel extends JPanel implements ActionListener {
 					"State:", precState,
 					"Value:", precValue
 			};
-			JOptionPane.showConfirmDialog(null, addMainFields, "Add a state to preconditions", JOptionPane.CANCEL_OPTION);
-			if (!(precEntity.getSelectedItem() == null) && !(precState.getSelectedItem() == null)) {
-				String precActObjStr = precEntity.getSelectedItem().toString();
-				String precStateStr = precState.getSelectedItem().toString();
-				String precValueStr = precValue.getSelectedItem().toString();
+			int ocprec = JOptionPane.showConfirmDialog(null, addMainFields, "Add a state to preconditions", JOptionPane.CANCEL_OPTION);
+			{
+				if (ocprec != JOptionPane.CANCEL_OPTION) {
+					if (!(precEntity.getSelectedItem() == null) && !(precState.getSelectedItem() == null)) {
+						String precActObjStr = precEntity.getSelectedItem().toString();
+						String precStateStr = precState.getSelectedItem().toString();
+						String precValueStr = precValue.getSelectedItem().toString();
 
-				main.getKnowledgeBase().addState(precStateStr);
-				DefaultTableModel precModel = (DefaultTableModel) precTable.getModel();
-				precModel.addRow(new Object[] { precActObjStr, precStateStr, precValueStr });
+						main.getKnowledgeBase().addState(precStateStr);
+						DefaultTableModel precModel = (DefaultTableModel) precTable.getModel();
+						precModel.addRow(new Object[] { precActObjStr, precStateStr, precValueStr });
+					}
+				}
 			}
 		}
 		if (ae.getActionCommand().equals("AddPost")) {
@@ -270,14 +274,18 @@ public class ActionPanel extends JPanel implements ActionListener {
 					"State:", postState,
 					"Value:", postValue
 			};
-			JOptionPane.showConfirmDialog(null, addMainFields, "Add a state to postconditions", JOptionPane.CANCEL_OPTION);
-			if (!(postEntity.getSelectedItem() == null) && !(postState.getSelectedItem() == null)) {
-				String postActObjStr = postEntity.getSelectedItem().toString();
-				String postStateStr = postState.getSelectedItem().toString();
-				String postValueStr = postValue.getSelectedItem().toString();
-				main.getKnowledgeBase().addState(postStateStr);
-				DefaultTableModel postModel = (DefaultTableModel) postTable.getModel();
-				postModel.addRow(new Object[] { postActObjStr, postStateStr, postValueStr });
+			int ocpost = JOptionPane.showConfirmDialog(null, addMainFields, "Add a state to postconditions", JOptionPane.CANCEL_OPTION);
+			{
+				if (ocpost != JOptionPane.CANCEL_OPTION) {
+					if (!(postEntity.getSelectedItem() == null) && !(postState.getSelectedItem() == null)) {
+						String postActObjStr = postEntity.getSelectedItem().toString();
+						String postStateStr = postState.getSelectedItem().toString();
+						String postValueStr = postValue.getSelectedItem().toString();
+						main.getKnowledgeBase().addState(postStateStr);
+						DefaultTableModel postModel = (DefaultTableModel) postTable.getModel();
+						postModel.addRow(new Object[] { postActObjStr, postStateStr, postValueStr });
+					}
+				}
 			}
 		}
 		if (ae.getActionCommand().equals("Save")) {

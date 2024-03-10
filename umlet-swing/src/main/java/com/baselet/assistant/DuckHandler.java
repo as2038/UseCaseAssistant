@@ -26,9 +26,9 @@ public class DuckHandler {
 		ArrayList<String> warnings = new ArrayList<String>();
 		boolean noProblems = true;
 		Main main = Main.getInstance();
-		KnowledgeBase knowledgeBase = main.getKnowledgeBase();
-		HashMap<String, Scenario> scenario_map = (HashMap<String, Scenario>) knowledgeBase.getScenarioMap();
-		HashMap<String, Actor> actor_map = (HashMap<String, Actor>) knowledgeBase.getActorMap();
+		KnowledgeBase kb = main.getKnowledgeBase();
+		HashMap<String, Scenario> scenario_map = (HashMap<String, Scenario>) kb.getScenarioMap();
+		HashMap<String, Actor> actor_map = (HashMap<String, Actor>) kb.getActorMap();
 		ArrayList<RelationTriple> relation_list = new ArrayList<RelationTriple>();
 
 		for (Map.Entry<String, Scenario> set : scenario_map.entrySet()) {
@@ -39,14 +39,30 @@ public class DuckHandler {
 			String sa = s.getSecac()[0];
 			relation_list.add(new RelationTriple(s_name, pa, "actor-usecase"));
 
-			if (knowledgeBase.getActor(pa) == null) {
+			if (kb.getActor(pa) == null) {
 				warnings.add("Warning (" + s_name + "): Actor '" + s.getPrac() + "' does not exist in the Knowledge Base.\n");
 				noProblems = false;
 			}
 
 			ArrayList<FlowStep> mainflow_steps = s.getMainflowSteps();
+			ArrayList<StateTriple> flow_states = s.getPrecond();
 
 			for (FlowStep fs : mainflow_steps) {
+				Actor fs_actor = kb.getActor(fs.getActor());
+				Action fs_action = kb.getAction(fs.getAction());
+				if (fs_actor == null) {
+					warnings.add("Warning (" + s_name + "): Actor '" + fs.getActor() + "' does not exist in the Knowledge Base.\n");
+					noProblems = false;
+				}
+				else if (!fs_actor.getActionList().contains(fs_action)) {
+					warnings.add("Warning (" + s_name + "): Actor '" + fs.getActor() + "' does not have action '" + fs.getAction() + "'.\n");
+					noProblems = false;
+				}
+
+				if (fs_action == null) {
+					warnings.add("Warning (" + s_name + "): Action '" + fs.getAction() + "' does not exist in the Knowledge Base.\n");
+					noProblems = false;
+				}
 
 			}
 

@@ -359,15 +359,19 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 					"State:", precState,
 					"Value:", precValue
 			};
-			JOptionPane.showConfirmDialog(null, addMainFields, "Add a state to preconditions", JOptionPane.CANCEL_OPTION);
-			if (!(precEntity.getSelectedItem() == null) && !(precState.getSelectedItem() == null)) {
-				String precActObjStr = precEntity.getSelectedItem().toString();
-				String precStateStr = precState.getSelectedItem().toString();
-				String precValueStr = precValue.getSelectedItem().toString();
+			int ocprec = JOptionPane.showConfirmDialog(null, addMainFields, "Add a state to preconditions", JOptionPane.CANCEL_OPTION);
+			{
+				if (ocprec != JOptionPane.CANCEL_OPTION) {
+					if (!(precEntity.getSelectedItem() == null) && !(precState.getSelectedItem() == null)) {
+						String precActObjStr = precEntity.getSelectedItem().toString();
+						String precStateStr = precState.getSelectedItem().toString();
+						String precValueStr = precValue.getSelectedItem().toString();
 
-				main.getKnowledgeBase().addState(precStateStr);
-				DefaultTableModel precModel = (DefaultTableModel) precTable.getModel();
-				precModel.addRow(new Object[] { precActObjStr, precStateStr, precValueStr });
+						main.getKnowledgeBase().addState(precStateStr);
+						DefaultTableModel precModel = (DefaultTableModel) precTable.getModel();
+						precModel.addRow(new Object[] { precActObjStr, precStateStr, precValueStr });
+					}
+				}
 			}
 		}
 		if (ae.getActionCommand().equals("AddPost")) {
@@ -387,14 +391,18 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 					"State:", postState,
 					"Value:", postValue
 			};
-			JOptionPane.showConfirmDialog(null, addMainFields, "Add a state to postconditions", JOptionPane.CANCEL_OPTION);
-			if (!(postEntity.getSelectedItem() == null) && !(postState.getSelectedItem() == null)) {
-				String postActObjStr = postEntity.getSelectedItem().toString();
-				String postStateStr = postState.getSelectedItem().toString();
-				String postValueStr = postValue.getSelectedItem().toString();
-				main.getKnowledgeBase().addState(postStateStr);
-				DefaultTableModel postModel = (DefaultTableModel) postTable.getModel();
-				postModel.addRow(new Object[] { postActObjStr, postStateStr, postValueStr });
+			int ocpost = JOptionPane.showConfirmDialog(null, addMainFields, "Add a state to postconditions", JOptionPane.CANCEL_OPTION);
+			{
+				if (ocpost != JOptionPane.CANCEL_OPTION) {
+					if (!(postEntity.getSelectedItem() == null) && !(postState.getSelectedItem() == null)) {
+						String postActObjStr = postEntity.getSelectedItem().toString();
+						String postStateStr = postState.getSelectedItem().toString();
+						String postValueStr = postValue.getSelectedItem().toString();
+						main.getKnowledgeBase().addState(postStateStr);
+						DefaultTableModel postModel = (DefaultTableModel) postTable.getModel();
+						postModel.addRow(new Object[] { postActObjStr, postStateStr, postValueStr });
+					}
+				}
 			}
 		}
 		if (ae.getActionCommand().equals("AddMain")) {
@@ -409,10 +417,14 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 					"Actor:", mainActor,
 					"Action:", mainAction
 			};
-			JOptionPane.showConfirmDialog(null, addMainFields, "Add step to main flow", JOptionPane.CANCEL_OPTION);
-			if (!(mainActor.getSelectedItem() == null) && !(mainAction.getSelectedItem() == null)) {
-				DefaultTableModel mainModel = (DefaultTableModel) mainFlowTable.getModel();
-				mainModel.addRow(new Object[] { mainActor.getSelectedItem(), mainAction.getSelectedItem() });
+			int ocmain = JOptionPane.showConfirmDialog(null, addMainFields, "Add step to main flow", JOptionPane.CANCEL_OPTION);
+			{
+				if (ocmain != JOptionPane.CANCEL_OPTION) {
+					if (!(mainActor.getSelectedItem() == null) && !(mainAction.getSelectedItem() == null)) {
+						DefaultTableModel mainModel = (DefaultTableModel) mainFlowTable.getModel();
+						mainModel.addRow(new Object[] { mainActor.getSelectedItem(), mainAction.getSelectedItem() });
+					}
+				}
 			}
 		}
 
@@ -428,10 +440,15 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 					"Actor:", altActor,
 					"Action:", altAction
 			};
-			JOptionPane.showConfirmDialog(null, addAltFields, "Add step to alternative flow", JOptionPane.CANCEL_OPTION);
-			if (!(altActor.getSelectedItem() == null) && !(altAction.getSelectedItem() == null)) {
-				DefaultTableModel altModel = (DefaultTableModel) altFlowTable.getModel();
-				altModel.addRow(new Object[] { altActor.getSelectedItem(), altAction.getSelectedItem() });
+			int ocalt = JOptionPane.showConfirmDialog(null, addAltFields, "Add step to alternative flow", JOptionPane.CANCEL_OPTION);
+			{
+				if (ocalt != JOptionPane.CANCEL_OPTION) {
+
+					if (!(altActor.getSelectedItem() == null) && !(altAction.getSelectedItem() == null)) {
+						DefaultTableModel altModel = (DefaultTableModel) altFlowTable.getModel();
+						altModel.addRow(new Object[] { altActor.getSelectedItem(), altAction.getSelectedItem() });
+					}
+				}
 			}
 		}
 
