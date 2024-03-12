@@ -16,7 +16,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-import com.baselet.control.Main;
 import com.baselet.control.config.Config;
 
 public class KnowledgeBasePanel extends JPanel implements ActionListener {
@@ -119,14 +118,14 @@ public class KnowledgeBasePanel extends JPanel implements ActionListener {
 
 	public void closePanel() {
 		Config.getInstance().setMail_split_position((int) this.getSize().getHeight());
-		CurrentGui.getInstance().getGui().setRequirementsPanelEnabled(false);
+		CurrentGui.getInstance().getGui().setKnowledgeBasePanelEnabled(false);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent ae) {
 		if (ae.getActionCommand().equals("NewEntity")) {
-			Main main = Main.getInstance();
-			main.getKnowledgeBase().getDuckHandler().showEARS();
+			// Main main = Main.getInstance();
+			// main.getKnowledgeBase().getDuckHandler().showEARS();
 		}
 		if (ae.getActionCommand().equals("Close")) {
 			closePanel();

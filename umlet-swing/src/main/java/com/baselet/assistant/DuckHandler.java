@@ -19,7 +19,7 @@ import com.baselet.gui.ScenarioPanel;
 public class DuckHandler {
 
 	public DuckHandler() {
-		// TODO Auto-generated constructor stub
+
 	}
 
 	public ArrayList<String> checkConsistency() {
@@ -43,10 +43,10 @@ public class DuckHandler {
 				warnings.add("Warning (" + s_name + "): Actor '" + s.getPrac() + "' does not exist in the Knowledge Base.\n");
 				noProblems = false;
 			}
-
 			ArrayList<FlowStep> mainflow_steps = s.getMainflowSteps();
 			ArrayList<StateTriple> flow_states = s.getPrecond();
 
+			// Running the proof step-by-step
 			for (FlowStep fs : mainflow_steps) {
 				Actor fs_actor = kb.getActor(fs.getActor());
 				Action fs_action = kb.getAction(fs.getAction());
@@ -63,9 +63,51 @@ public class DuckHandler {
 					warnings.add("Warning (" + s_name + "): Action '" + fs.getAction() + "' does not exist in the Knowledge Base.\n");
 					noProblems = false;
 				}
-
+				else {
+					for (StateTriple st : fs_action.getPrecond()) {
+						boolean satisfied = false;
+						for (StateTriple cst : flow_states) {
+							if (st.getEntity().equals(cst.getEntity()) && st.getState().equals(cst.getState()) && st.getValue().equals(cst.getValue())) {
+								for (StateTriple pst : fs_action.getPostcond()) {
+									boolean changed = false;
+									for (StateTriple nst : flow_states) {
+										if (pst.getEntity().equals(cst.getEntity()) && pst.getState().equals(cst.getState())) {
+											int edit_index = flow_states.indexOf(nst);
+											nst.setValue(pst.getValue());
+											flow_states.add(edit_index, st);
+											changed = true;
+											break;
+										}
+									}
+									if (!changed) {
+										flow_states.add(pst);
+									}
+								}
+								satisfied = true;
+								break;
+							}
+						}
+						if (!satisfied) {
+							warnings.add("Warning (" + s_name + "): Precondition not satisfied for action '" + fs.getAction() + "'.\n");
+							noProblems = false;
+						}
+					}
+				}
 			}
-
+			// Checking that all postconditions are satisfied
+			for (StateTriple pst : s.getPostcond()) {
+				boolean satisfied = false;
+				for (StateTriple cst : flow_states) {
+					if (pst.getEntity().equals(cst.getEntity()) && pst.getState().equals(cst.getState()) && pst.getValue().equals(cst.getValue())) {
+						satisfied = true;
+						break;
+					}
+				}
+				if (!satisfied) {
+					warnings.add("Warning (" + s_name + "): Postcondition (" + pst.getEntity() + ", " + pst.getState() + ", " + pst.getValue() + ") not satisfied.\n");
+					noProblems = false;
+				}
+			}
 		}
 
 		System.out.println();

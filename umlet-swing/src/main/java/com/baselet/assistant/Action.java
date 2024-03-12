@@ -1,12 +1,14 @@
 package com.baselet.assistant;
 
+import java.util.ArrayList;
+
 public class Action {
 
 	private final String name;
-	private final String precond;
-	private final String postcond;
+	private final ArrayList<StateTriple> precond;
+	private final ArrayList<StateTriple> postcond;
 
-	public Action(String name, String precond, String postcond) {
+	public Action(String name, ArrayList<StateTriple> precond, ArrayList<StateTriple> postcond) {
 		this.name = name;
 		this.precond = precond;
 		this.postcond = postcond;
@@ -16,11 +18,11 @@ public class Action {
 		return name;
 	}
 
-	public String getPrecond() {
+	public ArrayList<StateTriple> getPrecond() {
 		return precond;
 	}
 
-	public String getPostcond() {
+	public ArrayList<StateTriple> getPostcond() {
 		return postcond;
 	}
 }

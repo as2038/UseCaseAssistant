@@ -456,8 +456,16 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 			String[] temp_secacs = new String[1];
 			temp_secacs[0] = tf_secac.getText();
 			for (int j = 0; j < mainFlowModel.getRowCount(); j++) {
-				FlowStep temp_step = new FlowStep(mainFlowModel.getValueAt(j, 0).toString(), mainFlowModel.getValueAt(j, 1).toString());
-				mainflow_steps.add(temp_step);
+				FlowStep new_step = new FlowStep(mainFlowModel.getValueAt(j, 0).toString(), mainFlowModel.getValueAt(j, 1).toString());
+				mainflow_steps.add(new_step);
+			}
+			for (int k = 0; k < precModel.getRowCount(); k++) {
+				StateTriple new_prec = new StateTriple(precModel.getValueAt(k, 0).toString(), precModel.getValueAt(k, 1).toString(), precModel.getValueAt(k, 2).toString());
+				preconditions.add(new_prec);
+			}
+			for (int l = 0; l < postModel.getRowCount(); l++) {
+				StateTriple new_post = new StateTriple(postModel.getValueAt(l, 0).toString(), postModel.getValueAt(l, 1).toString(), postModel.getValueAt(l, 2).toString());
+				postconditions.add(new_post);
 			}
 			main.getKnowledgeBase().addScenario(new Scenario(temp_name, tf_prac.getText(), temp_secacs, preconditions, postconditions, mainflow_steps));
 			hideScenarioPanel();

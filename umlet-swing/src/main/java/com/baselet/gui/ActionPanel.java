@@ -25,6 +25,7 @@ import javax.swing.table.DefaultTableModel;
 import com.baselet.assistant.Action;
 import com.baselet.assistant.Actor;
 import com.baselet.assistant.KnowledgeBase;
+import com.baselet.assistant.StateTriple;
 import com.baselet.control.Main;
 
 public class ActionPanel extends JPanel implements ActionListener {
@@ -70,6 +71,9 @@ public class ActionPanel extends JPanel implements ActionListener {
 
 	private final JLabel lb_postc = new JLabel("Postconditions:");
 	private final JTextField tf_postc = new JTextField();
+
+	private final ArrayList<StateTriple> preconditions = new ArrayList<StateTriple>();
+	private final ArrayList<StateTriple> postconditions = new ArrayList<StateTriple>();
 
 	public ActionPanel() {
 		setLayout(new GridLayout(0, 2, 4, 4));
@@ -289,7 +293,15 @@ public class ActionPanel extends JPanel implements ActionListener {
 			}
 		}
 		if (ae.getActionCommand().equals("Save")) {
-			Action new_action = new Action(tf_name.getText(), tf_prec.getText(), tf_postc.getText());
+			for (int k = 0; k < precModel.getRowCount(); k++) {
+				StateTriple new_prec = new StateTriple(precModel.getValueAt(k, 0).toString(), precModel.getValueAt(k, 1).toString(), precModel.getValueAt(k, 2).toString());
+				preconditions.add(new_prec);
+			}
+			for (int l = 0; l < postModel.getRowCount(); l++) {
+				StateTriple new_post = new StateTriple(postModel.getValueAt(l, 0).toString(), postModel.getValueAt(l, 1).toString(), postModel.getValueAt(l, 2).toString());
+				postconditions.add(new_post);
+			}
+			Action new_action = new Action(tf_name.getText(), preconditions, postconditions);
 			kb.getActor(kb.getLastActorName()).addAction(new_action);
 			kb.addAction(new_action);
 			hideActionPanel();
