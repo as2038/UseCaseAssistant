@@ -283,8 +283,19 @@ public class DuckHandler {
 		else {
 			for (int l = 0; l < entities.size(); l++) {
 				if (sbX1 != null && sbY1 != null && sbX2 != null && sbY2 != null) {
-					if (sbX1 >= rectX1s.get(l) && sbY1 >= rectY1s.get(l) && sbX2 <= rectX2s.get(l) && sbY2 <= rectY2s.get(l)) {
+					String entityType = entities.get(l).getClass().toString();
+					if (entityType.contains("Actor")) {
+						if (sbX1 <= rectX1s.get(l) && sbY1 <= rectY1s.get(l) && sbX2 >= rectX2s.get(l) && sbY2 >= rectY2s.get(l)) {
+							warnings.add("Warning (Diagram): Actor '" + entities.get(l).getPanelAttributes() + "' was placed within the system boundary.\n");
+							noProblems = false;
+						}
+					}
+					else if (entityType.contains("UseCase")) {
+						if (!(sbX1 <= rectX1s.get(l) && sbY1 <= rectY1s.get(l) && sbX2 >= rectX2s.get(l) && sbY2 >= rectY2s.get(l))) {
 
+							warnings.add("Warning (Diagram): Use case '" + entities.get(l).getPanelAttributes() + "' was placed outside of the system boundary.\n");
+							noProblems = false;
+						}
 					}
 				}
 			}
