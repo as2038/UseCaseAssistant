@@ -111,6 +111,11 @@ public class DuckHandler {
 		}
 
 		System.out.println();
+		boolean systemBoundaryPlaced = false;
+		Double sbX1 = null;
+		Double sbY1 = null;
+		Double sbX2 = null;
+		Double sbY2 = null;
 		ArrayList<GridElement> entities = new ArrayList<GridElement>();
 		ArrayList<GridElement> relations = new ArrayList<GridElement>();
 		ArrayList<Double> rectX1s = new ArrayList<Double>();
@@ -122,7 +127,15 @@ public class DuckHandler {
 			String entity_name = ge.getPanelAttributes();
 			String entity_class = ge.getClass().toString();
 
-			if (entity_class.contains("Relation")) {
+			if (entity_class.contains("Generic")) {
+				Rectangle sysBound = ge.getRectangle();
+				sbX1 = (double) sysBound.getX();
+				sbY1 = (double) sysBound.getY();
+				sbX2 = (double) sysBound.getX2();
+				sbY2 = (double) sysBound.getY2();
+				systemBoundaryPlaced = true;
+			}
+			else if (entity_class.contains("Relation")) {
 				relations.add(ge);
 			}
 			else {
@@ -263,6 +276,19 @@ public class DuckHandler {
 			warnings.add("Warning (Diagram): Use case '" + rt.getFirstEntity() + "' has a reference to actor '" + rt.getSecondEntity() + "', but no connection was drawn.\n");
 			noProblems = false;
 		}
+		if (!systemBoundaryPlaced) {
+			warnings.add("Warning (Diagram): System boundary has not been placed.\n");
+			noProblems = false;
+		}
+		else {
+			for (int l = 0; l < entities.size(); l++) {
+				if (sbX1 != null && sbY1 != null && sbX2 != null && sbY2 != null) {
+					if (sbX1 >= rectX1s.get(l) && sbY1 >= rectY1s.get(l) && sbX2 <= rectX2s.get(l) && sbY2 <= rectY2s.get(l)) {
+
+					}
+				}
+			}
+		}
 		if (noProblems) {
 			warnings.add("No problems found!");
 		}
@@ -280,9 +306,6 @@ public class DuckHandler {
 		}
 		else if (element_type.equals("UseCase")) {
 			ScenarioPanel.getInstance().showScenarioPanel();
-		}
-		else if (element_type.equals("Relation")) {
-
 		}
 	}
 
