@@ -9,7 +9,9 @@ import com.baselet.gui.CurrentGui;
 
 public class KnowledgeBase {
 
+	private String last_scenario_name;
 	private String last_actor_name;
+	private String last_action_name;
 	private final Map<String, Scenario> scenario_map;
 	private final Map<String, Actor> actor_map;
 	private final Map<String, Action> action_map;
@@ -99,5 +101,26 @@ public class KnowledgeBase {
 
 	public DuckHandler getDuckHandler() {
 		return duck_handler;
+	}
+
+	public void deleteScenario(String scenario_name) {
+		scenario_map.remove(scenario_name);
+	}
+
+	public void deleteActor(String actor_name) {
+		actor_map.remove(actor_name);
+	}
+
+	public void deleteAction(String action_name) {
+		action_map.remove(action_name);
+	}
+
+	public void deleteObject(String object_name) {
+		object_list.remove(object_list.indexOf(object_name));
+	}
+
+	public void deleteState(String state_name) {
+		state_list.remove(state_list.indexOf(state_name));
+
 	}
 }

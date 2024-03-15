@@ -109,6 +109,7 @@ public class ActionPanel extends JPanel implements ActionListener {
 		button_editprec.addActionListener(this);
 		JButton button_deleteprec = new JButton("Delete");
 		button_deleteprec.setActionCommand("DeletePrec");
+		button_deleteprec.addActionListener(this);
 
 		JButton button_addpost = new JButton("Add");
 		button_addpost.setActionCommand("AddPost");
@@ -117,7 +118,8 @@ public class ActionPanel extends JPanel implements ActionListener {
 		button_editpost.setActionCommand("EditPost");
 		button_editpost.addActionListener(this);
 		JButton button_deletepost = new JButton("Delete");
-		button_deletepost.setActionCommand("DeletePost");
+		button_deletepost.setActionCommand("DeletPost");
+		button_deletepost.addActionListener(this);
 
 		JButton button_save = new JButton("Save");
 		button_save.setActionCommand("Save");
@@ -209,6 +211,7 @@ public class ActionPanel extends JPanel implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent ae) {
+		System.out.println(ae.getActionCommand());
 		Main main = Main.getInstance();
 		KnowledgeBase kb = main.getKnowledgeBase();
 		ArrayList<String> stateAL = kb.getStateList();
@@ -291,6 +294,14 @@ public class ActionPanel extends JPanel implements ActionListener {
 					}
 				}
 			}
+		}
+		if (ae.getActionCommand().equals("DeletePrec")) {
+			int sr = precTable.getSelectedRow();
+			precModel.removeRow(sr);
+		}
+		if (ae.getActionCommand().equals("DeletePost")) {
+			int sr = postTable.getSelectedRow();
+			postModel.removeRow(sr);
 		}
 		if (ae.getActionCommand().equals("Save")) {
 			for (int k = 0; k < precModel.getRowCount(); k++) {

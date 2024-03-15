@@ -81,6 +81,10 @@ public class KnowledgeBasePanel extends JPanel implements ActionListener {
 		this.add(bt_close, BorderLayout.NORTH);
 		bt_newentity.setActionCommand("NewEntity");
 		bt_newentity.addActionListener(this);
+		bt_edit.setActionCommand("EditEntity");
+		bt_edit.addActionListener(this);
+		bt_delete.setActionCommand("DeleteEntity");
+		bt_delete.addActionListener(this);
 		bt_close.setActionCommand("Close");
 		bt_close.addActionListener(this);
 	}

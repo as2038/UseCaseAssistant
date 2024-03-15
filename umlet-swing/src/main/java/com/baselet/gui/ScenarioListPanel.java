@@ -16,6 +16,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import com.baselet.assistant.KnowledgeBase;
+import com.baselet.control.Main;
 import com.baselet.control.config.Config;
 
 public class ScenarioListPanel extends JPanel implements ActionListener {
@@ -82,6 +84,10 @@ public class ScenarioListPanel extends JPanel implements ActionListener {
 
 		bt_newscenario.setActionCommand("Add");
 		bt_newscenario.addActionListener(this);
+		bt_edit.setActionCommand("Edit");
+		bt_edit.addActionListener(this);
+		bt_delete.setActionCommand("Delete");
+		bt_delete.addActionListener(this);
 		bt_close.setActionCommand("Close");
 		bt_close.addActionListener(this);
 	}
@@ -124,8 +130,19 @@ public class ScenarioListPanel extends JPanel implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent ae) {
+		Main main = Main.getInstance();
+		KnowledgeBase kb = main.getKnowledgeBase();
 		if (ae.getActionCommand().equals("Add")) {
 			ScenarioPanel.getInstance().showScenarioPanel();
+		}
+		if (ae.getActionCommand().equals("Edit")) {
+			int sr = scenarioTable.getSelectedRow();
+			ScenarioPanel.getInstance().showScenarioPanel();
+		}
+		if (ae.getActionCommand().equals("Delete")) {
+			int sr = scenarioTable.getSelectedRow();
+			scenarioModel.removeRow(sr);
+			scenarioModel.getValueAt(sr, 0).toString();
 		}
 		if (ae.getActionCommand().equals("Close")) {
 			closePanel();

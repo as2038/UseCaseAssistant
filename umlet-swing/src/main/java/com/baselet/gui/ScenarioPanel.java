@@ -151,6 +151,7 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 		button_editprec.addActionListener(this);
 		JButton button_deleteprec = new JButton("Delete");
 		button_deleteprec.setActionCommand("DeletePrec");
+		button_deleteprec.addActionListener(this);
 
 		JButton button_addpost = new JButton("Add");
 		button_addpost.setActionCommand("AddPost");
@@ -160,6 +161,7 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 		button_editpost.addActionListener(this);
 		JButton button_deletepost = new JButton("Delete");
 		button_deletepost.setActionCommand("DeletePost");
+		button_deletepost.addActionListener(this);
 
 		JButton button_addmain = new JButton("Add");
 		button_addmain.setActionCommand("AddMain");
@@ -169,6 +171,7 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 		button_editmain.addActionListener(this);
 		JButton button_deletemain = new JButton("Delete");
 		button_deletemain.setActionCommand("DeleteMain");
+		button_deletemain.addActionListener(this);
 
 		JButton button_addalt = new JButton("Add");
 		button_addalt.setActionCommand("AddAlt");
@@ -178,6 +181,7 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 		button_editalt.addActionListener(this);
 		JButton button_deletealt = new JButton("Delete");
 		button_deletealt.setActionCommand("DeleteAlt");
+		button_deletealt.addActionListener(this);
 
 		JButton button_save = new JButton("Save");
 		button_save.setActionCommand("Save");
@@ -451,7 +455,22 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 				}
 			}
 		}
-
+		if (ae.getActionCommand().equals("DeletePrec")) {
+			int sr = precTable.getSelectedRow();
+			precModel.removeRow(sr);
+		}
+		if (ae.getActionCommand().equals("DeletePost")) {
+			int sr = postTable.getSelectedRow();
+			postModel.removeRow(sr);
+		}
+		if (ae.getActionCommand().equals("DeleteMain")) {
+			int sr = mainFlowTable.getSelectedRow();
+			mainFlowModel.removeRow(sr);
+		}
+		if (ae.getActionCommand().equals("DeleteAlt")) {
+			int sr = altFlowTable.getSelectedRow();
+			altFlowModel.removeRow(sr);
+		}
 		if (ae.getActionCommand().equals("Save")) {
 			String[] temp_secacs = new String[1];
 			temp_secacs[0] = tf_secac.getText();
