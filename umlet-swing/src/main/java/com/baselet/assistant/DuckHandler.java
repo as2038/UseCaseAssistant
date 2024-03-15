@@ -316,7 +316,7 @@ public class DuckHandler {
 			ActorPanel.getInstance().showActorPanel();
 		}
 		else if (element_type.equals("UseCase")) {
-			ScenarioPanel.getInstance().showScenarioPanel();
+			ScenarioPanel.getInstance().showScenarioPanel(CurrentGui.getInstance().getGui().getPropertyPane().getText());
 		}
 	}
 

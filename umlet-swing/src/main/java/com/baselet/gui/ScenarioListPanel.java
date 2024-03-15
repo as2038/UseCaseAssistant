@@ -11,9 +11,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import com.baselet.assistant.KnowledgeBase;
@@ -133,16 +135,25 @@ public class ScenarioListPanel extends JPanel implements ActionListener {
 		Main main = Main.getInstance();
 		KnowledgeBase kb = main.getKnowledgeBase();
 		if (ae.getActionCommand().equals("Add")) {
-			ScenarioPanel.getInstance().showScenarioPanel();
+			JTextField new_scenario_name = new JTextField();
+			Object[] addMainFields = {
+					"New scenario name", new_scenario_name
+			};
+			int ocalt = JOptionPane.showConfirmDialog(null, addMainFields, "New scenario", JOptionPane.CANCEL_OPTION);
+			{
+				if (ocalt != JOptionPane.CANCEL_OPTION) {
+					ScenarioPanel.getInstance().showScenarioPanel(new_scenario_name.getText());
+				}
+			}
 		}
 		if (ae.getActionCommand().equals("Edit")) {
 			int sr = scenarioTable.getSelectedRow();
-			ScenarioPanel.getInstance().showScenarioPanel();
+			ScenarioPanel.getInstance().showScenarioPanel(scenarioModel.getValueAt(sr, 0).toString());
 		}
 		if (ae.getActionCommand().equals("Delete")) {
 			int sr = scenarioTable.getSelectedRow();
+			kb.deleteScenario(scenarioModel.getValueAt(sr, 0).toString());
 			scenarioModel.removeRow(sr);
-			scenarioModel.getValueAt(sr, 0).toString();
 		}
 		if (ae.getActionCommand().equals("Close")) {
 			closePanel();

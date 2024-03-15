@@ -211,7 +211,6 @@ public class ActionPanel extends JPanel implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent ae) {
-		System.out.println(ae.getActionCommand());
 		Main main = Main.getInstance();
 		KnowledgeBase kb = main.getKnowledgeBase();
 		ArrayList<String> stateAL = kb.getStateList();

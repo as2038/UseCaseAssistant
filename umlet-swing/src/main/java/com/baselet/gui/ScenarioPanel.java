@@ -275,7 +275,7 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 		scenarioframe.pack();
 	}
 
-	public void showScenarioPanel() {
+	public void showScenarioPanel(final String scenario_name) {
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
@@ -284,11 +284,11 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 				scenarioframe.setSize(300, 600);
 				scenarioframe.toFront();
 
-				temp_name = CurrentGui.getInstance().getGui().getPropertyPane().getText();
-				scenarioframe.setTitle("Scenario - " + temp_name);
+				scenarioframe.setTitle("Scenario - " + scenario_name);
+				temp_name = scenario_name;
 
 				Main main = Main.getInstance();
-				Scenario existing_scenario = main.getKnowledgeBase().getScenario(temp_name);
+				Scenario existing_scenario = main.getKnowledgeBase().getScenario(scenario_name);
 				if (existing_scenario != null) {
 					tf_prac.setText(existing_scenario.getPrac());
 					tf_secac.setText("");

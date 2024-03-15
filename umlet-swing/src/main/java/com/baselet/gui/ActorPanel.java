@@ -189,7 +189,6 @@ public class ActorPanel extends JPanel implements ActionListener {
 		}
 		if (ae.getActionCommand().equals("Delete")) {
 			int sr = actionTable.getSelectedRow();
-			// System.out.println(actionModel.getValueAt(sr, 0));
 			actionModel.removeRow(sr);
 		}
 		if (ae.getActionCommand().equals("Save")) {
