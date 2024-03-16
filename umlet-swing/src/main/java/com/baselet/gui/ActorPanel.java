@@ -53,9 +53,6 @@ public class ActorPanel extends JPanel implements ActionListener {
 
 	private final JLabel lb_actions = new JLabel("Actions:");
 
-	private final JLabel lb_states = new JLabel("States:");
-	private final JTextField tf_states = new JTextField();
-
 	private String temp_name;
 	private final ArrayList<Action> temp_action_list = new ArrayList<Action>();
 
@@ -117,11 +114,8 @@ public class ActorPanel extends JPanel implements ActionListener {
 		parent.add(lb_goals);
 		parent.add(tf_goals);
 		parent.add(lb_actions);
-		// parent.add(sp_actions);
 		parent.add(sp);
 		parent.add(act_button_panel);
-		parent.add(lb_states);
-		parent.add(tf_states);
 		parent.add(button_panel);
 
 		Font font = new Font(Font.SANS_SERIF, Font.PLAIN, 12);
@@ -131,7 +125,7 @@ public class ActorPanel extends JPanel implements ActionListener {
 		actorframe.pack();
 	}
 
-	public void showActorPanel() {
+	public void showActorPanel(final String actor_name) {
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
@@ -141,19 +135,20 @@ public class ActorPanel extends JPanel implements ActionListener {
 				actorframe.toFront();
 
 				temp_name = CurrentGui.getInstance().getGui().getPropertyPane().getText();
-				actorframe.setTitle("Actor - " + temp_name);
+				actorframe.setTitle("Actor - " + actor_name);
+				temp_name = actor_name;
 
 				Main main = Main.getInstance();
-				Actor existing_actor = main.getKnowledgeBase().getActor(temp_name);
-				// DefaultTableModel model = (DefaultTableModel) actionTable.getModel();
+				Actor existing_actor = main.getKnowledgeBase().getActor(actor_name);
+
 				actionModel.setRowCount(0);
 				if (existing_actor != null) {
 					ArrayList<Action> existing_action_list = existing_actor.getActionList();
 					if (existing_action_list.size() > 0) {
-						actionModel.setRowCount(0);
 						for (Action a : existing_action_list) {
 							actionModel.addRow(new Object[] { a.getName(), "", a.getPrecond(), a.getPostcond() });
 						}
+
 					}
 					else {
 						actionModel.setRowCount(0);
@@ -162,7 +157,6 @@ public class ActorPanel extends JPanel implements ActionListener {
 				else {
 					tf_alias.setText("");
 					tf_goals.setText("");
-					tf_states.setText("");
 				}
 			}
 		});

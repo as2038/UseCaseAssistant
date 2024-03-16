@@ -88,7 +88,7 @@ public class DuckHandler {
 							}
 						}
 						if (!satisfied) {
-							warnings.add("Warning (" + s_name + "): Precondition not satisfied for action '" + fs.getAction() + "'.\n");
+							warnings.add("Warning (" + s_name + "): Precondition (" + st.getEntity() + ", " + st.getState() + ", " + st.getValue() + ") not satisfied for action '" + fs.getAction() + "'.\n");
 							noProblems = false;
 						}
 					}
@@ -313,7 +313,7 @@ public class DuckHandler {
 		String element_type = selected_elements_string.substring(selected_elements_string.lastIndexOf(".") + 1);
 		element_type = element_type.substring(0, element_type.lastIndexOf("@"));
 		if (element_type.equals("Actor")) {
-			ActorPanel.getInstance().showActorPanel();
+			ActorPanel.getInstance().showActorPanel(CurrentGui.getInstance().getGui().getPropertyPane().getText());
 		}
 		else if (element_type.equals("UseCase")) {
 			ScenarioPanel.getInstance().showScenarioPanel(CurrentGui.getInstance().getGui().getPropertyPane().getText());

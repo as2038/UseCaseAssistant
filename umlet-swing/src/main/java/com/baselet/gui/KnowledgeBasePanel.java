@@ -10,12 +10,18 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
+import com.baselet.assistant.KnowledgeBase;
+import com.baselet.control.Main;
 import com.baselet.control.config.Config;
 
 public class KnowledgeBasePanel extends JPanel implements ActionListener {
@@ -127,14 +133,79 @@ public class KnowledgeBasePanel extends JPanel implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent ae) {
+		Main main = Main.getInstance();
+		KnowledgeBase kb = main.getKnowledgeBase();
 		if (ae.getActionCommand().equals("NewEntity")) {
-			// Main main = Main.getInstance();
-			// main.getKnowledgeBase().getDuckHandler().showEARS();
+			String[] typeOptions = { "Actor", "Action", "Object", "State" };
+			JTextField new_entity_name = new JTextField();
+			JComboBox newEntity = new JComboBox();
+			newEntity.setModel(new DefaultComboBoxModel(typeOptions));
+
+			Object[] addMainFields = {
+					"Object name", new_entity_name,
+					"Entity type", newEntity
+			};
+			int ocprec = JOptionPane.showConfirmDialog(null, addMainFields, "New entity", JOptionPane.CANCEL_OPTION);
+			{
+				if (ocprec != JOptionPane.CANCEL_OPTION) {
+					if (!(newEntity.getSelectedItem() == null)) {
+						String entityType = newEntity.getSelectedItem().toString();
+						if (entityType.equals("Actor")) {
+							ActorPanel.getInstance().showActorPanel(new_entity_name.getText());
+						}
+						if (entityType.equals("Action")) {
+							ActionPanel.getInstance().showActionPanel();
+						}
+						if (entityType.equals("Object")) {
+							kb.addObject(new_entity_name.getText());
+						}
+						if (entityType.equals("State")) {
+							kb.addState(new_entity_name.getText());
+						}
+					}
+				}
+			}
+		}
+		if (ae.getActionCommand().equals("EditEntity")) {
+			int sr = knowledgeTable.getSelectedRow();
+			String entityName = model.getValueAt(sr, 0).toString();
+			String entityType = model.getValueAt(sr, 1).toString();
+			if (entityType.equals("actor")) {
+
+			}
+			if (entityType.equals("action")) {
+
+			}
+			if (entityType.equals("object")) {
+
+			}
+			if (entityType.equals("state")) {
+
+			}
+		}
+		if (ae.getActionCommand().equals("DeleteEntity")) {
+			int sr = knowledgeTable.getSelectedRow();
+			String entityName = model.getValueAt(sr, 0).toString();
+			String entityType = model.getValueAt(sr, 1).toString();
+			if (entityType.equals("actor")) {
+				kb.deleteActor(entityName);
+				model.removeRow(sr);
+			}
+			if (entityType.equals("action")) {
+				kb.deleteAction(entityName);
+				model.removeRow(sr);
+			}
+			if (entityType.equals("object")) {
+				kb.deleteObject(entityName);
+				model.removeRow(sr);
+			}
+			if (entityType.equals("state")) {
+				kb.deleteState(entityName);
+				model.removeRow(sr);
+			}
 		}
 		if (ae.getActionCommand().equals("Close")) {
 			closePanel();
 		}
-
 	}
-
 }

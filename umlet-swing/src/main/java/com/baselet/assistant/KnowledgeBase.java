@@ -31,29 +31,47 @@ public class KnowledgeBase {
 	}
 
 	public void addScenario(Scenario new_scenario) {
+		if (!scenario_map.containsKey(new_scenario.getName())) {
+			gui.getScenarioListPanel().addScenarioToTable(new_scenario.getName(), new_scenario.getPrac());
+		}
 		scenario_map.put(new_scenario.getName(), new_scenario);
-		gui.getScenarioListPanel().addScenarioToTable(new_scenario.getName(), new_scenario.getPrac());
 	}
 
 	public void addActor(Actor new_actor) {
+		if (!actor_map.containsKey(new_actor.getName())) {
+			gui.getKnowledgeBasePanel().addEntityToTable(new_actor.getName(), "actor");
+		}
 		actor_map.put(new_actor.getName(), new_actor);
-		gui.getKnowledgeBasePanel().addEntityToTable(new_actor.getName(), "actor");
 	}
 
 	public void addAction(Action new_action) {
+		if (!action_map.containsKey(new_action.getName())) {
+			gui.getKnowledgeBasePanel().addEntityToTable(new_action.getName(), "action");
+		}
 		action_map.put(new_action.getName(), new_action);
-		gui.getKnowledgeBasePanel().addEntityToTable(new_action.getName(), "action");
 	}
 
 	public void addObject(String object_name) {
-		if (!object_list.contains(object_name)) {
-			object_list.add(object_name);
+		boolean object_exists = false;
+		for (String on : object_list) {
+			if (on.equals(object_name)) {
+				object_exists = true;
+			}
+		}
+		if (!object_exists) {
+			state_list.add(object_name);
 			gui.getKnowledgeBasePanel().addEntityToTable(object_name, "object");
 		}
 	}
 
 	public void addState(String state_name) {
-		if (!object_list.contains(state_name)) {
+		boolean state_exists = false;
+		for (String sn : state_list) {
+			if (sn.equals(state_name)) {
+				state_exists = true;
+			}
+		}
+		if (!state_exists) {
 			state_list.add(state_name);
 			gui.getKnowledgeBasePanel().addEntityToTable(state_name, "state");
 		}

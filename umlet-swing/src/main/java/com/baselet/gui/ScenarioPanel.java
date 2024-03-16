@@ -101,9 +101,6 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 	JScrollPane sp_altflow = new JScrollPane(ta_altflow);
 
 	private String temp_name;
-	private final ArrayList<FlowStep> mainflow_steps = new ArrayList<FlowStep>();
-	private final ArrayList<StateTriple> preconditions = new ArrayList<StateTriple>();
-	private final ArrayList<StateTriple> postconditions = new ArrayList<StateTriple>();
 
 	private ScenarioPanel() {
 		setLayout(new GridLayout(0, 2, 4, 4));
@@ -287,18 +284,31 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 				scenarioframe.setTitle("Scenario - " + scenario_name);
 				temp_name = scenario_name;
 
+				precModel.setRowCount(0);
+				postModel.setRowCount(0);
+				mainFlowModel.setRowCount(0);
+				altFlowModel.setRowCount(0);
 				Main main = Main.getInstance();
 				Scenario existing_scenario = main.getKnowledgeBase().getScenario(scenario_name);
 				if (existing_scenario != null) {
 					tf_prac.setText(existing_scenario.getPrac());
 					tf_secac.setText("");
+
+					for (StateTriple prst : existing_scenario.getPrecond()) {
+						precModel.addRow(new Object[] { prst.getEntity(), prst.getState(), prst.getValue() });
+					}
+					for (StateTriple post : existing_scenario.getPostcond()) {
+						postModel.addRow(new Object[] { post.getEntity(), post.getState(), post.getValue() });
+					}
+
+					for (FlowStep maac : existing_scenario.getMainflowSteps()) {
+						mainFlowModel.addRow(new Object[] { maac.getActor(), maac.getAction() });
+					}
+
 				}
 				else {
 					tf_prac.setText("");
 					tf_secac.setText("");
-					tf_prec.setText("");
-					tf_postc.setText("");
-					ta_altflow.setText("");
 				}
 			}
 		});
@@ -372,7 +382,7 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 						String precValueStr = precValue.getSelectedItem().toString();
 
 						main.getKnowledgeBase().addState(precStateStr);
-						DefaultTableModel precModel = (DefaultTableModel) precTable.getModel();
+						// DefaultTableModel precModel = (DefaultTableModel) precTable.getModel();
 						precModel.addRow(new Object[] { precActObjStr, precStateStr, precValueStr });
 					}
 				}
@@ -403,7 +413,7 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 						String postStateStr = postState.getSelectedItem().toString();
 						String postValueStr = postValue.getSelectedItem().toString();
 						main.getKnowledgeBase().addState(postStateStr);
-						DefaultTableModel postModel = (DefaultTableModel) postTable.getModel();
+						// DefaultTableModel postModel = (DefaultTableModel) postTable.getModel();
 						postModel.addRow(new Object[] { postActObjStr, postStateStr, postValueStr });
 					}
 				}
@@ -472,6 +482,10 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 			altFlowModel.removeRow(sr);
 		}
 		if (ae.getActionCommand().equals("Save")) {
+			ArrayList<FlowStep> mainflow_steps = new ArrayList<FlowStep>();
+			ArrayList<StateTriple> preconditions = new ArrayList<StateTriple>();
+			ArrayList<StateTriple> postconditions = new ArrayList<StateTriple>();
+
 			String[] temp_secacs = new String[1];
 			temp_secacs[0] = tf_secac.getText();
 			for (int j = 0; j < mainFlowModel.getRowCount(); j++) {

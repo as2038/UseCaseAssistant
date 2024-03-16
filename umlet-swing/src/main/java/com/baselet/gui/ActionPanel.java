@@ -72,9 +72,6 @@ public class ActionPanel extends JPanel implements ActionListener {
 	private final JLabel lb_postc = new JLabel("Postconditions:");
 	private final JTextField tf_postc = new JTextField();
 
-	private final ArrayList<StateTriple> preconditions = new ArrayList<StateTriple>();
-	private final ArrayList<StateTriple> postconditions = new ArrayList<StateTriple>();
-
 	public ActionPanel() {
 		setLayout(new GridLayout(0, 2, 4, 4));
 		setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -303,6 +300,9 @@ public class ActionPanel extends JPanel implements ActionListener {
 			postModel.removeRow(sr);
 		}
 		if (ae.getActionCommand().equals("Save")) {
+			ArrayList<StateTriple> preconditions = new ArrayList<StateTriple>();
+			ArrayList<StateTriple> postconditions = new ArrayList<StateTriple>();
+
 			for (int k = 0; k < precModel.getRowCount(); k++) {
 				StateTriple new_prec = new StateTriple(precModel.getValueAt(k, 0).toString(), precModel.getValueAt(k, 1).toString(), precModel.getValueAt(k, 2).toString());
 				preconditions.add(new_prec);
