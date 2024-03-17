@@ -50,25 +50,31 @@ public class DuckHandler {
 				flow_states.add(new StateTriple(dst.getEntity(), dst.getState(), dst.getValue()));
 			}
 			// Running the proof step-by-step
+			int stepNo = 0;
 			for (FlowStep fs : mainflow_steps) {
+				stepNo++;
 				Actor fs_actor = kb.getActor(fs.getActor());
 				Action fs_action = kb.getAction(fs.getAction());
 				// KB checks
 				if (fs_actor == null) {
-					warnings.add("Warning (" + s_name + "): Actor '" + fs.getActor() + "' does not exist in the Knowledge Base.\n");
+					warnings.add("Warning (" + s_name + ", step " + stepNo + "): Actor '" + fs.getActor() + "' does not exist in the Knowledge Base.\n");
 					noProblems = false;
 				}
-				else if (!fs_actor.getActionList().contains(fs_action)) {
-					warnings.add("Warning (" + s_name + "): Actor '" + fs.getActor() + "' does not have action '" + fs.getAction() + "'.\n");
+				else if (!fs_actor.getActionList().contains(fs_action.getName())) {
+					warnings.add("Warning (" + s_name + ", step " + stepNo + "): Actor '" + fs.getActor() + "' does not have action '" + fs.getAction() + "'.\n");
 					noProblems = false;
 				}
 
 				if (fs_action == null) {
-					warnings.add("Warning (" + s_name + "): Action '" + fs.getAction() + "' does not exist in the Knowledge Base.\n");
+					warnings.add("Warning (" + s_name + ", step " + stepNo + "): Action '" + fs.getAction() + "' does not exist in the Knowledge Base.\n");
 					noProblems = false;
 				}
 				else {
-					for (StateTriple st : fs_action.getPrecond()) {
+					ArrayList<StateTriple> act_prec = new ArrayList<StateTriple>();
+					for (StateTriple ast : fs_action.getPrecond()) {
+						act_prec.add(new StateTriple(ast.getEntity(), ast.getState(), ast.getValue()));
+					}
+					for (StateTriple st : act_prec) {
 						boolean satisfied = false;
 						for (StateTriple cst : flow_states) {
 							if (st.getEntity().equals(cst.getEntity()) && st.getState().equals(cst.getState()) && st.getValue().equals(cst.getValue())) {
@@ -92,7 +98,7 @@ public class DuckHandler {
 							}
 						}
 						if (!satisfied) {
-							warnings.add("Warning (" + s_name + "): Precondition (" + st.getEntity() + ", " + st.getState() + ", " + st.getValue() + ") not satisfied for action '" + fs.getAction() + "'.\n");
+							warnings.add("Warning (" + s_name + ", step " + stepNo + "): Precondition (" + st.getEntity() + ", " + st.getState() + ", " + st.getValue() + ") not satisfied for action '" + fs.getAction() + "'.\n");
 							noProblems = false;
 						}
 					}
@@ -112,6 +118,7 @@ public class DuckHandler {
 					noProblems = false;
 				}
 			}
+			flow_states.clear();
 		}
 
 		System.out.println();

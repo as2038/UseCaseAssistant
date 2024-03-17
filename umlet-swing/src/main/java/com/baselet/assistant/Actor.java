@@ -5,16 +5,16 @@ import java.util.ArrayList;
 public class Actor {
 
 	private final String name;
-	private final ArrayList<Action> action_list;
+	private final ArrayList<String> action_list;
 
-	public Actor(String name, ArrayList<Action> action_list) {
+	public Actor(String name, ArrayList<String> action_list) {
 		this.name = name;
 		this.action_list = action_list;
 
 		// System.out.println("Saved actor " + name + " with " + action_list.size() + " actions");
 	}
 
-	public void addAction(Action action) {
+	public void addAction(String action) {
 		action_list.add(action);
 	}
 
@@ -22,7 +22,7 @@ public class Actor {
 		return name;
 	}
 
-	public ArrayList<Action> getActionList() {
+	public ArrayList<String> getActionList() {
 		return action_list;
 	}
 

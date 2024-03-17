@@ -143,11 +143,13 @@ public class ActorPanel extends JPanel implements ActionListener {
 				actionModel.setRowCount(0);
 
 				Main main = Main.getInstance();
-				Actor existing_actor = main.getKnowledgeBase().getActor(actor_name);
+				KnowledgeBase kb = main.getKnowledgeBase();
+				Actor existing_actor = kb.getActor(actor_name);
 
 				if (existing_actor != null) {
-					for (Action a : existing_actor.getActionList()) {
-						actionModel.addRow(new Object[] { a.getName(), a.getObject() });
+
+					for (String sa : existing_actor.getActionList()) {
+						actionModel.addRow(new Object[] { sa, kb.getAction(sa).getObject() });
 					}
 				}
 				else {
@@ -200,10 +202,10 @@ public class ActorPanel extends JPanel implements ActionListener {
 			actionModel.removeRow(sr);
 		}
 		if (ae.getActionCommand().equals("Save")) {
-			ArrayList<Action> temp_action_list = new ArrayList<Action>();
+			ArrayList<String> temp_action_list = new ArrayList<String>();
 			for (int i = 0; i < actionModel.getRowCount(); i++) {
-				Action newAction = kb.getAction(actionModel.getValueAt(i, 0).toString());
-				temp_action_list.add(newAction);
+				// Action newAction = kb.getAction(actionModel.getValueAt(i, 0).toString());
+				temp_action_list.add(actionModel.getValueAt(i, 0).toString());
 			}
 			Actor new_actor = new Actor(temp_name, temp_action_list);
 			main.getKnowledgeBase().addActor(new_actor);

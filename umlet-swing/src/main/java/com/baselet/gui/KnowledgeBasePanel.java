@@ -154,7 +154,7 @@ public class KnowledgeBasePanel extends JPanel implements ActionListener {
 							ActorPanel.getInstance().showActorPanel(new_entity_name.getText());
 						}
 						if (entityType.equals("Action")) {
-							ActionPanel.getInstance().showActionPanel();
+							ActionPanel.getInstance().showActionPanel(new_entity_name.getText());
 						}
 						if (entityType.equals("Object")) {
 							kb.addObject(new_entity_name.getText());
@@ -171,10 +171,10 @@ public class KnowledgeBasePanel extends JPanel implements ActionListener {
 			String entityName = model.getValueAt(sr, 0).toString();
 			String entityType = model.getValueAt(sr, 1).toString();
 			if (entityType.equals("actor")) {
-
+				ActorPanel.getInstance().showActorPanel(entityName);
 			}
 			if (entityType.equals("action")) {
-
+				ActionPanel.getInstance().showActionPanel(entityName);
 			}
 			if (entityType.equals("object")) {
 

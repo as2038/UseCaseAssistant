@@ -177,7 +177,7 @@ public class ActionPanel extends JPanel implements ActionListener {
 		actionframe.pack();
 	}
 
-	public void showActionPanel() {
+	public void showActionPanel(final String action_name) {
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
@@ -189,8 +189,12 @@ public class ActionPanel extends JPanel implements ActionListener {
 				precModel.setRowCount(0);
 				postModel.setRowCount(0);
 
+				actionframe.setTitle("Action - " + action_name);
+
 				Main main = Main.getInstance();
-				Action existing_action = main.getKnowledgeBase().getAction("");
+				KnowledgeBase kb = main.getKnowledgeBase();
+				Action existing_action = kb.getAction(action_name);
+
 				if (existing_action != null) {
 					tf_name.setText(existing_action.getName());
 					tf_object.setText(existing_action.getObject());
