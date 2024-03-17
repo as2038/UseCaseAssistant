@@ -144,12 +144,8 @@ public class ActorPanel extends JPanel implements ActionListener {
 
 				Main main = Main.getInstance();
 				Actor existing_actor = main.getKnowledgeBase().getActor(actor_name);
-				if (existing_actor != null) {
-					// System.out.println("On init, Actor " + existing_actor.getName() + " has " + existing_actor.getActionList().size() + " actions");
-				}
 
 				if (existing_actor != null) {
-					// System.out.println("Actor " + existing_actor.getName() + " has " + existing_actor.getActionList().size() + " actions");
 					for (Action a : existing_actor.getActionList()) {
 						actionModel.addRow(new Object[] { a.getName(), a.getObject() });
 					}
@@ -211,7 +207,6 @@ public class ActorPanel extends JPanel implements ActionListener {
 			}
 			Actor new_actor = new Actor(temp_name, temp_action_list);
 			main.getKnowledgeBase().addActor(new_actor);
-			// System.out.println(temp_action_list.size());
 			hideActorPanel();
 		}
 		if (ae.getActionCommand().equals("Close")) {

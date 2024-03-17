@@ -11,7 +11,7 @@ public class Actor {
 		this.name = name;
 		this.action_list = action_list;
 
-		System.out.println("Saved actor " + name + " with " + action_list.size() + " actions");
+		// System.out.println("Saved actor " + name + " with " + action_list.size() + " actions");
 	}
 
 	public void addAction(Action action) {

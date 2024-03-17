@@ -44,8 +44,10 @@ public class DuckHandler {
 				noProblems = false;
 			}
 			ArrayList<FlowStep> mainflow_steps = s.getMainflowSteps();
-			ArrayList<StateTriple> flow_states = s.getPrecond();
-
+			ArrayList<StateTriple> flow_states = new ArrayList<StateTriple>();
+			for (StateTriple dst : s.getPrecond()) {
+				flow_states.add(new StateTriple(dst.getEntity(), dst.getState(), dst.getValue()));
+			}
 			// Running the proof step-by-step
 			for (FlowStep fs : mainflow_steps) {
 				Actor fs_actor = kb.getActor(fs.getActor());

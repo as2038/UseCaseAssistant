@@ -378,7 +378,7 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 						String precValueStr = precValue.getSelectedItem().toString();
 
 						main.getKnowledgeBase().addState(precStateStr);
-						// DefaultTableModel precModel = (DefaultTableModel) precTable.getModel();
+						DefaultTableModel precModel = (DefaultTableModel) precTable.getModel();
 						precModel.addRow(new Object[] { precActObjStr, precStateStr, precValueStr });
 					}
 				}
