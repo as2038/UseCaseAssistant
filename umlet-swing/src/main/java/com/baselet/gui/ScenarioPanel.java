@@ -324,26 +324,14 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 		KnowledgeBase kb = main.getKnowledgeBase();
 		Map<String, Actor> actorM = kb.getActorMap();
 		Map<String, Action> actionM = kb.getActionMap();
-
-		String[] actorOptions = new String[actorM.size()];
-		String[] actionOptions = new String[actionM.size()];
-
 		ArrayList<String> stateAL = kb.getStateList();
 		ArrayList<String> entityAL = kb.getObjectList();
-		for (String actorStr : actorM.keySet()) {
-			entityAL.add(actorStr);
-		}
 
 		String[] entityOptions = new String[entityAL.size()];
+		String[] actorOptions = new String[actorM.size()];
+		String[] actionOptions = new String[actionM.size()];
 		String[] stateOptions = new String[stateAL.size()];
 		String[] valueOptions = { "True", "False" };
-
-		for (int i = 0; i < stateAL.size(); i++) {
-			stateOptions[i] = stateAL.get(i);
-		}
-		for (int j = 0; j < entityAL.size(); j++) {
-			entityOptions[j] = entityAL.get(j);
-		}
 
 		int i = 0;
 		for (String actorStr : actorM.keySet()) {
@@ -354,6 +342,14 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 		for (String actionStr : actionM.keySet()) {
 			actionOptions[i] = actionStr;
 			i++;
+		}
+
+		for (int j = 0; j < entityAL.size(); j++) {
+			entityOptions[j] = entityAL.get(j);
+		}
+
+		for (int k = 0; k < stateAL.size(); k++) {
+			stateOptions[k] = stateAL.get(k);
 		}
 
 		if (ae.getActionCommand().equals("AddPrec")) {
@@ -413,14 +409,12 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 						String postStateStr = postState.getSelectedItem().toString();
 						String postValueStr = postValue.getSelectedItem().toString();
 						main.getKnowledgeBase().addState(postStateStr);
-						// DefaultTableModel postModel = (DefaultTableModel) postTable.getModel();
 						postModel.addRow(new Object[] { postActObjStr, postStateStr, postValueStr });
 					}
 				}
 			}
 		}
 		if (ae.getActionCommand().equals("AddMain")) {
-
 			JComboBox mainActor = new JComboBox();
 			JComboBox mainAction = new JComboBox();
 
@@ -443,7 +437,6 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 		}
 
 		if (ae.getActionCommand().equals("AddAlt")) {
-
 			JComboBox altActor = new JComboBox();
 			JComboBox altAction = new JComboBox();
 

@@ -7,12 +7,16 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Map;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -21,6 +25,7 @@ import javax.swing.table.DefaultTableModel;
 
 import com.baselet.assistant.Action;
 import com.baselet.assistant.Actor;
+import com.baselet.assistant.KnowledgeBase;
 import com.baselet.control.Main;
 
 public class ActorPanel extends JPanel implements ActionListener {
@@ -54,7 +59,6 @@ public class ActorPanel extends JPanel implements ActionListener {
 	private final JLabel lb_actions = new JLabel("Actions:");
 
 	private String temp_name;
-	private final ArrayList<Action> temp_action_list = new ArrayList<Action>();
 
 	private ActorPanel() {
 		setLayout(new GridLayout(0, 2, 4, 4));
@@ -101,7 +105,6 @@ public class ActorPanel extends JPanel implements ActionListener {
 		act_button_panel.add(button_add);
 		act_button_panel.add(Box.createRigidArea(new Dimension(20, 0)));
 		act_button_panel.add(Box.createHorizontalGlue());
-		act_button_panel.add(button_edit);
 		act_button_panel.add(Box.createRigidArea(new Dimension(20, 0)));
 		act_button_panel.add(button_delete);
 		act_button_panel.add(Box.createHorizontalGlue());
@@ -137,21 +140,18 @@ public class ActorPanel extends JPanel implements ActionListener {
 				temp_name = CurrentGui.getInstance().getGui().getPropertyPane().getText();
 				actorframe.setTitle("Actor - " + actor_name);
 				temp_name = actor_name;
+				actionModel.setRowCount(0);
 
 				Main main = Main.getInstance();
 				Actor existing_actor = main.getKnowledgeBase().getActor(actor_name);
-
-				actionModel.setRowCount(0);
 				if (existing_actor != null) {
-					ArrayList<Action> existing_action_list = existing_actor.getActionList();
-					if (existing_action_list.size() > 0) {
-						for (Action a : existing_action_list) {
-							actionModel.addRow(new Object[] { a.getName(), "", a.getPrecond(), a.getPostcond() });
-						}
+					// System.out.println("On init, Actor " + existing_actor.getName() + " has " + existing_actor.getActionList().size() + " actions");
+				}
 
-					}
-					else {
-						actionModel.setRowCount(0);
+				if (existing_actor != null) {
+					// System.out.println("Actor " + existing_actor.getName() + " has " + existing_actor.getActionList().size() + " actions");
+					for (Action a : existing_actor.getActionList()) {
+						actionModel.addRow(new Object[] { a.getName(), a.getObject() });
 					}
 				}
 				else {
@@ -166,28 +166,52 @@ public class ActorPanel extends JPanel implements ActionListener {
 		actorframe.setVisible(false);
 	}
 
-	public void addActionToTable() {
-
-	}
-
 	@Override
 	public void actionPerformed(ActionEvent ae) {
 		Main main = Main.getInstance();
-		main.getKnowledgeBase().setLastActorName(temp_name);
+		KnowledgeBase kb = main.getKnowledgeBase();
+		kb.setLastActorName(temp_name);
 
 		if (ae.getActionCommand().equals("Add")) {
-			ActionPanel.getInstance().showActionPanel();
-		}
-		if (ae.getActionCommand().equals("Edit")) {
-			ActionPanel.getInstance().showActionPanel();
+			Map<String, Action> actionM = kb.getActionMap();
+			String[] actionOptions = new String[actionM.size()];
+
+			int i = 0;
+			for (String actionStr : actionM.keySet()) {
+				actionOptions[i] = actionStr;
+				i++;
+			}
+
+			JComboBox action = new JComboBox();
+
+			action.setModel(new DefaultComboBoxModel(actionOptions));
+
+			Object[] addMainFields = {
+					"Action:", action
+			};
+			int ocmain = JOptionPane.showConfirmDialog(null, addMainFields, "Add action to this actor", JOptionPane.CANCEL_OPTION);
+			{
+				if (ocmain != JOptionPane.CANCEL_OPTION) {
+					if (!(action.getSelectedItem() == null)) {
+						Action selectedAction = kb.getAction(action.getSelectedItem().toString());
+						actionModel.addRow(new Object[] { selectedAction.getName(), selectedAction.getObject() });
+					}
+				}
+			}
 		}
 		if (ae.getActionCommand().equals("Delete")) {
 			int sr = actionTable.getSelectedRow();
 			actionModel.removeRow(sr);
 		}
 		if (ae.getActionCommand().equals("Save")) {
+			ArrayList<Action> temp_action_list = new ArrayList<Action>();
+			for (int i = 0; i < actionModel.getRowCount(); i++) {
+				Action newAction = kb.getAction(actionModel.getValueAt(i, 0).toString());
+				temp_action_list.add(newAction);
+			}
 			Actor new_actor = new Actor(temp_name, temp_action_list);
 			main.getKnowledgeBase().addActor(new_actor);
+			// System.out.println(temp_action_list.size());
 			hideActorPanel();
 		}
 		if (ae.getActionCommand().equals("Close")) {

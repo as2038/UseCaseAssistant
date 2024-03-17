@@ -59,7 +59,7 @@ public class KnowledgeBase {
 			}
 		}
 		if (!object_exists) {
-			state_list.add(object_name);
+			object_list.add(object_name);
 			gui.getKnowledgeBasePanel().addEntityToTable(object_name, "object");
 		}
 	}

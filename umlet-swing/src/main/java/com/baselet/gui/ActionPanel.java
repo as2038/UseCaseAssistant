@@ -172,9 +172,7 @@ public class ActionPanel extends JPanel implements ActionListener {
 		parent.add(post_button_panel);
 		parent.add(button_panel);
 
-		Main main = Main.getInstance();
-
-		actionframe = new JFrame(main.getKnowledgeBase().getLastActorName() + " - New Action");
+		actionframe = new JFrame("Action");
 		actionframe.setContentPane(parent);
 		actionframe.pack();
 	}
@@ -188,18 +186,33 @@ public class ActionPanel extends JPanel implements ActionListener {
 				actionframe.setSize(300, 400);
 				actionframe.toFront();
 
+				precModel.setRowCount(0);
+				postModel.setRowCount(0);
+
 				Main main = Main.getInstance();
 				Action existing_action = main.getKnowledgeBase().getAction("");
 				if (existing_action != null) {
-
+					tf_name.setText(existing_action.getName());
+					tf_object.setText(existing_action.getObject());
+					ArrayList<StateTriple> precs = existing_action.getPrecond();
+					ArrayList<StateTriple> posts = existing_action.getPostcond();
+					if (precs.size() > 0) {
+						for (StateTriple pr : precs) {
+							precModel.addRow(new Object[] { pr.getEntity(), pr.getState(), pr.getValue() });
+						}
+					}
+					if (posts.size() > 0) {
+						for (StateTriple po : posts) {
+							postModel.addRow(new Object[] { po.getEntity(), po.getState(), po.getValue() });
+						}
+					}
 				}
 				else {
-
+					tf_name.setText("");
+					tf_object.setText("");
 				}
 			}
-
 		});
-
 	}
 
 	public void hideActionPanel() {
@@ -211,24 +224,28 @@ public class ActionPanel extends JPanel implements ActionListener {
 		Main main = Main.getInstance();
 		KnowledgeBase kb = main.getKnowledgeBase();
 		ArrayList<String> stateAL = kb.getStateList();
-		ArrayList<String> entityAL = kb.getObjectList();
-		Map<String, Actor> actorM = kb.getActorMap();
-		for (String actorStr : actorM.keySet()) {
-			entityAL.add(actorStr);
-		}
-
-		String[] entityOptions = new String[entityAL.size()];
 		String[] stateOptions = new String[stateAL.size()];
 		String[] valueOptions = { "True", "False" };
 
 		for (int i = 0; i < stateAL.size(); i++) {
 			stateOptions[i] = stateAL.get(i);
 		}
-		for (int j = 0; j < entityAL.size(); j++) {
-			entityOptions[j] = entityAL.get(j);
-		}
 
 		if (ae.getActionCommand().equals("AddPrec")) {
+
+			ArrayList<String> entityAL = kb.getObjectList();
+			Map<String, Actor> actorM = kb.getActorMap();
+
+			for (String actorStr : actorM.keySet()) {
+				entityAL.add(actorStr);
+			}
+
+			String[] entityOptions = new String[entityAL.size()];
+
+			for (int j = 0; j < entityAL.size(); j++) {
+				entityOptions[j] = entityAL.get(j);
+			}
+
 			JComboBox precEntity = new JComboBox();
 			JComboBox precState = new JComboBox();
 			JComboBox precValue = new JComboBox();
@@ -261,6 +278,20 @@ public class ActionPanel extends JPanel implements ActionListener {
 			}
 		}
 		if (ae.getActionCommand().equals("AddPost")) {
+
+			ArrayList<String> entityAL = kb.getObjectList();
+			Map<String, Actor> actorM = kb.getActorMap();
+
+			for (String actorStr : actorM.keySet()) {
+				entityAL.add(actorStr);
+			}
+
+			String[] entityOptions = new String[entityAL.size()];
+
+			for (int j = 0; j < entityAL.size(); j++) {
+				entityOptions[j] = entityAL.get(j);
+			}
+
 			JComboBox postEntity = new JComboBox();
 			JComboBox postState = new JComboBox();
 			JComboBox postValue = new JComboBox();
@@ -311,15 +342,14 @@ public class ActionPanel extends JPanel implements ActionListener {
 				StateTriple new_post = new StateTriple(postModel.getValueAt(l, 0).toString(), postModel.getValueAt(l, 1).toString(), postModel.getValueAt(l, 2).toString());
 				postconditions.add(new_post);
 			}
-			Action new_action = new Action(tf_name.getText(), preconditions, postconditions);
-			kb.getActor(kb.getLastActorName()).addAction(new_action);
+			Action new_action = new Action(tf_name.getText(), tf_object.getName(), preconditions, postconditions);
+			// kb.getActor(kb.getLastActorName()).addAction(new_action);
 			kb.addAction(new_action);
 			hideActionPanel();
 		}
 		if (ae.getActionCommand().equals("Close")) {
 			hideActionPanel();
 		}
-
 	}
 
 }

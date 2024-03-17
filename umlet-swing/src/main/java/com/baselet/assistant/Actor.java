@@ -10,6 +10,8 @@ public class Actor {
 	public Actor(String name, ArrayList<Action> action_list) {
 		this.name = name;
 		this.action_list = action_list;
+
+		System.out.println("Saved actor " + name + " with " + action_list.size() + " actions");
 	}
 
 	public void addAction(Action action) {
