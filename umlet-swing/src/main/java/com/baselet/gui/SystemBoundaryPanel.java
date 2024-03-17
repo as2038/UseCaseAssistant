@@ -24,22 +24,22 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import com.baselet.assistant.Action;
-import com.baselet.assistant.Actor;
 import com.baselet.assistant.KnowledgeBase;
+import com.baselet.assistant.SystemBoundary;
 import com.baselet.control.Main;
 
-public class ActorPanel extends JPanel implements ActionListener {
+public class SystemBoundaryPanel extends JPanel implements ActionListener {
 
-	private static ActorPanel actorpanel;
+	private static SystemBoundaryPanel systempanel;
 
-	public static ActorPanel getInstance() {
-		if (actorpanel == null) {
-			actorpanel = new ActorPanel();
+	public static SystemBoundaryPanel getInstance() {
+		if (systempanel == null) {
+			systempanel = new SystemBoundaryPanel();
 		}
-		return actorpanel;
+		return systempanel;
 	}
 
-	private final JFrame actorframe;
+	private final JFrame systemframe;
 
 	private final JScrollPane sp;
 	private final JTable actionTable;
@@ -56,7 +56,7 @@ public class ActorPanel extends JPanel implements ActionListener {
 
 	private String temp_name;
 
-	private ActorPanel() {
+	private SystemBoundaryPanel() {
 		setLayout(new GridLayout(0, 2, 4, 4));
 		setAlignmentX(Component.LEFT_ALIGNMENT);
 
@@ -117,32 +117,31 @@ public class ActorPanel extends JPanel implements ActionListener {
 
 		Font font = new Font(Font.SANS_SERIF, Font.PLAIN, 12);
 
-		actorframe = new JFrame("Scenario");
-		actorframe.setContentPane(parent);
-		actorframe.pack();
+		systemframe = new JFrame("Scenario");
+		systemframe.setContentPane(parent);
+		systemframe.pack();
 	}
 
-	public void showActorPanel(final String actor_name) {
+	public void showSystemBoundaryrPanel(final String system_name) {
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				actorframe.setLocationRelativeTo(CurrentGui.getInstance().getGui().getMainFrame());
-				actorframe.setVisible(true);
-				actorframe.setSize(300, 300);
-				actorframe.toFront();
+				systemframe.setLocationRelativeTo(CurrentGui.getInstance().getGui().getMainFrame());
+				systemframe.setVisible(true);
+				systemframe.setSize(300, 300);
+				systemframe.toFront();
 
 				temp_name = CurrentGui.getInstance().getGui().getPropertyPane().getText();
-				actorframe.setTitle("Actor - " + actor_name);
-				temp_name = actor_name;
+				systemframe.setTitle("System - " + system_name);
+				temp_name = system_name;
 				actionModel.setRowCount(0);
 
 				Main main = Main.getInstance();
 				KnowledgeBase kb = main.getKnowledgeBase();
-				Actor existing_actor = kb.getActor(actor_name);
+				SystemBoundary system = kb.getSystem(system_name);
 
-				if (existing_actor != null) {
-
-					for (String sa : existing_actor.getActionList()) {
+				if (system != null) {
+					for (String sa : system.getActionList()) {
 						actionModel.addRow(new Object[] { sa, kb.getAction(sa).getObject() });
 					}
 				}
@@ -153,15 +152,14 @@ public class ActorPanel extends JPanel implements ActionListener {
 		});
 	}
 
-	public void hideActorPanel() {
-		actorframe.setVisible(false);
+	public void hideSystemBoundaryPanel() {
+		systemframe.setVisible(false);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent ae) {
 		Main main = Main.getInstance();
 		KnowledgeBase kb = main.getKnowledgeBase();
-		kb.setLastActorName(temp_name);
 
 		if (ae.getActionCommand().equals("Add")) {
 			Map<String, Action> actionM = kb.getActionMap();
@@ -180,7 +178,7 @@ public class ActorPanel extends JPanel implements ActionListener {
 			Object[] addMainFields = {
 					"Action:", action
 			};
-			int ocmain = JOptionPane.showConfirmDialog(null, addMainFields, "Add action to this actor", JOptionPane.CANCEL_OPTION);
+			int ocmain = JOptionPane.showConfirmDialog(null, addMainFields, "Add action to system", JOptionPane.CANCEL_OPTION);
 			{
 				if (ocmain != JOptionPane.CANCEL_OPTION) {
 					if (!(action.getSelectedItem() == null)) {
@@ -197,15 +195,14 @@ public class ActorPanel extends JPanel implements ActionListener {
 		if (ae.getActionCommand().equals("Save")) {
 			ArrayList<String> temp_action_list = new ArrayList<String>();
 			for (int i = 0; i < actionModel.getRowCount(); i++) {
-				// Action newAction = kb.getAction(actionModel.getValueAt(i, 0).toString());
 				temp_action_list.add(actionModel.getValueAt(i, 0).toString());
 			}
-			Actor new_actor = new Actor(temp_name, temp_action_list);
-			main.getKnowledgeBase().addActor(new_actor);
-			hideActorPanel();
+			SystemBoundary new_system = new SystemBoundary(temp_name, temp_action_list);
+			main.getKnowledgeBase().addSystem(new_system);
+			hideSystemBoundaryPanel();
 		}
 		if (ae.getActionCommand().equals("Close")) {
-			hideActorPanel();
+			hideSystemBoundaryPanel();
 		}
 	}
 

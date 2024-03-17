@@ -12,6 +12,7 @@ public class KnowledgeBase {
 	private String last_scenario_name;
 	private String last_actor_name;
 	private String last_action_name;
+	private SystemBoundary system_boundary;
 	private final Map<String, Scenario> scenario_map;
 	private final Map<String, Actor> actor_map;
 	private final Map<String, Action> action_map;
@@ -77,6 +78,13 @@ public class KnowledgeBase {
 		}
 	}
 
+	public void addSystem(SystemBoundary new_system) {
+		if (system_boundary == null) {
+			gui.getKnowledgeBasePanel().addEntityToTable(new_system.getName(), "system");
+		}
+		system_boundary = new_system;
+	}
+
 	public Scenario getScenario(String scenario_name) {
 		return scenario_map.get(scenario_name);
 	}
@@ -87,6 +95,10 @@ public class KnowledgeBase {
 
 	public Action getAction(String action_name) {
 		return action_map.get(action_name);
+	}
+
+	public SystemBoundary getSystem(String system_name) {
+		return system_boundary;
 	}
 
 	public void setLastActorName(String last_actor_name) {

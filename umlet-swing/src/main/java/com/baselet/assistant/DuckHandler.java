@@ -15,6 +15,7 @@ import com.baselet.gui.CurrentGui;
 import com.baselet.gui.DUCKHelpPanel;
 import com.baselet.gui.EARSPanel;
 import com.baselet.gui.ScenarioPanel;
+import com.baselet.gui.SystemBoundaryPanel;
 
 public class DuckHandler {
 
@@ -323,11 +324,17 @@ public class DuckHandler {
 		element_id = element_id.replace("]", "");
 		String element_type = selected_elements_string.substring(selected_elements_string.lastIndexOf(".") + 1);
 		element_type = element_type.substring(0, element_type.lastIndexOf("@"));
+		String property_pane_text = CurrentGui.getInstance().getGui().getPropertyPane().getText();
+
 		if (element_type.equals("Actor")) {
-			ActorPanel.getInstance().showActorPanel(CurrentGui.getInstance().getGui().getPropertyPane().getText());
+			ActorPanel.getInstance().showActorPanel(property_pane_text);
 		}
 		else if (element_type.equals("UseCase")) {
-			ScenarioPanel.getInstance().showScenarioPanel(CurrentGui.getInstance().getGui().getPropertyPane().getText());
+			ScenarioPanel.getInstance().showScenarioPanel(property_pane_text);
+		}
+		else if (element_type.equals("Generic")) {
+			String[] split = property_pane_text.split("halign=left");
+			SystemBoundaryPanel.getInstance().showSystemBoundaryrPanel(split[0]);
 		}
 	}
 
