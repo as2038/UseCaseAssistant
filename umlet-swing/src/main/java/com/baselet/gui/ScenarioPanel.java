@@ -106,6 +106,7 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 		setLayout(new GridLayout(0, 2, 4, 4));
 		setAlignmentX(Component.LEFT_ALIGNMENT);
 
+		mainFlowModel.addColumn("Step No.");
 		mainFlowModel.addColumn("Actor");
 		mainFlowModel.addColumn("Action");
 		mainFlowModel.setRowCount(0);
@@ -114,6 +115,7 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 		spMain = new JScrollPane();
 		spMain.setViewportView(mainFlowTable);
 
+		altFlowModel.addColumn("Step No.");
 		altFlowModel.addColumn("Actor");
 		altFlowModel.addColumn("Action");
 		altFlowModel.setRowCount(0);
@@ -300,9 +302,10 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 					for (StateTriple post : existing_scenario.getPostcond()) {
 						postModel.addRow(new Object[] { post.getEntity(), post.getState(), post.getValue() });
 					}
-
+					int i = 0;
 					for (FlowStep maac : existing_scenario.getMainflowSteps()) {
-						mainFlowModel.addRow(new Object[] { maac.getActor(), maac.getAction() });
+						i++;
+						mainFlowModel.addRow(new Object[] { i, maac.getActor(), maac.getAction() });
 					}
 
 				}
@@ -430,7 +433,8 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 				if (ocmain != JOptionPane.CANCEL_OPTION) {
 					if (!(mainActor.getSelectedItem() == null) && !(mainAction.getSelectedItem() == null)) {
 						DefaultTableModel mainModel = (DefaultTableModel) mainFlowTable.getModel();
-						mainModel.addRow(new Object[] { mainActor.getSelectedItem(), mainAction.getSelectedItem() });
+						int stepno = mainModel.getRowCount() + 1;
+						mainModel.addRow(new Object[] { stepno, mainActor.getSelectedItem(), mainAction.getSelectedItem() });
 					}
 				}
 			}
@@ -453,7 +457,8 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 
 					if (!(altActor.getSelectedItem() == null) && !(altAction.getSelectedItem() == null)) {
 						DefaultTableModel altModel = (DefaultTableModel) altFlowTable.getModel();
-						altModel.addRow(new Object[] { altActor.getSelectedItem(), altAction.getSelectedItem() });
+						int stepno = altModel.getRowCount() + 1;
+						altModel.addRow(new Object[] { stepno, altActor.getSelectedItem(), altAction.getSelectedItem() });
 					}
 				}
 			}
@@ -482,7 +487,7 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 			String[] temp_secacs = new String[1];
 			temp_secacs[0] = tf_secac.getText();
 			for (int j = 0; j < mainFlowModel.getRowCount(); j++) {
-				FlowStep new_step = new FlowStep(mainFlowModel.getValueAt(j, 0).toString(), mainFlowModel.getValueAt(j, 1).toString());
+				FlowStep new_step = new FlowStep(mainFlowModel.getValueAt(j, 1).toString(), mainFlowModel.getValueAt(j, 2).toString());
 				mainflow_steps.add(new_step);
 			}
 			for (int k = 0; k < precModel.getRowCount(); k++) {
