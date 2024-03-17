@@ -36,9 +36,10 @@ public class DuckHandler {
 			Scenario s = set.getValue();
 			String s_name = s.getName();
 			String pa = s.getPrac();
-			String sa = s.getSecac()[0];
 			relation_list.add(new RelationTriple(s_name, pa, "actor-usecase"));
-
+			for (String sca : s.getSecac()) {
+				relation_list.add(new RelationTriple(s_name, sca, "actor-usecase"));
+			}
 			if (kb.getActor(pa) == null) {
 				warnings.add("Warning (" + s_name + "): Actor '" + s.getPrac() + "' does not exist in the Knowledge Base.\n");
 				noProblems = false;
@@ -52,6 +53,7 @@ public class DuckHandler {
 			for (FlowStep fs : mainflow_steps) {
 				Actor fs_actor = kb.getActor(fs.getActor());
 				Action fs_action = kb.getAction(fs.getAction());
+				// KB checks
 				if (fs_actor == null) {
 					warnings.add("Warning (" + s_name + "): Actor '" + fs.getActor() + "' does not exist in the Knowledge Base.\n");
 					noProblems = false;

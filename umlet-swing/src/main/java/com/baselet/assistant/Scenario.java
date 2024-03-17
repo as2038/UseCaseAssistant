@@ -5,12 +5,12 @@ import java.util.ArrayList;
 public class Scenario {
 	private final String name;
 	private final String prac;
-	private final String[] secac;
+	private final ArrayList<String> secac;
 	private final ArrayList<StateTriple> precond;
 	private final ArrayList<StateTriple> postcond;
 	private final ArrayList<FlowStep> mainflow_steps;
 
-	public Scenario(String name, String prac, String[] secac, ArrayList<StateTriple> precond, ArrayList<StateTriple> postcond, ArrayList<FlowStep> mainflow_steps) {
+	public Scenario(String name, String prac, ArrayList<String> secac, ArrayList<StateTriple> precond, ArrayList<StateTriple> postcond, ArrayList<FlowStep> mainflow_steps) {
 		this.name = name;
 		this.prac = prac;
 		this.precond = precond;
@@ -27,7 +27,7 @@ public class Scenario {
 		return prac;
 	}
 
-	public String[] getSecac() {
+	public ArrayList<String> getSecac() {
 		return secac;
 	}
 

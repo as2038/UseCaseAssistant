@@ -20,7 +20,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
@@ -45,16 +44,24 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 
 	private final JFrame scenarioframe;
 
+	private final JScrollPane spSecac;
 	private final JScrollPane spMain;
 	private final JScrollPane spAlt;
 	private final JScrollPane spPrec;
 	private final JScrollPane spPost;
 
+	private final JTable secacTable;
 	private final JTable mainFlowTable;
 	private final JTable altFlowTable;
 	private final JTable precTable;
 	private final JTable postTable;
 
+	private final DefaultTableModel secacModel = new DefaultTableModel() {
+		@Override
+		public boolean isCellEditable(int row, int column) {
+			return false;
+		}
+	};
 	private final DefaultTableModel mainFlowModel = new DefaultTableModel() {
 		@Override
 		public boolean isCellEditable(int row, int column) {
@@ -86,25 +93,27 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 	private final JTextField tf_prac = new JTextField();
 
 	private final JLabel lb_secac = new JLabel("Secondary actor(s):");
-	private final JTextField tf_secac = new JTextField();
 
 	private final JLabel lb_prec = new JLabel("Preconditions:");
-	private final JTextField tf_prec = new JTextField();
 
 	private final JLabel lb_postc = new JLabel("Postconditions:");
-	private final JTextField tf_postc = new JTextField();
 
 	private final JLabel lb_mainflow = new JLabel("Main flow:");
 
 	private final JLabel lb_altflow = new JLabel("Alternative flows:");
-	private final JTextArea ta_altflow = new JTextArea(5, 5);
-	JScrollPane sp_altflow = new JScrollPane(ta_altflow);
 
 	private String temp_name;
 
 	private ScenarioPanel() {
 		setLayout(new GridLayout(0, 2, 4, 4));
 		setAlignmentX(Component.LEFT_ALIGNMENT);
+
+		secacModel.addColumn("Actor");
+		mainFlowModel.setRowCount(0);
+		secacTable = new JTable(secacModel);
+
+		spSecac = new JScrollPane();
+		spSecac.setViewportView(secacTable);
 
 		mainFlowModel.addColumn("Step No.");
 		mainFlowModel.addColumn("Actor");
@@ -141,6 +150,13 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 
 		spPost = new JScrollPane();
 		spPost.setViewportView(postTable);
+
+		JButton button_addsec = new JButton("Add");
+		button_addsec.setActionCommand("AddSec");
+		button_addsec.addActionListener(this);
+		JButton button_deletesec = new JButton("Delete");
+		button_deletesec.setActionCommand("DeleteSec");
+		button_deletesec.addActionListener(this);
 
 		JButton button_addprec = new JButton("Add");
 		button_addprec.setActionCommand("AddPrec");
@@ -188,6 +204,17 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 		JButton button_close = new JButton("Close");
 		button_close.setActionCommand("Close");
 		button_close.addActionListener(this);
+
+		JPanel sec_button_panel = new JPanel();
+		sec_button_panel.setLayout(new BoxLayout(sec_button_panel, BoxLayout.X_AXIS));
+		sec_button_panel.add(Box.createHorizontalGlue());
+		sec_button_panel.add(button_addsec);
+		sec_button_panel.add(Box.createRigidArea(new Dimension(20, 0)));
+		sec_button_panel.add(Box.createHorizontalGlue());
+		sec_button_panel.add(Box.createRigidArea(new Dimension(20, 0)));
+		sec_button_panel.add(button_deletesec);
+		sec_button_panel.add(Box.createHorizontalGlue());
+		sec_button_panel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
 		JPanel prec_button_panel = new JPanel();
 		prec_button_panel.setLayout(new BoxLayout(prec_button_panel, BoxLayout.X_AXIS));
@@ -251,7 +278,8 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 		parent.add(lb_prac);
 		parent.add(tf_prac);
 		parent.add(lb_secac);
-		parent.add(tf_secac);
+		parent.add(spSecac);
+		parent.add(sec_button_panel);
 		parent.add(lb_prec);
 		parent.add(spPrec);
 		parent.add(prec_button_panel);
@@ -267,7 +295,6 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 		parent.add(button_panel);
 
 		Font font = new Font(Font.SANS_SERIF, Font.PLAIN, 12);
-		ta_altflow.setFont(font);
 
 		scenarioframe = new JFrame("Scenario");
 		scenarioframe.setContentPane(parent);
@@ -284,8 +311,11 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 				scenarioframe.toFront();
 
 				scenarioframe.setTitle("Scenario - " + scenario_name);
+				tf_prac.setText("");
+
 				temp_name = scenario_name;
 
+				secacModel.setRowCount(0);
 				precModel.setRowCount(0);
 				postModel.setRowCount(0);
 				mainFlowModel.setRowCount(0);
@@ -294,8 +324,9 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 				Scenario existing_scenario = main.getKnowledgeBase().getScenario(scenario_name);
 				if (existing_scenario != null) {
 					tf_prac.setText(existing_scenario.getPrac());
-					tf_secac.setText("");
-
+					for (String sca : existing_scenario.getSecac()) {
+						secacModel.addRow(new Object[] { sca });
+					}
 					for (StateTriple prst : existing_scenario.getPrecond()) {
 						precModel.addRow(new Object[] { prst.getEntity(), prst.getState(), prst.getValue() });
 					}
@@ -308,10 +339,6 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 						mainFlowModel.addRow(new Object[] { i, maac.getActor(), maac.getAction() });
 					}
 
-				}
-				else {
-					tf_prac.setText("");
-					tf_secac.setText("");
 				}
 			}
 		});
@@ -353,6 +380,25 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 
 		for (int k = 0; k < stateAL.size(); k++) {
 			stateOptions[k] = stateAL.get(k);
+		}
+		if (ae.getActionCommand().equals("AddSec")) {
+			JComboBox secActor = new JComboBox();
+			secActor.setModel(new DefaultComboBoxModel(actorOptions));
+
+			Object[] addMainFields = {
+					"Actor:", secActor
+			};
+			int ocmain = JOptionPane.showConfirmDialog(null, addMainFields, "Add secondary actor", JOptionPane.CANCEL_OPTION);
+			{
+				if (ocmain != JOptionPane.CANCEL_OPTION) {
+					if (!(secActor.getSelectedItem() == null)) {
+						secacModel.addRow(new Object[] { secActor.getSelectedItem() });
+					}
+				}
+			}
+		}
+		if (ae.getActionCommand().equals("DeleteSec")) {
+
 		}
 
 		if (ae.getActionCommand().equals("AddPrec")) {
@@ -480,12 +526,14 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 			altFlowModel.removeRow(sr);
 		}
 		if (ae.getActionCommand().equals("Save")) {
+			ArrayList<String> temp_secacs = new ArrayList<String>();
 			ArrayList<FlowStep> mainflow_steps = new ArrayList<FlowStep>();
 			ArrayList<StateTriple> preconditions = new ArrayList<StateTriple>();
 			ArrayList<StateTriple> postconditions = new ArrayList<StateTriple>();
 
-			String[] temp_secacs = new String[1];
-			temp_secacs[0] = tf_secac.getText();
+			for (int m = 0; m < secacModel.getRowCount(); m++) {
+				temp_secacs.add(secacModel.getValueAt(m, 0).toString());
+			}
 			for (int j = 0; j < mainFlowModel.getRowCount(); j++) {
 				FlowStep new_step = new FlowStep(mainFlowModel.getValueAt(j, 1).toString(), mainFlowModel.getValueAt(j, 2).toString());
 				mainflow_steps.add(new_step);
