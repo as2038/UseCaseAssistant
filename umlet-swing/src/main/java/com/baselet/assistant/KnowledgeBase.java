@@ -16,6 +16,7 @@ public class KnowledgeBase {
 	private final Map<String, Scenario> scenario_map;
 	private final Map<String, Actor> actor_map;
 	private final Map<String, Action> action_map;
+	private final Map<String, ScenarioLog> log_map;
 	private final ArrayList<String> object_list;
 	private final ArrayList<String> state_list;
 	private final DuckHandler duck_handler;
@@ -26,6 +27,7 @@ public class KnowledgeBase {
 		scenario_map = new HashMap<String, Scenario>();
 		actor_map = new HashMap<String, Actor>();
 		action_map = new HashMap<String, Action>();
+		log_map = new HashMap<String, ScenarioLog>();
 		object_list = new ArrayList<String>();
 		state_list = new ArrayList<String>();
 		duck_handler = new DuckHandler();
@@ -50,6 +52,10 @@ public class KnowledgeBase {
 			gui.getKnowledgeBasePanel().addEntityToTable(new_action.getName(), "action");
 		}
 		action_map.put(new_action.getName(), new_action);
+	}
+
+	public void addLog(ScenarioLog new_log) {
+		log_map.put(new_log.getName(), new_log);
 	}
 
 	public void addObject(String object_name) {
@@ -119,6 +125,10 @@ public class KnowledgeBase {
 
 	public Map<String, Action> getActionMap() {
 		return action_map;
+	}
+
+	public Map<String, ScenarioLog> getLogMap() {
+		return log_map;
 	}
 
 	public ArrayList<String> getStateList() {
