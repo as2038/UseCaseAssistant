@@ -32,11 +32,13 @@ public class DuckHandler {
 		HashMap<String, Scenario> scenario_map = (HashMap<String, Scenario>) kb.getScenarioMap();
 		HashMap<String, Actor> actor_map = (HashMap<String, Actor>) kb.getActorMap();
 		ArrayList<RelationTriple> relation_list = new ArrayList<RelationTriple>();
+		ArrayList<String> step_str = new ArrayList<String>();
 
 		for (Map.Entry<String, Scenario> set : scenario_map.entrySet()) {
 			Scenario s = set.getValue();
 			String s_name = s.getName();
 			String pa = s.getPrac();
+			step_str.clear();
 
 			if (system_name != null && !system_name.equals(pa)) {
 				relation_list.add(new RelationTriple(s_name, pa, "actor-usecase"));

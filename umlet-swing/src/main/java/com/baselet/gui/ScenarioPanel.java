@@ -162,9 +162,6 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 		JButton button_addprec = new JButton("Add");
 		button_addprec.setActionCommand("AddPrec");
 		button_addprec.addActionListener(this);
-		JButton button_editprec = new JButton("Edit");
-		button_editprec.setActionCommand("EditPrec");
-		button_editprec.addActionListener(this);
 		JButton button_deleteprec = new JButton("Delete");
 		button_deleteprec.setActionCommand("DeletePrec");
 		button_deleteprec.addActionListener(this);
@@ -172,9 +169,6 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 		JButton button_addpost = new JButton("Add");
 		button_addpost.setActionCommand("AddPost");
 		button_addpost.addActionListener(this);
-		JButton button_editpost = new JButton("Edit");
-		button_editpost.setActionCommand("EditPost");
-		button_editpost.addActionListener(this);
 		JButton button_deletepost = new JButton("Delete");
 		button_deletepost.setActionCommand("DeletePost");
 		button_deletepost.addActionListener(this);
@@ -182,9 +176,6 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 		JButton button_addmain = new JButton("Add");
 		button_addmain.setActionCommand("AddMain");
 		button_addmain.addActionListener(this);
-		JButton button_editmain = new JButton("Edit");
-		button_editmain.setActionCommand("EditMain");
-		button_editmain.addActionListener(this);
 		JButton button_deletemain = new JButton("Delete");
 		button_deletemain.setActionCommand("DeleteMain");
 		button_deletemain.addActionListener(this);
@@ -192,9 +183,6 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 		JButton button_addalt = new JButton("Add");
 		button_addalt.setActionCommand("AddAlt");
 		button_addalt.addActionListener(this);
-		JButton button_editalt = new JButton("Edit");
-		button_editalt.setActionCommand("EditAlt");
-		button_editalt.addActionListener(this);
 		JButton button_deletealt = new JButton("Delete");
 		button_deletealt.setActionCommand("DeleteAlt");
 		button_deletealt.addActionListener(this);
@@ -222,7 +210,6 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 		prec_button_panel.add(Box.createHorizontalGlue());
 		prec_button_panel.add(button_addprec);
 		prec_button_panel.add(Box.createRigidArea(new Dimension(20, 0)));
-		prec_button_panel.add(button_editprec);
 		prec_button_panel.add(Box.createHorizontalGlue());
 		prec_button_panel.add(Box.createRigidArea(new Dimension(20, 0)));
 		prec_button_panel.add(button_deleteprec);
@@ -234,7 +221,6 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 		post_button_panel.add(Box.createHorizontalGlue());
 		post_button_panel.add(button_addpost);
 		post_button_panel.add(Box.createRigidArea(new Dimension(20, 0)));
-		post_button_panel.add(button_editpost);
 		post_button_panel.add(Box.createHorizontalGlue());
 		post_button_panel.add(Box.createRigidArea(new Dimension(20, 0)));
 		post_button_panel.add(button_deletepost);
@@ -246,7 +232,6 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 		main_button_panel.add(Box.createHorizontalGlue());
 		main_button_panel.add(button_addmain);
 		main_button_panel.add(Box.createRigidArea(new Dimension(20, 0)));
-		main_button_panel.add(button_editmain);
 		main_button_panel.add(Box.createHorizontalGlue());
 		main_button_panel.add(Box.createRigidArea(new Dimension(20, 0)));
 		main_button_panel.add(button_deletemain);
@@ -258,7 +243,6 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 		alt_button_panel.add(Box.createHorizontalGlue());
 		alt_button_panel.add(button_addalt);
 		alt_button_panel.add(Box.createRigidArea(new Dimension(20, 0)));
-		alt_button_panel.add(button_editalt);
 		alt_button_panel.add(Box.createHorizontalGlue());
 		alt_button_panel.add(Box.createRigidArea(new Dimension(20, 0)));
 		alt_button_panel.add(button_deletealt);
@@ -357,14 +341,24 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 		Map<String, Action> actionM = kb.getActionMap();
 		Map<String, Scenario> scenarioM = kb.getScenarioMap();
 		ArrayList<String> stateAL = kb.getStateList();
-		ArrayList<String> entityAL = kb.getObjectList();
+		ArrayList<String> objectAL = kb.getObjectList();
 
-		String[] entityOptions = new String[entityAL.size()];
-
+		String[] entityOptions = new String[objectAL.size() + actorM.size()];
 		String[] actionOptions = new String[actionM.size() + scenarioM.size()];
 		String[] stateOptions = new String[stateAL.size()];
 		String[] valueOptions = { "True", "False" };
 		String[] actorOptions;
+
+		int g = 0;
+		for (String ostr : objectAL) {
+			entityOptions[g] = ostr;
+			g++;
+		}
+		for (String actorStr : actorM.keySet()) {
+			entityOptions[g] = actorStr;
+			g++;
+		}
+		g = 0;
 
 		int i = 0;
 		int aOSize = actorM.size() + 1;
@@ -393,10 +387,6 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 		for (String scenarioStr : scenarioM.keySet()) {
 			actionOptions[i] = scenarioStr;
 			i++;
-		}
-
-		for (int j = 0; j < entityAL.size(); j++) {
-			entityOptions[j] = entityAL.get(j);
 		}
 
 		for (int k = 0; k < stateAL.size(); k++) {

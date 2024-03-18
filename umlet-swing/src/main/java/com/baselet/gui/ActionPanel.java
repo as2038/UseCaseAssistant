@@ -227,28 +227,28 @@ public class ActionPanel extends JPanel implements ActionListener {
 		Main main = Main.getInstance();
 		KnowledgeBase kb = main.getKnowledgeBase();
 		ArrayList<String> stateAL = kb.getStateList();
+		ArrayList<String> objectAL = kb.getObjectList();
+		Map<String, Actor> actorM = kb.getActorMap();
+		String[] entityOptions = new String[objectAL.size() + actorM.size()];
 		String[] stateOptions = new String[stateAL.size()];
 		String[] valueOptions = { "True", "False" };
+
+		int g = 0;
+		for (String ostr : objectAL) {
+			entityOptions[g] = ostr;
+			g++;
+		}
+		for (String actorStr : actorM.keySet()) {
+			entityOptions[g] = actorStr;
+			g++;
+		}
+		g = 0;
 
 		for (int i = 0; i < stateAL.size(); i++) {
 			stateOptions[i] = stateAL.get(i);
 		}
 
 		if (ae.getActionCommand().equals("AddPrec")) {
-
-			ArrayList<String> entityAL = kb.getObjectList();
-			Map<String, Actor> actorM = kb.getActorMap();
-
-			for (String actorStr : actorM.keySet()) {
-				entityAL.add(actorStr);
-			}
-
-			String[] entityOptions = new String[entityAL.size()];
-
-			for (int j = 0; j < entityAL.size(); j++) {
-				entityOptions[j] = entityAL.get(j);
-			}
-
 			JComboBox precEntity = new JComboBox();
 			JComboBox precState = new JComboBox();
 			JComboBox precValue = new JComboBox();
@@ -281,20 +281,6 @@ public class ActionPanel extends JPanel implements ActionListener {
 			}
 		}
 		if (ae.getActionCommand().equals("AddPost")) {
-
-			ArrayList<String> entityAL = kb.getObjectList();
-			Map<String, Actor> actorM = kb.getActorMap();
-
-			for (String actorStr : actorM.keySet()) {
-				entityAL.add(actorStr);
-			}
-
-			String[] entityOptions = new String[entityAL.size()];
-
-			for (int j = 0; j < entityAL.size(); j++) {
-				entityOptions[j] = entityAL.get(j);
-			}
-
 			JComboBox postEntity = new JComboBox();
 			JComboBox postState = new JComboBox();
 			JComboBox postValue = new JComboBox();
