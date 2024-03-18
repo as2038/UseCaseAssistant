@@ -32,13 +32,11 @@ public class DuckHandler {
 		HashMap<String, Scenario> scenario_map = (HashMap<String, Scenario>) kb.getScenarioMap();
 		HashMap<String, Actor> actor_map = (HashMap<String, Actor>) kb.getActorMap();
 		ArrayList<RelationTriple> relation_list = new ArrayList<RelationTriple>();
-		ArrayList<String> step_str = new ArrayList<String>();
 
 		for (Map.Entry<String, Scenario> set : scenario_map.entrySet()) {
 			Scenario s = set.getValue();
 			String s_name = s.getName();
 			String pa = s.getPrac();
-			step_str.clear();
 
 			if (system_name != null && !system_name.equals(pa)) {
 				relation_list.add(new RelationTriple(s_name, pa, "actor-usecase"));
@@ -49,31 +47,41 @@ public class DuckHandler {
 					relation_list.add(new RelationTriple(s_name, sca, "actor-usecase"));
 				}
 			}
-			if (kb.getActor(pa) == null) {
+			if (!pa.equals(system_name) && kb.getActor(pa) == null) {
 				warnings.add("Warning (" + s_name + "): Actor '" + s.getPrac() + "' does not exist in the Knowledge Base.\n");
 				noProblems = false;
 			}
+			int stepNo = 0;
+			ArrayList<String> step_str = new ArrayList<String>();
 			ArrayList<FlowStep> mainflow_steps = new ArrayList<FlowStep>();
+
 			for (FlowStep fsproc : s.getMainflowSteps()) {
+				stepNo++;
 				if (fsproc.getActor().equals("Include")) {
+
 					Scenario includeScenario = kb.getScenario(fsproc.getAction());
 					if (includeScenario != null) {
+						int incNo = 0;
 						for (FlowStep ifs : includeScenario.getMainflowSteps()) {
+							incNo++;
 							mainflow_steps.add(ifs);
+							step_str.add(stepNo + " of main flow, [step " + incNo + " of " + includeScenario.getName() + "]");
 						}
 					}
 				}
 				else {
 					mainflow_steps.add(fsproc);
+					step_str.add(stepNo + " of main flow");
 				}
 			}
+			System.out.println(stepNo);
 
 			ArrayList<StateTriple> flow_states = new ArrayList<StateTriple>();
 			for (StateTriple dst : s.getPrecond()) {
 				flow_states.add(new StateTriple(dst.getEntity(), dst.getState(), dst.getValue()));
 			}
 			// Running the proof step-by-step
-			int stepNo = 0;
+			stepNo = 0;
 			for (FlowStep fs : mainflow_steps) {
 				stepNo++;
 				Actor fs_actor = kb.getActor(fs.getActor());
@@ -81,23 +89,23 @@ public class DuckHandler {
 				// KB checks
 				if (!fs.getActor().equals(system_name)) { // Actor
 					if (fs_actor == null) {
-						warnings.add("Warning (" + s_name + ", step " + stepNo + "): Actor '" + fs.getActor() + "' does not exist in the Knowledge Base.\n");
+						warnings.add("Warning (" + s_name + ", step " + step_str.get(stepNo - 1) + "): Actor '" + fs.getActor() + "' does not exist in the Knowledge Base.\n");
 						noProblems = false;
 					}
 					else if (!fs_actor.getActionList().contains(fs_action.getName())) {
-						warnings.add("Warning (" + s_name + ", step " + stepNo + "): Actor '" + fs.getActor() + "' does not have action '" + fs.getAction() + "'.\n");
+						warnings.add("Warning (" + s_name + ", step " + step_str.get(stepNo - 1) + "): Actor '" + fs.getActor() + "' does not have action '" + fs.getAction() + "'.\n");
 						noProblems = false;
 					}
 				}
 				else { // System
 					if (!kb.getSystem().getActionList().contains(fs_action.getName())) {
-						warnings.add("Warning (" + s_name + ", step " + stepNo + "): System '" + system_name + "' does not have action '" + fs.getAction() + "'.\n");
+						warnings.add("Warning (" + s_name + ", step " + step_str.get(stepNo - 1) + "): System '" + system_name + "' does not have action '" + fs.getAction() + "'.\n");
 						noProblems = false;
 					}
 				}
 
 				if (fs_action == null) {
-					warnings.add("Warning (" + s_name + ", step " + stepNo + "): Action '" + fs.getAction() + "' does not exist in the Knowledge Base.\n");
+					warnings.add("Warning (" + s_name + ", step " + step_str.get(stepNo - 1) + "): Action '" + fs.getAction() + "' does not exist in the Knowledge Base.\n");
 					noProblems = false;
 				}
 				else {
@@ -129,7 +137,7 @@ public class DuckHandler {
 							}
 						}
 						if (!satisfied) {
-							warnings.add("Warning (" + s_name + ", step " + stepNo + "): Precondition (" + st.getEntity() + ", " + st.getState() + ", " + st.getValue() + ") not satisfied for action '" + fs.getAction() + "'.\n");
+							warnings.add("Warning (" + s_name + ", step " + step_str.get(stepNo - 1) + "): Precondition (" + st.getEntity() + ", " + st.getState() + ", " + st.getValue() + ") not satisfied for action '" + fs.getAction() + "'.\n");
 							noProblems = false;
 						}
 					}
