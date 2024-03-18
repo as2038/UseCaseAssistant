@@ -36,6 +36,7 @@ public class ReportPanel extends JPanel implements ActionListener {
 	JScrollPane sp_warnings = new JScrollPane(ta_warnings);
 
 	private final JButton bt_check = new JButton("Check Consistency");
+	private final JButton bt_logs = new JButton("View Scenario Logs");
 	private final JButton bt_close = new JButton("Close");
 
 	private final Insets paddingLeftLabel = new Insets(paddingTop, outerPaddingLeft, paddingBottom, halfHorizontalDividerSpace);
@@ -68,10 +69,14 @@ public class ReportPanel extends JPanel implements ActionListener {
 		line++;
 		addComponent(this, layout, bt_check, 0, line, 1, 1, fillWidth, leftWeight, 0, paddingText);
 		line++;
+		addComponent(this, layout, bt_logs, 0, line, 1, 1, fillWidth, leftWeight, 0, paddingText);
+		line++;
 		addComponent(this, layout, bt_close, 0, line, 1, 1, fillWidth, leftWeight, 0, paddingText);
 
 		bt_check.setActionCommand("Check");
 		bt_check.addActionListener(this);
+		bt_logs.setActionCommand("Logs");
+		bt_logs.addActionListener(this);
 		bt_close.setActionCommand("Close");
 		bt_close.addActionListener(this);
 	}
@@ -118,6 +123,9 @@ public class ReportPanel extends JPanel implements ActionListener {
 			for (String s : warnings) {
 				ta_warnings.append(s);
 			}
+		}
+		if (ae.getActionCommand().equals("Logs")) {
+			ScenarioLogPanel.getInstance().showScenarioLogPanel();
 		}
 		if (ae.getActionCommand().equals("Close")) {
 			closePanel();

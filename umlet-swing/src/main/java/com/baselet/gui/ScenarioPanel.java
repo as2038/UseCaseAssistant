@@ -355,18 +355,19 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 		KnowledgeBase kb = main.getKnowledgeBase();
 		Map<String, Actor> actorM = kb.getActorMap();
 		Map<String, Action> actionM = kb.getActionMap();
+		Map<String, Scenario> scenarioM = kb.getScenarioMap();
 		ArrayList<String> stateAL = kb.getStateList();
 		ArrayList<String> entityAL = kb.getObjectList();
 
 		String[] entityOptions = new String[entityAL.size()];
 
-		String[] actionOptions = new String[actionM.size()];
+		String[] actionOptions = new String[actionM.size() + scenarioM.size()];
 		String[] stateOptions = new String[stateAL.size()];
 		String[] valueOptions = { "True", "False" };
 		String[] actorOptions;
 
 		int i = 0;
-		int aOSize = actorM.size();
+		int aOSize = actorM.size() + 1;
 		SystemBoundary sys = kb.getSystem();
 
 		if (sys != null) {
@@ -383,9 +384,14 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 			actorOptions[i] = actorStr;
 			i++;
 		}
+		actorOptions[i] = "Include";
 		i = 0;
 		for (String actionStr : actionM.keySet()) {
 			actionOptions[i] = actionStr;
+			i++;
+		}
+		for (String scenarioStr : scenarioM.keySet()) {
+			actionOptions[i] = scenarioStr;
 			i++;
 		}
 
