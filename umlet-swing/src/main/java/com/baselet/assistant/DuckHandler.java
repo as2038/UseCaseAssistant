@@ -28,18 +28,24 @@ public class DuckHandler {
 		boolean noProblems = true;
 		Main main = Main.getInstance();
 		KnowledgeBase kb = main.getKnowledgeBase();
+		String system_name = kb.getSystem().getName();
 		HashMap<String, Scenario> scenario_map = (HashMap<String, Scenario>) kb.getScenarioMap();
 		HashMap<String, Actor> actor_map = (HashMap<String, Actor>) kb.getActorMap();
 		ArrayList<RelationTriple> relation_list = new ArrayList<RelationTriple>();
 
 		for (Map.Entry<String, Scenario> set : scenario_map.entrySet()) {
-
 			Scenario s = set.getValue();
 			String s_name = s.getName();
 			String pa = s.getPrac();
-			relation_list.add(new RelationTriple(s_name, pa, "actor-usecase"));
+
+			if (system_name != null && !system_name.equals(pa)) {
+				relation_list.add(new RelationTriple(s_name, pa, "actor-usecase"));
+			}
+
 			for (String sca : s.getSecac()) {
-				relation_list.add(new RelationTriple(s_name, sca, "actor-usecase"));
+				if (system_name != null && !system_name.equals(sca)) {
+					relation_list.add(new RelationTriple(s_name, sca, "actor-usecase"));
+				}
 			}
 			if (kb.getActor(pa) == null) {
 				warnings.add("Warning (" + s_name + "): Actor '" + s.getPrac() + "' does not exist in the Knowledge Base.\n");
@@ -57,13 +63,21 @@ public class DuckHandler {
 				Actor fs_actor = kb.getActor(fs.getActor());
 				Action fs_action = kb.getAction(fs.getAction());
 				// KB checks
-				if (fs_actor == null) {
-					warnings.add("Warning (" + s_name + ", step " + stepNo + "): Actor '" + fs.getActor() + "' does not exist in the Knowledge Base.\n");
-					noProblems = false;
+				if (!fs.getActor().equals(system_name)) { // Actor
+					if (fs_actor == null) {
+						warnings.add("Warning (" + s_name + ", step " + stepNo + "): Actor '" + fs.getActor() + "' does not exist in the Knowledge Base.\n");
+						noProblems = false;
+					}
+					else if (!fs_actor.getActionList().contains(fs_action.getName())) {
+						warnings.add("Warning (" + s_name + ", step " + stepNo + "): Actor '" + fs.getActor() + "' does not have action '" + fs.getAction() + "'.\n");
+						noProblems = false;
+					}
 				}
-				else if (!fs_actor.getActionList().contains(fs_action.getName())) {
-					warnings.add("Warning (" + s_name + ", step " + stepNo + "): Actor '" + fs.getActor() + "' does not have action '" + fs.getAction() + "'.\n");
-					noProblems = false;
+				else { // System
+					if (!kb.getSystem().getActionList().contains(fs_action.getName())) {
+						warnings.add("Warning (" + s_name + ", step " + stepNo + "): System '" + system_name + "' does not have action '" + fs.getAction() + "'.\n");
+						noProblems = false;
+					}
 				}
 
 				if (fs_action == null) {
@@ -259,7 +273,6 @@ public class DuckHandler {
 					warnings.add("Warning (Diagram): Cannot connect an " + entity1type + "(" + entity1 + ") and " + entity2type + "(" + entity2 + ") with an 'actor-usecase' relation.\n");
 					noProblems = false;
 				}
-
 				else {
 					if (entity2type.equals("use case")) {
 						String temp_a = entity1;
@@ -304,7 +317,6 @@ public class DuckHandler {
 					}
 					else if (entityType.contains("UseCase")) {
 						if (!(sbX1 <= rectX1s.get(l) && sbY1 <= rectY1s.get(l) && sbX2 >= rectX2s.get(l) && sbY2 >= rectY2s.get(l))) {
-
 							warnings.add("Warning (Diagram): Use case '" + entities.get(l).getPanelAttributes() + "' was placed outside of the system boundary.\n");
 							noProblems = false;
 						}
@@ -333,7 +345,7 @@ public class DuckHandler {
 			ScenarioPanel.getInstance().showScenarioPanel(property_pane_text);
 		}
 		else if (element_type.equals("Generic")) {
-			String[] split = property_pane_text.split("halign=left");
+			String[] split = property_pane_text.split("\nhalign=left");
 			SystemBoundaryPanel.getInstance().showSystemBoundaryrPanel(split[0]);
 		}
 	}

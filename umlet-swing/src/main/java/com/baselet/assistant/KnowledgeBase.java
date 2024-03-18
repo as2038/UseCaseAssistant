@@ -97,7 +97,7 @@ public class KnowledgeBase {
 		return action_map.get(action_name);
 	}
 
-	public SystemBoundary getSystem(String system_name) {
+	public SystemBoundary getSystem() {
 		return system_boundary;
 	}
 

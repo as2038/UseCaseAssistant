@@ -138,7 +138,7 @@ public class SystemBoundaryPanel extends JPanel implements ActionListener {
 
 				Main main = Main.getInstance();
 				KnowledgeBase kb = main.getKnowledgeBase();
-				SystemBoundary system = kb.getSystem(system_name);
+				SystemBoundary system = kb.getSystem();
 
 				if (system != null) {
 					for (String sa : system.getActionList()) {

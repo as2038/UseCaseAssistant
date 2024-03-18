@@ -29,6 +29,7 @@ import com.baselet.assistant.FlowStep;
 import com.baselet.assistant.KnowledgeBase;
 import com.baselet.assistant.Scenario;
 import com.baselet.assistant.StateTriple;
+import com.baselet.assistant.SystemBoundary;
 import com.baselet.control.Main;
 
 public class ScenarioPanel extends JPanel implements ActionListener {
@@ -358,12 +359,26 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 		ArrayList<String> entityAL = kb.getObjectList();
 
 		String[] entityOptions = new String[entityAL.size()];
-		String[] actorOptions = new String[actorM.size()];
+
 		String[] actionOptions = new String[actionM.size()];
 		String[] stateOptions = new String[stateAL.size()];
 		String[] valueOptions = { "True", "False" };
+		String[] actorOptions;
 
 		int i = 0;
+		int aOSize = actorM.size();
+		SystemBoundary sys = kb.getSystem();
+
+		if (sys != null) {
+			aOSize++;
+			actorOptions = new String[aOSize];
+			actorOptions[0] = sys.getName();
+			i++;
+		}
+		else {
+			actorOptions = new String[aOSize];
+		}
+
 		for (String actorStr : actorM.keySet()) {
 			actorOptions[i] = actorStr;
 			i++;
