@@ -61,7 +61,6 @@ public class ActorPanel extends JPanel implements ActionListener {
 		setAlignmentX(Component.LEFT_ALIGNMENT);
 
 		actionModel.addColumn("Name");
-		actionModel.addColumn("Object");
 
 		actionModel.setRowCount(0);
 
@@ -143,7 +142,7 @@ public class ActorPanel extends JPanel implements ActionListener {
 				if (existing_actor != null) {
 
 					for (String sa : existing_actor.getActionList()) {
-						actionModel.addRow(new Object[] { sa, kb.getAction(sa).getObject() });
+						actionModel.addRow(new Object[] { sa });
 					}
 				}
 				else {
@@ -185,7 +184,7 @@ public class ActorPanel extends JPanel implements ActionListener {
 				if (ocmain != JOptionPane.CANCEL_OPTION) {
 					if (!(action.getSelectedItem() == null)) {
 						Action selectedAction = kb.getAction(action.getSelectedItem().toString());
-						actionModel.addRow(new Object[] { selectedAction.getName(), selectedAction.getObject() });
+						actionModel.addRow(new Object[] { selectedAction.getName() });
 					}
 				}
 			}
@@ -197,7 +196,6 @@ public class ActorPanel extends JPanel implements ActionListener {
 		if (ae.getActionCommand().equals("Save")) {
 			ArrayList<String> temp_action_list = new ArrayList<String>();
 			for (int i = 0; i < actionModel.getRowCount(); i++) {
-				// Action newAction = kb.getAction(actionModel.getValueAt(i, 0).toString());
 				temp_action_list.add(actionModel.getValueAt(i, 0).toString());
 			}
 			Actor new_actor = new Actor(temp_name, temp_action_list);

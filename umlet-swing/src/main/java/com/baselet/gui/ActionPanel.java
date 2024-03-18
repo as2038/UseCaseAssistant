@@ -115,7 +115,7 @@ public class ActionPanel extends JPanel implements ActionListener {
 		button_editpost.setActionCommand("EditPost");
 		button_editpost.addActionListener(this);
 		JButton button_deletepost = new JButton("Delete");
-		button_deletepost.setActionCommand("DeletPost");
+		button_deletepost.setActionCommand("DeletePost");
 		button_deletepost.addActionListener(this);
 
 		JButton button_save = new JButton("Save");
@@ -197,7 +197,6 @@ public class ActionPanel extends JPanel implements ActionListener {
 
 				if (existing_action != null) {
 					tf_name.setText(existing_action.getName());
-					tf_object.setText(existing_action.getObject());
 					ArrayList<StateTriple> precs = existing_action.getPrecond();
 					ArrayList<StateTriple> posts = existing_action.getPostcond();
 					if (precs.size() > 0) {
@@ -346,8 +345,7 @@ public class ActionPanel extends JPanel implements ActionListener {
 				StateTriple new_post = new StateTriple(postModel.getValueAt(l, 0).toString(), postModel.getValueAt(l, 1).toString(), postModel.getValueAt(l, 2).toString());
 				postconditions.add(new_post);
 			}
-			Action new_action = new Action(tf_name.getText(), tf_object.getName(), preconditions, postconditions);
-			// kb.getActor(kb.getLastActorName()).addAction(new_action);
+			Action new_action = new Action(tf_name.getText(), preconditions, postconditions);
 			kb.addAction(new_action);
 			hideActionPanel();
 		}

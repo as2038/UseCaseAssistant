@@ -413,7 +413,8 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 			}
 		}
 		if (ae.getActionCommand().equals("DeleteSec")) {
-
+			int sr = secacTable.getSelectedRow();
+			secacModel.removeRow(sr);
 		}
 
 		if (ae.getActionCommand().equals("AddPrec")) {

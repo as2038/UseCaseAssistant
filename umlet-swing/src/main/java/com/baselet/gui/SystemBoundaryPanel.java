@@ -61,7 +61,6 @@ public class SystemBoundaryPanel extends JPanel implements ActionListener {
 		setAlignmentX(Component.LEFT_ALIGNMENT);
 
 		actionModel.addColumn("Name");
-		actionModel.addColumn("Object");
 
 		actionModel.setRowCount(0);
 
@@ -142,7 +141,7 @@ public class SystemBoundaryPanel extends JPanel implements ActionListener {
 
 				if (system != null) {
 					for (String sa : system.getActionList()) {
-						actionModel.addRow(new Object[] { sa, kb.getAction(sa).getObject() });
+						actionModel.addRow(new Object[] { sa });
 					}
 				}
 				else {
@@ -183,7 +182,7 @@ public class SystemBoundaryPanel extends JPanel implements ActionListener {
 				if (ocmain != JOptionPane.CANCEL_OPTION) {
 					if (!(action.getSelectedItem() == null)) {
 						Action selectedAction = kb.getAction(action.getSelectedItem().toString());
-						actionModel.addRow(new Object[] { selectedAction.getName(), selectedAction.getObject() });
+						actionModel.addRow(new Object[] { selectedAction.getName() });
 					}
 				}
 			}

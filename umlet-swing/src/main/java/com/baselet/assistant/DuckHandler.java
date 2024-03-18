@@ -181,9 +181,7 @@ public class DuckHandler {
 					}
 				}
 				else if (entity_class.contains("Actor")) {
-					if (actor_map.containsKey(entity_name)) {
-					}
-					else {
+					if (!entity_name.equals(system_name)) {
 						warnings.add("Warning (Diagram): Actor '" + entity_name + "' does not exist in the Knowledge Base.\n");
 						noProblems = false;
 					}

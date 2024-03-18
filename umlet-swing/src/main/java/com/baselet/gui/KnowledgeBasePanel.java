@@ -142,7 +142,7 @@ public class KnowledgeBasePanel extends JPanel implements ActionListener {
 			newEntity.setModel(new DefaultComboBoxModel(typeOptions));
 
 			Object[] addMainFields = {
-					"Object name", new_entity_name,
+					"Entity name", new_entity_name,
 					"Entity type", newEntity
 			};
 			int ocprec = JOptionPane.showConfirmDialog(null, addMainFields, "New entity", JOptionPane.CANCEL_OPTION);
