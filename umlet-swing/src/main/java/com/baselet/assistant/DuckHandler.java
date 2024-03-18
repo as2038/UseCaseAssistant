@@ -74,7 +74,6 @@ public class DuckHandler {
 					step_str.add(stepNo + " of main flow");
 				}
 			}
-			System.out.println(stepNo);
 
 			ArrayList<StateTriple> flow_states = new ArrayList<StateTriple>();
 			for (StateTriple dst : s.getPrecond()) {

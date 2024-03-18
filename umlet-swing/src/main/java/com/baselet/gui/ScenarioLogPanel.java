@@ -6,15 +6,24 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Map;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+
+import com.baselet.assistant.KnowledgeBase;
+import com.baselet.assistant.Scenario;
+import com.baselet.control.Main;
 
 public class ScenarioLogPanel extends JPanel implements ActionListener {
 
@@ -39,7 +48,36 @@ public class ScenarioLogPanel extends JPanel implements ActionListener {
 		}
 	};
 
+	private final JScrollPane spActPrec;
+
+	private final JTable actPrecTable;
+	private final DefaultTableModel actPrecModel = new DefaultTableModel() {
+		@Override
+		public boolean isCellEditable(int row, int column) {
+			return false;
+		}
+	};
+
+	private final JScrollPane spActPost;
+
+	private final JTable actPostTable;
+	private final DefaultTableModel actPostModel = new DefaultTableModel() {
+		@Override
+		public boolean isCellEditable(int row, int column) {
+			return false;
+		}
+	};
+
 	// UI
+	private final JLabel lb_scenario = new JLabel("Scenario:");
+	JComboBox scenario = new JComboBox();
+	private final JLabel lb_step = new JLabel("Step:");
+	private final JTextField tf_stepIndex = new JTextField();
+	private final JLabel lb_currSt = new JLabel("Current state:");
+	private final JLabel lb_stepAct = new JLabel("Step action:");
+	private final JTextField tf_actName = new JTextField();
+	private final JLabel lb_stepActPrec = new JLabel("Step action preconditions:");
+	private final JLabel lb_stepActPost = new JLabel("Step action preconditions:");
 
 	public ScenarioLogPanel() {
 		setLayout(new GridLayout(0, 2, 4, 4));
@@ -56,30 +94,64 @@ public class ScenarioLogPanel extends JPanel implements ActionListener {
 		spCurrSt = new JScrollPane();
 		spCurrSt.setViewportView(currStTable);
 
+		actPrecModel.addColumn("Entity");
+		actPrecModel.addColumn("State");
+		actPrecModel.addColumn("Value");
+
+		actPrecModel.setRowCount(0);
+
+		actPrecTable = new JTable(actPrecModel);
+
+		spActPrec = new JScrollPane();
+		spActPrec.setViewportView(actPrecTable);
+
+		actPostModel.addColumn("Entity");
+		actPostModel.addColumn("State");
+		actPostModel.addColumn("Value");
+
+		actPrecModel.setRowCount(0);
+
+		actPostTable = new JTable(actPostModel);
+
+		spActPost = new JScrollPane();
+		spActPost.setViewportView(actPostTable);
+
+		JButton button_previous = new JButton("< Previous Step");
+		button_previous.setActionCommand("Previous");
+		button_previous.addActionListener(this);
+		JButton button_next = new JButton("Next Step >");
+		button_next.setActionCommand("Next");
+		button_next.addActionListener(this);
 		JButton button_close = new JButton("Close");
 		button_close.setActionCommand("Close");
 		button_close.addActionListener(this);
 
 		JPanel button_panel = new JPanel();
 		button_panel.setLayout(new BoxLayout(button_panel, BoxLayout.X_AXIS));
+		button_panel.add(button_previous);
+		button_panel.add(Box.createHorizontalGlue());
+		button_panel.add(Box.createRigidArea(new Dimension(20, 0)));
+		button_panel.add(button_next);
 		button_panel.add(Box.createHorizontalGlue());
 		button_panel.add(Box.createRigidArea(new Dimension(20, 0)));
 		button_panel.add(button_close);
 		button_panel.add(Box.createHorizontalGlue());
 		button_panel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-		JPanel act_button_panel = new JPanel();
-		act_button_panel.setLayout(new BoxLayout(act_button_panel, BoxLayout.X_AXIS));
-		act_button_panel.add(Box.createHorizontalGlue());
-		act_button_panel.add(Box.createRigidArea(new Dimension(20, 0)));
-		act_button_panel.add(Box.createHorizontalGlue());
-		act_button_panel.add(Box.createRigidArea(new Dimension(20, 0)));
-		act_button_panel.add(Box.createHorizontalGlue());
-		act_button_panel.setAlignmentX(Component.LEFT_ALIGNMENT);
-
 		JPanel parent = new JPanel();
 		parent.setLayout(new BoxLayout(parent, BoxLayout.Y_AXIS));
+		parent.add(lb_scenario);
+		parent.add(scenario);
+		parent.add(lb_step);
+		parent.add(tf_stepIndex);
+		parent.add(lb_currSt);
 		parent.add(spCurrSt);
+		parent.add(lb_stepAct);
+		parent.add(tf_actName);
+		parent.add(lb_stepActPrec);
+		parent.add(spActPrec);
+		parent.add(lb_stepActPost);
+		parent.add(spActPost);
 		parent.add(button_panel);
 
 		Font font = new Font(Font.SANS_SERIF, Font.PLAIN, 12);
@@ -95,11 +167,21 @@ public class ScenarioLogPanel extends JPanel implements ActionListener {
 			public void run() {
 				scenariologframe.setLocationRelativeTo(CurrentGui.getInstance().getGui().getMainFrame());
 				scenariologframe.setVisible(true);
-				scenariologframe.setSize(600, 400);
+				scenariologframe.setSize(500, 400);
 				scenariologframe.toFront();
 
 				scenariologframe.setTitle("Scenario Logs");
 
+				Main main = Main.getInstance();
+				KnowledgeBase kb = main.getKnowledgeBase();
+				Map<String, Scenario> scenarioM = kb.getScenarioMap();
+				String[] scenarioOptions = new String[scenarioM.size()];
+				int i = 0;
+				for (String scenarioStr : scenarioM.keySet()) {
+					scenarioOptions[i] = scenarioStr;
+					i++;
+				}
+				scenario.setModel(new DefaultComboBoxModel(scenarioOptions));
 			}
 		});
 	}
@@ -110,6 +192,12 @@ public class ScenarioLogPanel extends JPanel implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent ae) {
+		if (ae.getActionCommand().equals("Previous")) {
+			System.out.println("Previous!");
+		}
+		if (ae.getActionCommand().equals("Next")) {
+			System.out.println("Next!");
+		}
 		if (ae.getActionCommand().equals("Close")) {
 			hideScenarioLogPanel();
 		}
