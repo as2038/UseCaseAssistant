@@ -51,7 +51,21 @@ public class DuckHandler {
 				warnings.add("Warning (" + s_name + "): Actor '" + s.getPrac() + "' does not exist in the Knowledge Base.\n");
 				noProblems = false;
 			}
-			ArrayList<FlowStep> mainflow_steps = s.getMainflowSteps();
+			ArrayList<FlowStep> mainflow_steps = new ArrayList<FlowStep>();
+			for (FlowStep fsproc : s.getMainflowSteps()) {
+				if (fsproc.getActor().equals("Include")) {
+					Scenario includeScenario = kb.getScenario(fsproc.getAction());
+					if (includeScenario != null) {
+						for (FlowStep ifs : includeScenario.getMainflowSteps()) {
+							mainflow_steps.add(ifs);
+						}
+					}
+				}
+				else {
+					mainflow_steps.add(fsproc);
+				}
+			}
+
 			ArrayList<StateTriple> flow_states = new ArrayList<StateTriple>();
 			for (StateTriple dst : s.getPrecond()) {
 				flow_states.add(new StateTriple(dst.getEntity(), dst.getState(), dst.getValue()));
