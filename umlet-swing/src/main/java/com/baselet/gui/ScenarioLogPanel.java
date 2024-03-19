@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Map;
 
 import javax.swing.Box;
@@ -22,8 +23,10 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import com.baselet.assistant.KnowledgeBase;
+import com.baselet.assistant.LogStep;
 import com.baselet.assistant.Scenario;
 import com.baselet.assistant.ScenarioLog;
+import com.baselet.assistant.StateTriple;
 import com.baselet.control.Main;
 
 public class ScenarioLogPanel extends JPanel implements ActionListener {
@@ -68,6 +71,8 @@ public class ScenarioLogPanel extends JPanel implements ActionListener {
 			return false;
 		}
 	};
+
+	private ArrayList<LogStep> logSteps;
 
 	// UI
 	private final JLabel lb_scenario = new JLabel("Scenario:");
@@ -117,6 +122,9 @@ public class ScenarioLogPanel extends JPanel implements ActionListener {
 		spActPost = new JScrollPane();
 		spActPost.setViewportView(actPostTable);
 
+		JButton button_load = new JButton("Load");
+		button_load.setActionCommand("Load");
+		button_load.addActionListener(this);
 		JButton button_previous = new JButton("< Previous Step");
 		button_previous.setActionCommand("Previous");
 		button_previous.addActionListener(this);
@@ -126,6 +134,15 @@ public class ScenarioLogPanel extends JPanel implements ActionListener {
 		JButton button_close = new JButton("Close");
 		button_close.setActionCommand("Close");
 		button_close.addActionListener(this);
+
+		JPanel top_panel = new JPanel();
+		top_panel.setLayout(new BoxLayout(top_panel, BoxLayout.X_AXIS));
+		top_panel.add(scenario);
+		top_panel.add(Box.createHorizontalGlue());
+		top_panel.add(Box.createRigidArea(new Dimension(20, 0)));
+		top_panel.add(button_load);
+		top_panel.add(Box.createHorizontalGlue());
+		top_panel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
 		JPanel button_panel = new JPanel();
 		button_panel.setLayout(new BoxLayout(button_panel, BoxLayout.X_AXIS));
@@ -142,7 +159,7 @@ public class ScenarioLogPanel extends JPanel implements ActionListener {
 		JPanel parent = new JPanel();
 		parent.setLayout(new BoxLayout(parent, BoxLayout.Y_AXIS));
 		parent.add(lb_scenario);
-		parent.add(scenario);
+		parent.add(top_panel);
 		parent.add(lb_step);
 		parent.add(tf_stepIndex);
 		parent.add(lb_currSt);
@@ -176,16 +193,15 @@ public class ScenarioLogPanel extends JPanel implements ActionListener {
 				Main main = Main.getInstance();
 				KnowledgeBase kb = main.getKnowledgeBase();
 				Map<String, Scenario> scenarioM = kb.getScenarioMap();
-				String[] scenarioOptions = new String[scenarioM.size()];
-				int i = 0;
-				for (String scenarioStr : scenarioM.keySet()) {
-					scenarioOptions[i] = scenarioStr;
-					i++;
+				if (scenarioM.size() > 0) {
+					String[] scenarioOptions = new String[scenarioM.size()];
+					int i = 0;
+					for (String scenarioStr : scenarioM.keySet()) {
+						scenarioOptions[i] = scenarioStr;
+						i++;
+					}
+					scenario.setModel(new DefaultComboBoxModel(scenarioOptions));
 				}
-				scenario.setModel(new DefaultComboBoxModel(scenarioOptions));
-
-				ScenarioLog sl = kb.getLogMap().get(scenarioOptions[0]);
-
 			}
 		});
 	}
@@ -196,6 +212,24 @@ public class ScenarioLogPanel extends JPanel implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent ae) {
+		Main main = Main.getInstance();
+		KnowledgeBase kb = main.getKnowledgeBase();
+		if (ae.getActionCommand().equals("Load")) {
+			ScenarioLog sl = kb.getLogMap().get(scenario.getSelectedItem().toString());
+			logSteps = sl.getLogSteps();
+			LogStep ls = logSteps.get(0);
+			tf_stepIndex.setText(ls.getIndex());
+			tf_actName.setText(ls.getAction());
+			for (StateTriple crst : ls.getCurrentState()) {
+				currStModel.addRow(new Object[] { crst.getEntity(), crst.getState(), crst.getValue() });
+			}
+			for (StateTriple prst : ls.getActionPrecond()) {
+				actPrecModel.addRow(new Object[] { prst.getEntity(), prst.getState(), prst.getValue() });
+			}
+			for (StateTriple post : ls.getActionPostcond()) {
+				actPostModel.addRow(new Object[] { post.getEntity(), post.getState(), post.getValue() });
+			}
+		}
 		if (ae.getActionCommand().equals("Previous")) {
 			System.out.println("Previous!");
 		}
