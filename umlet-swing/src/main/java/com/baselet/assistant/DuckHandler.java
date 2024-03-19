@@ -34,6 +34,7 @@ public class DuckHandler {
 		ArrayList<RelationTriple> relation_list = new ArrayList<RelationTriple>();
 
 		for (Map.Entry<String, Scenario> set : scenario_map.entrySet()) {
+			ArrayList<LogStep> log_steps = new ArrayList<LogStep>();
 			Scenario s = set.getValue();
 			String s_name = s.getName();
 			String pa = s.getPrac();
@@ -82,9 +83,11 @@ public class DuckHandler {
 			// Running the proof step-by-step
 			stepNo = 0;
 			for (FlowStep fs : mainflow_steps) {
+
 				stepNo++;
 				Actor fs_actor = kb.getActor(fs.getActor());
 				Action fs_action = kb.getAction(fs.getAction());
+
 				// KB checks
 				if (!fs.getActor().equals(system_name)) { // Actor
 					if (fs_actor == null) {
@@ -101,6 +104,9 @@ public class DuckHandler {
 						warnings.add("Warning (" + s_name + ", step " + step_str.get(stepNo - 1) + "): System '" + system_name + "' does not have action '" + fs.getAction() + "'.\n");
 						noProblems = false;
 					}
+					else {
+						fs_action = kb.getAction(fs_action.getName());
+					}
 				}
 
 				if (fs_action == null) {
@@ -108,6 +114,8 @@ public class DuckHandler {
 					noProblems = false;
 				}
 				else {
+					log_steps.add(new LogStep(step_str.get(stepNo - 1), fs_action.getName(), flow_states, fs_action.getPrecond(), fs_action.getPostcond()));
+
 					ArrayList<StateTriple> act_prec = new ArrayList<StateTriple>();
 					for (StateTriple ast : fs_action.getPrecond()) {
 						act_prec.add(new StateTriple(ast.getEntity(), ast.getState(), ast.getValue()));
@@ -122,7 +130,9 @@ public class DuckHandler {
 										if (pst.getEntity().equals(cst.getEntity()) && pst.getState().equals(cst.getState())) {
 											int edit_index = flow_states.indexOf(nst);
 											nst.setValue(pst.getValue());
-											flow_states.add(edit_index, st);
+											flow_states.remove(edit_index);
+											// System.out.println();
+											flow_states.add(nst);
 											changed = true;
 											break;
 										}
@@ -156,6 +166,7 @@ public class DuckHandler {
 					noProblems = false;
 				}
 			}
+			kb.addLog(new ScenarioLog(s_name, log_steps));
 			flow_states.clear();
 		}
 

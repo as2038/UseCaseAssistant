@@ -23,6 +23,7 @@ import javax.swing.table.DefaultTableModel;
 
 import com.baselet.assistant.KnowledgeBase;
 import com.baselet.assistant.Scenario;
+import com.baselet.assistant.ScenarioLog;
 import com.baselet.control.Main;
 
 public class ScenarioLogPanel extends JPanel implements ActionListener {
@@ -182,6 +183,9 @@ public class ScenarioLogPanel extends JPanel implements ActionListener {
 					i++;
 				}
 				scenario.setModel(new DefaultComboBoxModel(scenarioOptions));
+
+				ScenarioLog sl = kb.getLogMap().get(scenarioOptions[0]);
+
 			}
 		});
 	}
