@@ -116,7 +116,7 @@ public class DuckHandler {
 				else {
 					ArrayList<StateTriple> curr_states = new ArrayList<StateTriple>();
 					for (StateTriple c_s : flow_states) {
-						curr_states.add(c_s);
+						curr_states.add(new StateTriple(c_s.getEntity(), c_s.getState(), c_s.getValue()));
 					}
 					log_steps.add(new LogStep(step_str.get(stepNo - 1), fs_action.getName(), curr_states, fs_action.getPrecond(), fs_action.getPostcond()));
 
