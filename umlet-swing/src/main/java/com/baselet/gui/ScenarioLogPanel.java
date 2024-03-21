@@ -73,6 +73,8 @@ public class ScenarioLogPanel extends JPanel implements ActionListener {
 	};
 
 	private ArrayList<LogStep> logSteps;
+	private int stepNo;
+	private int maxStep;
 
 	// UI
 	private final JLabel lb_scenario = new JLabel("Scenario:");
@@ -210,31 +212,48 @@ public class ScenarioLogPanel extends JPanel implements ActionListener {
 		scenariologframe.setVisible(false);
 	}
 
-	@Override
-	public void actionPerformed(ActionEvent ae) {
+	private void loadStep() {
 		Main main = Main.getInstance();
 		KnowledgeBase kb = main.getKnowledgeBase();
+		ScenarioLog sl = kb.getLogMap().get(scenario.getSelectedItem().toString());
+		logSteps = sl.getLogSteps();
+		maxStep = logSteps.size();
+		LogStep ls = logSteps.get(stepNo);
+		tf_stepIndex.setText(ls.getIndex());
+		tf_actName.setText(ls.getAction());
+
+		currStModel.setRowCount(0);
+		actPrecModel.setRowCount(0);
+		actPostModel.setRowCount(0);
+
+		for (StateTriple crst : ls.getCurrentState()) {
+			currStModel.addRow(new Object[] { crst.getEntity(), crst.getState(), crst.getValue() });
+		}
+		for (StateTriple prst : ls.getActionPrecond()) {
+			actPrecModel.addRow(new Object[] { prst.getEntity(), prst.getState(), prst.getValue() });
+		}
+		for (StateTriple post : ls.getActionPostcond()) {
+			actPostModel.addRow(new Object[] { post.getEntity(), post.getState(), post.getValue() });
+		}
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent ae) {
 		if (ae.getActionCommand().equals("Load")) {
-			ScenarioLog sl = kb.getLogMap().get(scenario.getSelectedItem().toString());
-			logSteps = sl.getLogSteps();
-			LogStep ls = logSteps.get(0);
-			tf_stepIndex.setText(ls.getIndex());
-			tf_actName.setText(ls.getAction());
-			for (StateTriple crst : ls.getCurrentState()) {
-				currStModel.addRow(new Object[] { crst.getEntity(), crst.getState(), crst.getValue() });
-			}
-			for (StateTriple prst : ls.getActionPrecond()) {
-				actPrecModel.addRow(new Object[] { prst.getEntity(), prst.getState(), prst.getValue() });
-			}
-			for (StateTriple post : ls.getActionPostcond()) {
-				actPostModel.addRow(new Object[] { post.getEntity(), post.getState(), post.getValue() });
-			}
+			stepNo = 0;
+			loadStep();
 		}
 		if (ae.getActionCommand().equals("Previous")) {
-			System.out.println("Previous!");
+			if (stepNo > 0) {
+				stepNo--;
+				loadStep();
+			}
 		}
 		if (ae.getActionCommand().equals("Next")) {
-			System.out.println("Next!");
+			if (stepNo < maxStep - 1) {
+				stepNo++;
+				loadStep();
+			}
 		}
 		if (ae.getActionCommand().equals("Close")) {
 			hideScenarioLogPanel();

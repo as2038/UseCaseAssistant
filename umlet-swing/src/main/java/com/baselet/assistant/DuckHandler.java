@@ -114,7 +114,11 @@ public class DuckHandler {
 					noProblems = false;
 				}
 				else {
-					log_steps.add(new LogStep(step_str.get(stepNo - 1), fs_action.getName(), flow_states, fs_action.getPrecond(), fs_action.getPostcond()));
+					ArrayList<StateTriple> curr_states = new ArrayList<StateTriple>();
+					for (StateTriple c_s : flow_states) {
+						curr_states.add(c_s);
+					}
+					log_steps.add(new LogStep(step_str.get(stepNo - 1), fs_action.getName(), curr_states, fs_action.getPrecond(), fs_action.getPostcond()));
 
 					ArrayList<StateTriple> act_prec = new ArrayList<StateTriple>();
 					for (StateTriple ast : fs_action.getPrecond()) {
@@ -131,7 +135,6 @@ public class DuckHandler {
 											int edit_index = flow_states.indexOf(nst);
 											nst.setValue(pst.getValue());
 											flow_states.remove(edit_index);
-											// System.out.println();
 											flow_states.add(nst);
 											changed = true;
 											break;
