@@ -229,11 +229,13 @@ public class ScenarioLogPanel extends JPanel implements ActionListener {
 		for (StateTriple crst : ls.getCurrentState()) {
 			currStModel.addRow(new Object[] { crst.getEntity(), crst.getState(), crst.getValue() });
 		}
-		for (StateTriple prst : ls.getActionPrecond()) {
-			actPrecModel.addRow(new Object[] { prst.getEntity(), prst.getState(), prst.getValue() });
-		}
-		for (StateTriple post : ls.getActionPostcond()) {
-			actPostModel.addRow(new Object[] { post.getEntity(), post.getState(), post.getValue() });
+		if (ls.getActionPrecond() != null) {
+			for (StateTriple prst : ls.getActionPrecond()) {
+				actPrecModel.addRow(new Object[] { prst.getEntity(), prst.getState(), prst.getValue() });
+			}
+			for (StateTriple post : ls.getActionPostcond()) {
+				actPostModel.addRow(new Object[] { post.getEntity(), post.getState(), post.getValue() });
+			}
 		}
 	}
 

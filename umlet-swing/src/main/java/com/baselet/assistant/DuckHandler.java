@@ -124,25 +124,23 @@ public class DuckHandler {
 					for (StateTriple ast : fs_action.getPrecond()) {
 						act_prec.add(new StateTriple(ast.getEntity(), ast.getState(), ast.getValue()));
 					}
-					for (StateTriple st : act_prec) {
+					for (StateTriple st : act_prec) { // For each action precondition
 						boolean satisfied = false;
 						for (StateTriple cst : flow_states) {
-							if (st.getEntity().equals(cst.getEntity()) && st.getState().equals(cst.getState()) && st.getValue().equals(cst.getValue())) {
+							if (st.getEntity().equals(cst.getEntity()) && st.getState().equals(cst.getState()) && st.getValue().equals(cst.getValue())) { // Match precond
+								System.out.println("Precond matched!");
 								for (StateTriple pst : fs_action.getPostcond()) {
-									boolean changed = false;
 									for (StateTriple nst : flow_states) {
 										if (pst.getEntity().equals(cst.getEntity()) && pst.getState().equals(cst.getState())) {
+											System.out.println("Same detected!");
 											int edit_index = flow_states.indexOf(nst);
 											nst.setValue(pst.getValue());
 											flow_states.remove(edit_index);
-											flow_states.add(nst);
-											changed = true;
 											break;
 										}
 									}
-									if (!changed) {
-										flow_states.add(pst);
-									}
+									flow_states.add(pst);
+									System.out.println(flow_states.size());
 								}
 								satisfied = true;
 								break;
@@ -151,6 +149,9 @@ public class DuckHandler {
 						if (!satisfied) {
 							warnings.add("Warning (" + s_name + ", step " + step_str.get(stepNo - 1) + "): Precondition (" + st.getEntity() + ", " + st.getState() + ", " + st.getValue() + ") not satisfied for action '" + fs.getAction() + "'.\n");
 							noProblems = false;
+						}
+						else {
+
 						}
 					}
 				}
@@ -169,6 +170,11 @@ public class DuckHandler {
 					noProblems = false;
 				}
 			}
+			ArrayList<StateTriple> curr_states = new ArrayList<StateTriple>();
+			for (StateTriple c_s : flow_states) {
+				curr_states.add(new StateTriple(c_s.getEntity(), c_s.getState(), c_s.getValue()));
+			}
+			log_steps.add(new LogStep("Final State", "none", curr_states, null, null));
 			kb.addLog(new ScenarioLog(s_name, log_steps));
 			flow_states.clear();
 		}
