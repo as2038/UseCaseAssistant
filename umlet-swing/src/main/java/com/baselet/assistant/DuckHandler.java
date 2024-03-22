@@ -124,34 +124,36 @@ public class DuckHandler {
 					for (StateTriple ast : fs_action.getPrecond()) {
 						act_prec.add(new StateTriple(ast.getEntity(), ast.getState(), ast.getValue()));
 					}
+					boolean allSatisfied = true;
 					for (StateTriple st : act_prec) { // For each action precondition
 						boolean satisfied = false;
 						for (StateTriple cst : flow_states) {
 							if (st.getEntity().equals(cst.getEntity()) && st.getState().equals(cst.getState()) && st.getValue().equals(cst.getValue())) { // Match precond
 								System.out.println("Precond matched!");
-								for (StateTriple pst : fs_action.getPostcond()) {
-									for (StateTriple nst : flow_states) {
-										if (pst.getEntity().equals(cst.getEntity()) && pst.getState().equals(cst.getState())) {
-											System.out.println("Same detected!");
-											int edit_index = flow_states.indexOf(nst);
-											nst.setValue(pst.getValue());
-											flow_states.remove(edit_index);
-											break;
-										}
-									}
-									flow_states.add(pst);
-									System.out.println(flow_states.size());
-								}
 								satisfied = true;
 								break;
 							}
 						}
 						if (!satisfied) {
+							allSatisfied = false;
 							warnings.add("Warning (" + s_name + ", step " + step_str.get(stepNo - 1) + "): Precondition (" + st.getEntity() + ", " + st.getState() + ", " + st.getValue() + ") not satisfied for action '" + fs.getAction() + "'.\n");
 							noProblems = false;
 						}
-						else {
 
+					}
+					if (allSatisfied) { // Update current state if all action preconditions are satisfied
+						for (StateTriple pst : fs_action.getPostcond()) {
+							for (StateTriple nst : flow_states) {
+								if (pst.getEntity().equals(nst.getEntity()) && pst.getState().equals(nst.getState())) {
+									System.out.println("Same detected!");
+									int edit_index = flow_states.indexOf(nst);
+									nst.setValue(pst.getValue());
+									flow_states.remove(edit_index);
+									break;
+								}
+							}
+							flow_states.add(pst);
+							System.out.println(flow_states.size());
 						}
 					}
 				}
