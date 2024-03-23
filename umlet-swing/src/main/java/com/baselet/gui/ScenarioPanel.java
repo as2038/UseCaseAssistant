@@ -274,9 +274,9 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 		parent.add(lb_mainflow);
 		parent.add(spMain);
 		parent.add(main_button_panel);
-		parent.add(lb_altflow);
-		parent.add(spAlt);
-		parent.add(alt_button_panel);
+		// parent.add(lb_altflow);
+		// parent.add(spAlt);
+		// parent.add(alt_button_panel);
 		parent.add(button_panel);
 
 		Font font = new Font(Font.SANS_SERIF, Font.PLAIN, 12);

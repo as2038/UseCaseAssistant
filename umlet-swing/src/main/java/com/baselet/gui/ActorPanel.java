@@ -107,8 +107,8 @@ public class ActorPanel extends JPanel implements ActionListener {
 
 		JPanel parent = new JPanel();
 		parent.setLayout(new BoxLayout(parent, BoxLayout.Y_AXIS));
-		parent.add(lb_goals);
-		parent.add(tf_goals);
+		// parent.add(lb_goals);
+		// parent.add(tf_goals);
 		parent.add(lb_actions);
 		parent.add(sp);
 		parent.add(act_button_panel);

@@ -129,7 +129,6 @@ public class DuckHandler {
 						boolean satisfied = false;
 						for (StateTriple cst : flow_states) {
 							if (st.getEntity().equals(cst.getEntity()) && st.getState().equals(cst.getState()) && st.getValue().equals(cst.getValue())) { // Match precond
-								System.out.println("Precond matched!");
 								satisfied = true;
 								break;
 							}
@@ -145,7 +144,6 @@ public class DuckHandler {
 						for (StateTriple pst : fs_action.getPostcond()) {
 							for (StateTriple nst : flow_states) {
 								if (pst.getEntity().equals(nst.getEntity()) && pst.getState().equals(nst.getState())) {
-									System.out.println("Same detected!");
 									int edit_index = flow_states.indexOf(nst);
 									nst.setValue(pst.getValue());
 									flow_states.remove(edit_index);
@@ -153,7 +151,6 @@ public class DuckHandler {
 								}
 							}
 							flow_states.add(pst);
-							System.out.println(flow_states.size());
 						}
 					}
 				}
