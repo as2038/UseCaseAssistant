@@ -90,6 +90,9 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 		}
 	};
 
+	private final JLabel lb_name = new JLabel("Name:");
+	private final JTextField tf_name = new JTextField();
+
 	private final JLabel lb_prac = new JLabel("Primary actor:");
 	private final JTextField tf_prac = new JTextField();
 
@@ -260,6 +263,8 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 
 		JPanel parent = new JPanel();
 		parent.setLayout(new BoxLayout(parent, BoxLayout.Y_AXIS));
+		parent.add(lb_name);
+		parent.add(tf_name);
 		parent.add(lb_prac);
 		parent.add(tf_prac);
 		parent.add(lb_secac);
@@ -296,6 +301,7 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 				scenarioframe.toFront();
 
 				scenarioframe.setTitle("Scenario - " + scenario_name);
+				tf_name.setText(scenario_name);
 				tf_prac.setText("");
 
 				temp_name = scenario_name;
@@ -558,7 +564,7 @@ public class ScenarioPanel extends JPanel implements ActionListener {
 				StateTriple new_post = new StateTriple(postModel.getValueAt(l, 0).toString(), postModel.getValueAt(l, 1).toString(), postModel.getValueAt(l, 2).toString());
 				postconditions.add(new_post);
 			}
-			main.getKnowledgeBase().addScenario(new Scenario(temp_name, tf_prac.getText(), temp_secacs, preconditions, postconditions, mainflow_steps));
+			main.getKnowledgeBase().addScenario(new Scenario(tf_name.getText(), tf_prac.getText(), temp_secacs, preconditions, postconditions, mainflow_steps));
 			hideScenarioPanel();
 		}
 		if (ae.getActionCommand().equals("Close")) {

@@ -71,7 +71,6 @@ public class ScenarioListPanel extends JPanel implements ActionListener {
 
 		scenarioModel.addColumn("Name");
 		scenarioModel.addColumn("Primary Actor");
-		scenarioModel.addColumn("Warnings");
 
 		scenarioTable = new JTable(scenarioModel);
 
@@ -122,7 +121,7 @@ public class ScenarioListPanel extends JPanel implements ActionListener {
 
 	public void addScenarioToTable(String name, String primaryActor) {
 		DefaultTableModel model = (DefaultTableModel) scenarioTable.getModel();
-		model.addRow(new Object[] { name, primaryActor, "0" });
+		model.addRow(new Object[] { name, primaryActor });
 	}
 
 	public void closePanel() {

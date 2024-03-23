@@ -220,7 +220,7 @@ public class ScenarioLogPanel extends JPanel implements ActionListener {
 		maxStep = logSteps.size();
 		LogStep ls = logSteps.get(stepNo);
 		tf_stepIndex.setText(ls.getIndex());
-		tf_actName.setText(ls.getAction());
+		tf_actName.setText(ls.getActor() + " - " + ls.getAction());
 
 		currStModel.setRowCount(0);
 		actPrecModel.setRowCount(0);

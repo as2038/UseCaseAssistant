@@ -73,7 +73,6 @@ public class KnowledgeBasePanel extends JPanel implements ActionListener {
 
 		model.addColumn("Entity Name");
 		model.addColumn("Entity Type");
-		model.addColumn("Warnings");
 
 		knowledgeTable = new JTable(model);
 
@@ -123,7 +122,7 @@ public class KnowledgeBasePanel extends JPanel implements ActionListener {
 
 	public void addEntityToTable(String name, String type) {
 		DefaultTableModel model = (DefaultTableModel) knowledgeTable.getModel();
-		model.addRow(new Object[] { name, type, "0" });
+		model.addRow(new Object[] { name, type });
 	}
 
 	public void closePanel() {

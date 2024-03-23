@@ -87,6 +87,7 @@ public class DuckHandler {
 				stepNo++;
 				Actor fs_actor = kb.getActor(fs.getActor());
 				Action fs_action = kb.getAction(fs.getAction());
+				String actorName = "";
 
 				// KB checks
 				if (!fs.getActor().equals(system_name)) { // Actor
@@ -95,8 +96,12 @@ public class DuckHandler {
 						noProblems = false;
 					}
 					else if (!fs_actor.getActionList().contains(fs_action.getName())) {
+						actorName = fs_actor.getName();
 						warnings.add("Warning (" + s_name + ", step " + step_str.get(stepNo - 1) + "): Actor '" + fs.getActor() + "' does not have action '" + fs.getAction() + "'.\n");
 						noProblems = false;
+					}
+					else {
+						actorName = fs_actor.getName();
 					}
 				}
 				else { // System
@@ -105,10 +110,10 @@ public class DuckHandler {
 						noProblems = false;
 					}
 					else {
+						actorName = kb.getSystem().getName();
 						fs_action = kb.getAction(fs_action.getName());
 					}
 				}
-
 				if (fs_action == null) {
 					warnings.add("Warning (" + s_name + ", step " + step_str.get(stepNo - 1) + "): Action '" + fs.getAction() + "' does not exist in the Knowledge Base.\n");
 					noProblems = false;
@@ -118,7 +123,7 @@ public class DuckHandler {
 					for (StateTriple c_s : flow_states) {
 						curr_states.add(new StateTriple(c_s.getEntity(), c_s.getState(), c_s.getValue()));
 					}
-					log_steps.add(new LogStep(step_str.get(stepNo - 1), fs_action.getName(), curr_states, fs_action.getPrecond(), fs_action.getPostcond()));
+					log_steps.add(new LogStep(step_str.get(stepNo - 1), actorName, fs_action.getName(), curr_states, fs_action.getPrecond(), fs_action.getPostcond()));
 
 					ArrayList<StateTriple> act_prec = new ArrayList<StateTriple>();
 					for (StateTriple ast : fs_action.getPrecond()) {
@@ -138,7 +143,6 @@ public class DuckHandler {
 							warnings.add("Warning (" + s_name + ", step " + step_str.get(stepNo - 1) + "): Precondition (" + st.getEntity() + ", " + st.getState() + ", " + st.getValue() + ") not satisfied for action '" + fs.getAction() + "'.\n");
 							noProblems = false;
 						}
-
 					}
 					if (allSatisfied) { // Update current state if all action preconditions are satisfied
 						for (StateTriple pst : fs_action.getPostcond()) {
@@ -173,7 +177,7 @@ public class DuckHandler {
 			for (StateTriple c_s : flow_states) {
 				curr_states.add(new StateTriple(c_s.getEntity(), c_s.getState(), c_s.getValue()));
 			}
-			log_steps.add(new LogStep("Final State", "none", curr_states, null, null));
+			log_steps.add(new LogStep("Final State", "none", "none", curr_states, null, null));
 			kb.addLog(new ScenarioLog(s_name, log_steps));
 			flow_states.clear();
 		}

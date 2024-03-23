@@ -162,8 +162,8 @@ public class ActionPanel extends JPanel implements ActionListener {
 		parent.setLayout(new BoxLayout(parent, BoxLayout.Y_AXIS));
 		parent.add(lb_name);
 		parent.add(tf_name);
-		parent.add(lb_object);
-		parent.add(tf_object);
+		// parent.add(lb_object);
+		// parent.add(tf_object);
 		parent.add(lb_prec);
 		parent.add(spPrec);
 		parent.add(prec_button_panel);
@@ -190,13 +190,14 @@ public class ActionPanel extends JPanel implements ActionListener {
 				postModel.setRowCount(0);
 
 				actionframe.setTitle("Action - " + action_name);
+				tf_name.setText(action_name);
 
 				Main main = Main.getInstance();
 				KnowledgeBase kb = main.getKnowledgeBase();
 				Action existing_action = kb.getAction(action_name);
 
 				if (existing_action != null) {
-					tf_name.setText(existing_action.getName());
+
 					ArrayList<StateTriple> precs = existing_action.getPrecond();
 					ArrayList<StateTriple> posts = existing_action.getPostcond();
 					if (precs.size() > 0) {
@@ -209,10 +210,6 @@ public class ActionPanel extends JPanel implements ActionListener {
 							postModel.addRow(new Object[] { po.getEntity(), po.getState(), po.getValue() });
 						}
 					}
-				}
-				else {
-					tf_name.setText("");
-					tf_object.setText("");
 				}
 			}
 		});

@@ -49,8 +49,8 @@ public class SystemBoundaryPanel extends JPanel implements ActionListener {
 			return false;
 		}
 	};
-	private final JLabel lb_goals = new JLabel("Goals:");
-	private final JTextField tf_goals = new JTextField();
+	private final JLabel lb_name = new JLabel("Name:");
+	private final JTextField tf_name = new JTextField();
 
 	private final JLabel lb_actions = new JLabel("Actions:");
 
@@ -107,8 +107,8 @@ public class SystemBoundaryPanel extends JPanel implements ActionListener {
 
 		JPanel parent = new JPanel();
 		parent.setLayout(new BoxLayout(parent, BoxLayout.Y_AXIS));
-		// parent.add(lb_goals);
-		// parent.add(tf_goals);
+		parent.add(lb_name);
+		parent.add(tf_name);
 		parent.add(lb_actions);
 		parent.add(sp);
 		parent.add(act_button_panel);
@@ -132,6 +132,7 @@ public class SystemBoundaryPanel extends JPanel implements ActionListener {
 
 				temp_name = CurrentGui.getInstance().getGui().getPropertyPane().getText();
 				systemframe.setTitle("System - " + system_name);
+				tf_name.setText(system_name);
 				temp_name = system_name;
 				actionModel.setRowCount(0);
 
@@ -143,9 +144,6 @@ public class SystemBoundaryPanel extends JPanel implements ActionListener {
 					for (String sa : system.getActionList()) {
 						actionModel.addRow(new Object[] { sa });
 					}
-				}
-				else {
-					tf_goals.setText("");
 				}
 			}
 		});
