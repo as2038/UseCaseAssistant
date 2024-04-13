@@ -28,7 +28,11 @@ public class DuckHandler {
 		boolean noProblems = true;
 		Main main = Main.getInstance();
 		KnowledgeBase kb = main.getKnowledgeBase();
-		String system_name = kb.getSystem().getName();
+		String system_name = null;
+		SystemBoundary sb = kb.getSystem();
+		if (sb != null) {
+			system_name = sb.getName();
+		}
 		HashMap<String, Scenario> scenario_map = (HashMap<String, Scenario>) kb.getScenarioMap();
 		HashMap<String, Actor> actor_map = (HashMap<String, Actor>) kb.getActorMap();
 		ArrayList<RelationTriple> relation_list = new ArrayList<RelationTriple>();
@@ -233,7 +237,6 @@ public class DuckHandler {
 							noProblems = false;
 						}
 					}
-
 				}
 			}
 		}
@@ -348,7 +351,7 @@ public class DuckHandler {
 			noProblems = false;
 		}
 		if (!systemBoundaryPlaced) {
-			warnings.add("Warning (Diagram): System boundary has not been placed.\n");
+			warnings.add("Warning (Diagram): System boundary was not placed.\n");
 			noProblems = false;
 		}
 		else {

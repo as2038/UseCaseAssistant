@@ -9,9 +9,7 @@ import com.baselet.gui.CurrentGui;
 
 public class KnowledgeBase {
 
-	private String last_scenario_name;
 	private String last_actor_name;
-	private String last_action_name;
 	private SystemBoundary system_boundary;
 	private final Map<String, Scenario> scenario_map;
 	private final Map<String, Actor> actor_map;
