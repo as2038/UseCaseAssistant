@@ -101,9 +101,6 @@ public class ActionPanel extends JPanel implements ActionListener {
 		JButton button_addprec = new JButton("Add");
 		button_addprec.setActionCommand("AddPrec");
 		button_addprec.addActionListener(this);
-		JButton button_editprec = new JButton("Edit");
-		button_editprec.setActionCommand("EditPrec");
-		button_editprec.addActionListener(this);
 		JButton button_deleteprec = new JButton("Delete");
 		button_deleteprec.setActionCommand("DeletePrec");
 		button_deleteprec.addActionListener(this);
@@ -111,9 +108,6 @@ public class ActionPanel extends JPanel implements ActionListener {
 		JButton button_addpost = new JButton("Add");
 		button_addpost.setActionCommand("AddPost");
 		button_addpost.addActionListener(this);
-		JButton button_editpost = new JButton("Edit");
-		button_editpost.setActionCommand("EditPost");
-		button_editpost.addActionListener(this);
 		JButton button_deletepost = new JButton("Delete");
 		button_deletepost.setActionCommand("DeletePost");
 		button_deletepost.addActionListener(this);
@@ -130,7 +124,6 @@ public class ActionPanel extends JPanel implements ActionListener {
 		prec_button_panel.add(Box.createHorizontalGlue());
 		prec_button_panel.add(button_addprec);
 		prec_button_panel.add(Box.createRigidArea(new Dimension(20, 0)));
-		prec_button_panel.add(button_editprec);
 		prec_button_panel.add(Box.createHorizontalGlue());
 		prec_button_panel.add(Box.createRigidArea(new Dimension(20, 0)));
 		prec_button_panel.add(button_deleteprec);
@@ -142,7 +135,6 @@ public class ActionPanel extends JPanel implements ActionListener {
 		post_button_panel.add(Box.createHorizontalGlue());
 		post_button_panel.add(button_addpost);
 		post_button_panel.add(Box.createRigidArea(new Dimension(20, 0)));
-		post_button_panel.add(button_editpost);
 		post_button_panel.add(Box.createHorizontalGlue());
 		post_button_panel.add(Box.createRigidArea(new Dimension(20, 0)));
 		post_button_panel.add(button_deletepost);
